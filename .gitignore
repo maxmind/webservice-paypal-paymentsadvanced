@@ -1,0 +1,6 @@
+.build
+/WebService-PayflowPro*
+local
+.tidyall.d
+t/*config.pl
+*.swp
