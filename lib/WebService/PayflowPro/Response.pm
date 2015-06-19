@@ -2,6 +2,7 @@ package WebService::PayflowPro::Response;
 
 use Moo;
 
+use Moox::HandlesVia;
 use Types::Standard qw( HashRef InstanceOf );
 use URI;
 use URI::QueryParam;
@@ -15,6 +16,7 @@ has raw_response => (
     is       => 'ro',
     isa      => InstanceOf ['HTTP::Response'],
     required => 1,
+    handles  => { http_response_code => 'code' },
 );
 
 has success => ( is => 'lazy', );

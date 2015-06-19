@@ -59,6 +59,7 @@ SKIP: {
 
     ok( $res,          'got response' );
     ok( $res->success, 'success' );
+    is( $res->http_response_code, 200, '200 response' );
     like( $res->message, qr{approved}i, 'approved' );
     ok( $res->secure_token, 'secure token' );
     cmp_ok( $res->secure_token_id, 'eq', $token_id, 'token id unchanged' );
