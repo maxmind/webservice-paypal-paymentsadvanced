@@ -47,13 +47,10 @@ SKIP: {
 
     my $token = {
         AMT               => 1.01,
-        CREATESECURETOKEN => 'Y',
-        EXPDATE           => 1218,
         INVNUM            => '000002',
         NAME              => 'Foo Bar Baz',
         PONUM             => '000002-1',
         SECURETOKENID     => $token_id,
-        TENDER            => 'C',
         TRXTYPE           => 'S',
         VERBOSITY         => 'HIGH',
     };
@@ -67,6 +64,11 @@ SKIP: {
     cmp_ok( $res->secure_token_id, 'eq', $token_id, 'token id unchanged' );
 
     diag np $res->params;
+
+    delete $token->{SECURETOKENID};
+
+    my $res = $flow->create_secure_token($token);
+    ok( $res->success, 'Let module create the token id' );
 }
 
 done_testing();
