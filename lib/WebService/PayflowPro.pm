@@ -13,28 +13,21 @@ use URI::FromHash qw( uri uri_object );
 use URI::QueryParam;
 use WebService::PayflowPro::Response;
 
+has host => (
+    is => 'lazy',
+);
+
+has partner => (
+    is       => 'ro',
+    isa      => Str,
+    required => 1,
+    default  => 'PayPal'
+);
+
 has password => (
     is       => 'ro',
     isa      => Str,
     required => 1,
-);
-
-has user => (
-    is       => 'ro',
-    isa      => Str,
-    required => 1,
-);
-
-has vendor => (
-    is       => 'ro',
-    isa      => Str,
-    required => 1,
-);
-
-has partner => (
-    is      => 'ro',
-    isa     => Str,
-    default => 'PayPal'
 );
 
 has production_mode => (
@@ -50,8 +43,16 @@ has ua => (
     }
 );
 
-has host => (
-    is => 'lazy',
+has user => (
+    is       => 'ro',
+    isa      => Str,
+    required => 1,
+);
+
+has vendor => (
+    is       => 'ro',
+    isa      => Str,
+    required => 1,
 );
 
 sub _build_host {
@@ -65,36 +66,68 @@ sub create_secure_token {
     my $self = shift;
     my $args = shift;
 
-    my %post = map { uc $_ => $args->{$_} } keys %{$args};
+    my $post = $self->_force_upper_case($args);
+    $post->{CREATESECURETOKEN} = 'Y';
+    $post->{SECURETOKENID} ||= Data::GUID->new->as_string;
 
-    $post{PARTNER}           = $self->partner;
-    $post{PWD}               = $self->password;
-    $post{USER}              = $self->user;
-    $post{VENDOR}            = $self->vendor;
-    $post{CREATESECURETOKEN} = 'Y';
-
-    $post{SECURETOKENID} ||= Data::GUID->new->as_string;
-
-    # Create key/value pairs, this may not be totally correct.
-    # https://metacpan.org/source/PLOBBES/Business-OnlinePayment-PayflowPro-1.01/PayflowPro.pm#L276
-
-    my $pairs = uri_object( query => \%post )->query_form_hash;
     my $payflow_url = uri( scheme => 'https', host => $self->host );
 
-    my $response = $self->ua->post( $payflow_url, Content => $pairs );
+    my $content = join '&', $self->_encode_credentials,
+        $self->_pseudo_encode_args($post);
+
+    my $response = $self->ua->post( $payflow_url, Content => $content );
 
     my $res
         = WebService::PayflowPro::Response->new( raw_response => $response );
 
     # this should never happen
-    if ( $res->success && $res->secure_token_id ne $post{SECURETOKENID} ) {
+    if ( $res->success && $res->secure_token_id ne $post->{SECURETOKENID} ) {
         croak sprintf(
             'Secure token ids do not match: yours(%s) theirs (%s)',
-            $post{SECURETOKENID}, $res->secure_token_id
+            $post->{SECURETOKENID}, $res->secure_token_id
         );
     }
 
     return $res;
+}
+
+# The authentication args will not contain characters which need to be handled
+# specially.  Also, I think adding the length to these keys actually just
+# doesn't work.
+
+sub _encode_credentials {
+    my $self = shift;
+
+    my %auth = (
+        PARTNER => $self->partner,
+        PWD     => $self->password,
+        USER    => $self->user,
+        VENDOR  => $self->vendor,
+    );
+
+    # Create key/value pairs the way that PayflowPro wants them.
+    my $pairs = join '&', map { $_ . '=' . $auth{$_} } sort keys %auth;
+    return $pairs;
+}
+
+sub _force_upper_case {
+    my $self = shift;
+    my $args = shift;
+    my %post = map { uc $_ => $args->{$_} } keys %{$args};
+    return \%post;
+}
+
+# Payflow treats encoding key/value pairs like a special snowflake.
+# https://metacpan.org/source/PLOBBES/Business-OnlinePayment-PayflowPro-1.01/PayflowPro.pm#L276
+
+sub _pseudo_encode_args {
+    my $self = shift;
+    my $args = shift;
+
+    my $uri = join '&', map {
+        join '=', sprintf( '%s[%i]', $_, length( $args->{$_} ) ), $args->{$_}
+    } sort keys %{$args};
+    return $uri;
 }
 
 1;
