@@ -1,6 +1,7 @@
-.build
 /WebService-PayflowPro*
+.build
+cpanfile.snapshot
 local
-.tidyall.d
-t/*config.pl
 *.swp
+t/*config.pl
+.tidyall.d
