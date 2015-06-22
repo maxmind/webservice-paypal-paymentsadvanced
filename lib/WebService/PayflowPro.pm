@@ -7,11 +7,12 @@ use feature qw( say );
 use Carp qw( croak );
 use Data::GUID;
 use LWP::UserAgent;
+use MooX::StrictConstructor;
 use Types::Standard qw( Bool InstanceOf Str );
 use URI;
 use URI::FromHash qw( uri uri_object );
 use URI::QueryParam;
-use WebService::PayflowPro::Response;
+use WebService::PayflowPro::Response::HTTP;
 
 has host => (
     is => 'lazy',
@@ -78,7 +79,7 @@ sub create_secure_token {
     my $response = $self->ua->post( $payflow_url, Content => $content );
 
     my $res
-        = WebService::PayflowPro::Response->new( raw_response => $response );
+        = WebService::PayflowPro::Response::HTTP->new( raw_response => $response );
 
     # this should never happen
     if ( $res->success && $res->secure_token_id ne $post->{SECURETOKENID} ) {

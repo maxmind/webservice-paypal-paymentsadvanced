@@ -1,37 +1,27 @@
-package WebService::PayflowPro::Response;
+package WebService::PayflowPro::Response::HTTP;
 
 use Moo;
 
-use Carp qw( croak );
 use MooX::HandlesVia;
+use MooX::StrictConstructor;
 use Types::Standard qw( HashRef InstanceOf );
 use URI;
 use URI::QueryParam;
 
-sub BUILD {
-    my $self = shift;
-    unless ( $self->has_params || $self->has_raw_response ) {
-        croak 'You must provide either params or an HTTP::Response object.';
-    }
-}
-
 has params => (
     is        => 'lazy',
     isa       => HashRef,
-    predicate => 'has_params',
 );
 
 has raw_response => (
     is        => 'ro',
     isa       => InstanceOf ['HTTP::Response'],
-    required  => 0,
+    required  => 1,
     predicate => 'has_raw_response',
     handles   => { http_response_code => 'code' },
 );
 
-has success => (
-    is => 'lazy',
-);
+with 'WebService::PayflowPro::Role::Response';
 
 sub _build_params {
     my $self    = shift;
@@ -46,22 +36,7 @@ sub _build_success {
         : $self->params->{RESULT} == 0;
 }
 
-sub message {
-    my $self = shift;
-    return $self->params->{RESPMSG};
-}
-
-sub secure_token {
-    my $self = shift;
-    return $self->params->{SECURETOKEN};
-}
-
-sub secure_token_id {
-    my $self = shift;
-    return $self->params->{SECURETOKENID};
-}
-
 1;
 
 __END__
-# ABSTRACT: Response object for WebService::PayflowPro
+# ABSTRACT: Response object for WebService::PayflowPro instantiated from HTTP::Response object
