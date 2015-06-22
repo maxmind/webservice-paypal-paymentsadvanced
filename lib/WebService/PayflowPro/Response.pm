@@ -31,7 +31,7 @@ sub _build_params {
 
 sub _build_success {
     my $self = shift;
-    return $self->params->{RESULT} == 0;
+    return $self->raw_response->is_success && $self->params->{RESULT} == 0;
 }
 
 sub message {
