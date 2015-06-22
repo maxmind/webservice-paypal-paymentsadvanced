@@ -19,7 +19,9 @@ has raw_response => (
     handles  => { http_response_code => 'code' },
 );
 
-has success => ( is => 'lazy', );
+has success => (
+    is => 'lazy',
+);
 
 sub _build_params {
     my $self    = shift;
