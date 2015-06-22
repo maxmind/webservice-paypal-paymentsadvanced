@@ -2,7 +2,7 @@ package WebService::PayflowPro::Response;
 
 use Moo;
 
-use Moox::HandlesVia;
+use MooX::HandlesVia;
 use Types::Standard qw( HashRef InstanceOf );
 use URI;
 use URI::QueryParam;
