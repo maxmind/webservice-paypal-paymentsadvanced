@@ -5,17 +5,6 @@ use Test::More;
 use Test::Fatal qw( exception );
 use WebService::PayflowPro::Response::FromParams;
 
-SKIP: {
-    skip 'no idea why this is messing with the test plan', 1;
-    like(
-        exception {
-            WebService::PayflowPro::Response::FromParams->new( params => {} )
-        },
-        qr/required for validation/,
-        'dies if ip_address is missing and strict checking not disabled'
-    );
-}
-
 my $params = {
     ACCT            => 9990,
     AMT             => 1.01,
@@ -61,6 +50,12 @@ my $params = {
 
     ok( $res->success, 'new with params success' );
     is( $res->message, 'Approved', 'response message' );
+
+    like(
+        exception { $res->ip_address_is_verified },
+        qr/required for validation/,
+        'dies if we try to verify a missing ip_address'
+    );
 }
 
 {
