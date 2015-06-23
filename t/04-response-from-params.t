@@ -54,12 +54,31 @@ my $params = {
     TYPE            => 'S',
 };
 
-my $res = WebService::PayflowPro::Response::FromParams->new(
-    params              => $params,
-    validate_ip_address => 0,
-);
+{
+    my $res = WebService::PayflowPro::Response::FromParams->new(
+        params => $params,
+    );
 
-ok( $res->success, 'new with params success' );
-is( $res->message, 'Approved', 'response message' );
+    ok( $res->success, 'new with params success' );
+    is( $res->message, 'Approved', 'response message' );
+}
+
+{
+    my $res = WebService::PayflowPro::Response::FromParams->new(
+        ip_address => '4.4.4.4',
+        params     => $params,
+    );
+
+    ok( !$res->success, 'no success with unverified ip' );
+}
+
+{
+    my $res = WebService::PayflowPro::Response::FromParams->new(
+        ip_address => '173.0.82.165',
+        params     => $params,
+    );
+
+    ok( $res->success, 'success with verified ip' );
+}
 
 done_testing();

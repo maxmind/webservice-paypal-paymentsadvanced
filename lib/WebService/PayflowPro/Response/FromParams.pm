@@ -8,31 +8,27 @@ use MooX::HandlesVia;
 use MooX::StrictConstructor;
 use Types::Standard qw( Bool HashRef Str );
 
-# https://ppmts.custhelp.com/app/answers/detail/a_id/883/kw/payflow%20Ip
-
-sub BUILD {
-    my $self = shift;
-    return unless $self->validate_ip_address;
-
-    croak 'IP address required for validation' unless $self->ip_address;
-
-    unless ( any { $_ eq $self->ip_address } $self->all_ip_addresses ) {
-        croak sprintf 'IP address (%s) does not appear to be from Payflow',
-            $self->ip_address;
-    }
-}
-
 has ip_address => (
-    is       => 'ro',
-    isa      => Str,
-    required => 0,
+    is        => 'ro',
+    isa       => Str,
+    required  => 0,
+    predicate => 'has_ip_address',
 );
+
+has ip_address_is_verified => (
+    is       => 'lazy',
+    isa      => Bool,
+    init_arg => undef,
+);
+
+# Payflow IPs listed at
+# https://ppmts.custhelp.com/app/answers/detail/a_id/883/kw/payflow%20Ip
 
 has _ip_addresses => (
     is          => 'ro',
     isa         => HashRef,
     handles_via => 'Hash',
-    handles     => { all_ip_addresses => 'values' },
+    handles     => { _all_verified_ip_addresses => 'values' },
     default     => sub {
         +{
             'agw.paypal.com'                              => '173.0.82.33',
@@ -61,17 +57,21 @@ has params => (
     required => 1,
 );
 
-has validate_ip_address => (
-    is      => 'ro',
-    isa     => Bool,
-    default => 1,
-);
-
 with 'WebService::PayflowPro::Role::Response';
+
+sub _build_ip_address_is_verified {
+    my $self = shift;
+
+    croak 'IP address required for validation' unless $self->ip_address;
+
+    return any { $_ eq $self->ip_address } $self->_all_verified_ip_addresses;
+}
 
 sub _build_success {
     my $self = shift;
-    return $self->params->{RESULT} == 0;
+    return $self->has_ip_address
+        ? $self->ip_address_is_verified && $self->params->{RESULT} == 0
+        : $self->params->{RESULT} == 0;
 }
 
 sub message {
