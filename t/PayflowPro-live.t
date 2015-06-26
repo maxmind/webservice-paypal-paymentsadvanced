@@ -4,9 +4,9 @@ use strict;
 use warnings;
 
 use Data::GUID;
-use Data::Printer;
 use LWP::ConsoleLogger::Easy qw( debug_ua );
 use Path::Tiny qw( path );
+use Test::Fatal;
 use Test::More;
 use Test::RequiresInternet( 'pilot-payflowpro.paypal.com' => 443 );
 use WebService::PayflowPro;
@@ -15,19 +15,25 @@ my $ua = LWP::UserAgent->new();
 debug_ua($ua);
 
 {
-    my $flow = WebService::PayflowPro->new(
-        password => 'seekrit',
-        ua       => $ua,
-        user     => 'someuser',
-        vendor   => 'PayPal',
-    );
+    foreach my $production_mode ( 0, 1 ) {
+        my $flow = WebService::PayflowPro->new(
+            password        => 'seekrit',
+            production_mode => $production_mode,
+            ua              => $ua,
+            user            => 'someuser',
+            vendor          => 'PayPal',
+        );
 
-    isa_ok( $flow, 'WebService::PayflowPro', 'new object' );
+        isa_ok( $flow, 'WebService::PayflowPro', 'new object' );
 
-    my $res = $flow->create_secure_token;
-
-    ok( !$res->success, 'failed' );
-    like( $res->message, qr{failed}i, 'auth failed' );
+        isa_ok(
+            exception {
+                my $res = $flow->create_secure_token;
+            },
+            'WebService::PayflowPro::Error::Authentication',
+            $production_mode ? 'production' : 'sandbox'
+        );
+    }
 }
 
 my $file = path('t/config.pl');
@@ -47,9 +53,7 @@ SKIP: {
 
     my $create_token = {
         AMT           => 1.01,
-        INVNUM        => '000002',
         NAME          => 'Foo Bar Baz',
-        PONUM         => '000002-1',
         SECURETOKENID => $token_id,
         TRXTYPE       => 'S',
         VERBOSITY     => 'HIGH',
@@ -58,9 +62,7 @@ SKIP: {
     {
         my $res = $flow->create_secure_token($create_token);
 
-        ok( $res,          'got response' );
-        ok( $res->success, 'success' );
-        is( $res->http_response_code, 200, '200 response' );
+        ok( $res, 'got response' );
         like( $res->message, qr{approved}i, 'approved' );
         ok( $res->secure_token, 'secure token' );
         cmp_ok(
@@ -73,7 +75,7 @@ SKIP: {
 
     {
         my $res = $flow->create_secure_token($create_token);
-        ok( $res->success, 'Let module create the token id' );
+        ok( $res->secure_token, 'gets token when module generates own id' );
     }
 }
 

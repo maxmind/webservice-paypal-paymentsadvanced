@@ -4,7 +4,6 @@ use Moo;
 
 use feature qw( say );
 
-use Carp qw( croak );
 use Data::GUID;
 use LWP::UserAgent;
 use MooX::StrictConstructor;
@@ -12,7 +11,9 @@ use Types::Standard qw( Bool InstanceOf Str );
 use URI;
 use URI::FromHash qw( uri uri_object );
 use URI::QueryParam;
-use WebService::PayflowPro::Response::HTTP;
+use WebService::PayflowPro::Error::Generic;
+use WebService::PayflowPro::Response;
+use WebService::PayflowPro::Response::FromHTTP;
 
 has host => (
     is => 'lazy',
@@ -76,16 +77,22 @@ sub create_secure_token {
     my $content = join '&', $self->_encode_credentials,
         $self->_pseudo_encode_args($post);
 
-    my $response = $self->ua->post( $payflow_url, Content => $content );
+    my $http_response = $self->ua->post( $payflow_url, Content => $content );
 
-    my $res
-        = WebService::PayflowPro::Response::HTTP->new( raw_response => $response );
+    my $params
+        = WebService::PayflowPro::Response::FromHTTP->new(
+        http_response => $http_response )->params;
 
-    # this should never happen
-    if ( $res->success && $res->secure_token_id ne $post->{SECURETOKENID} ) {
-        croak sprintf(
-            'Secure token ids do not match: yours(%s) theirs (%s)',
-            $post->{SECURETOKENID}, $res->secure_token_id
+    my $res = WebService::PayflowPro::Response->new( params => $params );
+
+    # This should only happen if bad actors are involved.
+    if ( $res->secure_token_id ne $post->{SECURETOKENID} ) {
+        WebService::PayflowPro::Error::Generic->throw(
+            message => sprintf(
+                'Secure token ids do not match: yours(%s) theirs (%s)',
+                $post->{SECURETOKENID}, $res->secure_token_id
+            ),
+            params => $res->params
         );
     }
 

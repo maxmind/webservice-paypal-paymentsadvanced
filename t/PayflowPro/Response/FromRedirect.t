@@ -3,7 +3,7 @@ use warnings;
 
 use Test::More;
 use Test::Fatal qw( exception );
-use WebService::PayflowPro::Response::FromParams;
+use WebService::PayflowPro::Response::FromRedirect;
 
 my $params = {
     ACCT            => 9990,
@@ -44,11 +44,10 @@ my $params = {
 };
 
 {
-    my $res = WebService::PayflowPro::Response::FromParams->new(
+    my $res = WebService::PayflowPro::Response::FromRedirect->new(
         params => $params,
     );
 
-    ok( $res->success, 'new with params success' );
     is( $res->message, 'Approved', 'response message' );
 
     like(
@@ -59,21 +58,26 @@ my $params = {
 }
 
 {
-    my $res = WebService::PayflowPro::Response::FromParams->new(
-        ip_address => '4.4.4.4',
-        params     => $params,
+    isa_ok(
+        exception {
+            my $res = WebService::PayflowPro::Response::FromRedirect->new(
+                ip_address => '4.4.4.4',
+                params     => $params,
+            );
+        },
+        'WebService::PayflowPro::Error::IPVerification',
+        'Bad IP exception'
     );
 
-    ok( !$res->success, 'no success with unverified ip' );
 }
 
 {
-    my $res = WebService::PayflowPro::Response::FromParams->new(
+    my $res = WebService::PayflowPro::Response::FromRedirect->new(
         ip_address => '173.0.82.165',
         params     => $params,
     );
 
-    ok( $res->success, 'success with verified ip' );
+    is( $res->message, 'Approved' );
 }
 
 done_testing();
