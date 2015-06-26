@@ -50,35 +50,40 @@ my $params = {
     TYPE            => 'S',
 };
 
-{
-    my $res = $flow->get_response_from_redirect(
-        params => $params,
-    );
+foreach my $method (
+    'get_response_from_redirect',
+    'get_response_from_silent_post'
+    ) {
+    {
+        my $res = $flow->$method(
+            params => $params,
+        );
 
-    is( $res->message, 'Approved', 'response message' );
-}
+        is( $res->message, 'Approved', 'response message' );
+    }
 
-{
-    isa_ok(
-        exception {
-            my $res = $flow->get_response_from_redirect(
-                ip_address => '4.4.4.4',
-                params     => $params,
-            );
-        },
-        'WebService::PayflowPro::Error::IPVerification',
-        'Bad IP exception'
-    );
+    {
+        isa_ok(
+            exception {
+                my $res = $flow->$method(
+                    ip_address => '4.4.4.4',
+                    params     => $params,
+                );
+            },
+            'WebService::PayflowPro::Error::IPVerification',
+            'Bad IP exception'
+        );
 
-}
+    }
 
-{
-    my $res = $flow->get_response_from_redirect(
-        ip_address => '173.0.82.165',
-        params     => $params,
-    );
+    {
+        my $res = $flow->$method(
+            ip_address => '173.0.82.165',
+            params     => $params,
+        );
 
-    is( $res->message, 'Approved', 'whitelisted IP' );
+        is( $res->message, 'Approved', 'whitelisted IP' );
+    }
 }
 
 done_testing();

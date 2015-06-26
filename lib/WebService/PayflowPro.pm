@@ -100,6 +100,11 @@ sub get_response_from_redirect {
         params => $res_from_redirect->params );
 }
 
+sub get_response_from_silent_post {
+    my $self = shift;
+    return $self->get_response_from_redirect( @_ );
+}
+
 sub _validate_secure_token_id {
     my $self     = shift;
     my $res      = shift;
