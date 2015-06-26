@@ -84,19 +84,37 @@ sub create_secure_token {
         http_response => $http_response )->params;
 
     my $res = WebService::PayflowPro::Response->new( params => $params );
-
-    # This should only happen if bad actors are involved.
-    if ( $res->secure_token_id ne $post->{SECURETOKENID} ) {
-        WebService::PayflowPro::Error::Generic->throw(
-            message => sprintf(
-                'Secure token ids do not match: yours(%s) theirs (%s)',
-                $post->{SECURETOKENID}, $res->secure_token_id
-            ),
-            params => $res->params
-        );
-    }
+    $self->_validate_secure_token_id( $res, $post->{SECURETOKENID} );
 
     return $res;
+}
+
+sub get_response_from_redirect {
+    my $self = shift;
+    my %args = @_;
+
+    my $res_from_redirect
+        = WebService::PayflowPro::Response::FromRedirect->new(%args);
+
+    return WebService::PayflowPro::Response->new(
+        params => $res_from_redirect->params );
+}
+
+sub _validate_secure_token_id {
+    my $self     = shift;
+    my $res      = shift;
+    my $token_id = shift;
+
+    # This should only happen if bad actors are involved.
+    if ( $res->secure_token_id ne $token_id ) {
+        WebService::PayflowPro::Error::Generic->throw(
+            message => sprintf(
+                'Secure token ids do not match. Yours: %s. From response: %s.',
+                $token_id, $res->secure_token_id
+            ),
+            params => $res->params,
+        );
+    }
 }
 
 # The authentication args will not contain characters which need to be handled

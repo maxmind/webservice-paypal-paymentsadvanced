@@ -22,26 +22,6 @@ my %params = (
     ok( $res, 'can create response object' );
 }
 
-use Try::Tiny;
-try {
-
-            WebService::PayflowPro::Response->new(
-                params => {
-                    %params,
-                    RESULT  => 1,
-                    RESPMSG => 'User authentication failed'
-                }
-            );
-
-}
-catch {
-    use Scalar::Util qw( blessed );
-    diag blessed $_;
-
-use DDP;
-diag np( $_->params );
-diag $_->message;
-};
 {
     isa_ok(
         exception {

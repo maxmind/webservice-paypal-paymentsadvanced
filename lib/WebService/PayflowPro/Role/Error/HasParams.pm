@@ -11,3 +11,6 @@ has params => (
 );
 
 1;
+
+__END__
+#ABSTRACT: Role which provides a params attribute to exception classes.

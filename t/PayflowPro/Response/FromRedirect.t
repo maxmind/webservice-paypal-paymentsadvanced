@@ -3,7 +3,14 @@ use warnings;
 
 use Test::More;
 use Test::Fatal qw( exception );
+use WebService::PayflowPro;
 use WebService::PayflowPro::Response::FromRedirect;
+
+my $flow = WebService::PayflowPro->new(
+    password => 'seekrit',
+    user     => 'someuser',
+    vendor   => 'PayPal',
+);
 
 my $params = {
     ACCT            => 9990,
@@ -44,23 +51,17 @@ my $params = {
 };
 
 {
-    my $res = WebService::PayflowPro::Response::FromRedirect->new(
+    my $res = $flow->get_response_from_redirect(
         params => $params,
     );
 
     is( $res->message, 'Approved', 'response message' );
-
-    like(
-        exception { $res->ip_address_is_verified },
-        qr/required for validation/,
-        'dies if we try to verify a missing ip_address'
-    );
 }
 
 {
     isa_ok(
         exception {
-            my $res = WebService::PayflowPro::Response::FromRedirect->new(
+            my $res = $flow->get_response_from_redirect(
                 ip_address => '4.4.4.4',
                 params     => $params,
             );
@@ -72,12 +73,12 @@ my $params = {
 }
 
 {
-    my $res = WebService::PayflowPro::Response::FromRedirect->new(
+    my $res = $flow->get_response_from_redirect(
         ip_address => '173.0.82.165',
         params     => $params,
     );
 
-    is( $res->message, 'Approved' );
+    is( $res->message, 'Approved', 'whitelisted IP' );
 }
 
 done_testing();

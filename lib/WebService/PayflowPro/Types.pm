@@ -1,1 +1,0 @@
-package WebService::PayflowPro::Types;

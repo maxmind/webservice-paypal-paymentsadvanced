@@ -2,7 +2,6 @@ package WebService::PayflowPro::Response::FromRedirect;
 
 use Moo;
 
-use Carp qw( croak );
 use List::AllUtils qw( any );
 use MooX::HandlesVia;
 use MooX::StrictConstructor;
@@ -14,26 +13,29 @@ sub BUILD {
 
     return
         if !$self->has_ip_address
-        || $self->has_ip_address && $self->ip_address_is_verified;
+        || $self->has_ip_address && $self->_ip_address_is_verified;
 
     WebService::PayflowPro::Error::IPVerification->throw(
-        message    => $self->ip_address . ' is not a verified PayPal address',
-        ip_address => $self->ip_address,
+        message    => $self->_ip_address . ' is not a verified PayPal address',
+        ip_address => $self->_ip_address,
         params     => $self->params,
     );
 }
 
-has ip_address => (
+has _ip_address => (
     is        => 'ro',
     isa       => Str,
+    init_arg => 'ip_address',
     required  => 0,
     predicate => 'has_ip_address',
 );
 
-has ip_address_is_verified => (
-    is       => 'lazy',
+has _ip_address_is_verified => (
+    is       => 'ro',
     isa      => Bool,
+    lazy     => 1,
     init_arg => undef,
+    builder => '_build_ip_address_is_verified',
 );
 
 # Payflow IPs listed at
@@ -75,24 +77,7 @@ has params => (
 sub _build_ip_address_is_verified {
     my $self = shift;
 
-    croak 'IP address required for validation' unless $self->ip_address;
-
-    return any { $_ eq $self->ip_address } $self->_all_verified_ip_addresses;
-}
-
-sub message {
-    my $self = shift;
-    return $self->params->{RESPMSG};
-}
-
-sub secure_token {
-    my $self = shift;
-    return $self->params->{SECURETOKEN};
-}
-
-sub secure_token_id {
-    my $self = shift;
-    return $self->params->{SECURETOKENID};
+    return any { $_ eq $self->_ip_address } $self->_all_verified_ip_addresses;
 }
 
 1;

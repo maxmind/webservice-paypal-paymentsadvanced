@@ -61,3 +61,6 @@ sub _build_secure_token_id {
 }
 
 1;
+
+__END__
+#ABSTRACT: Generic response object
