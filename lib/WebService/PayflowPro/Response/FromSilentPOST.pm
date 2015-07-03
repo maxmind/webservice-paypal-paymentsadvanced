@@ -8,3 +8,6 @@ use Moo;
 extends 'WebService::PayflowPro::Response::FromRedirect';
 
 1;
+
+__END__
+# ABSTRACT: Parse Payflow response params which originate from a silent POST
