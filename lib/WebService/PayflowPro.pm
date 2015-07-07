@@ -2,11 +2,12 @@ package WebService::PayflowPro;
 
 use Moo;
 
-use feature qw( say );
+use feature qw( say state );
 
 use Data::GUID;
 use LWP::UserAgent;
 use MooX::StrictConstructor;
+use Type::Params qw( compile );
 use Types::Standard qw( Bool InstanceOf Str );
 use URI;
 use URI::FromHash qw( uri uri_object );
@@ -30,6 +31,15 @@ has password => (
     is       => 'ro',
     isa      => Str,
     required => 1,
+);
+
+has payflow_uri => (
+    is      => 'ro',
+    isa     => InstanceOf ['URI'],
+    lazy    => 1,
+    default => sub {
+        uri_object( scheme => 'https', host => $_[0]->host );
+    },
 );
 
 has production_mode => (
@@ -72,12 +82,11 @@ sub create_secure_token {
     $post->{CREATESECURETOKEN} = 'Y';
     $post->{SECURETOKENID} ||= Data::GUID->new->as_string;
 
-    my $payflow_url = uri( scheme => 'https', host => $self->host );
-
     my $content = join '&', $self->_encode_credentials,
         $self->_pseudo_encode_args($post);
 
-    my $http_response = $self->ua->post( $payflow_url, Content => $content );
+    my $http_response
+        = $self->ua->post( $self->payflow_uri, Content => $content );
 
     my $params
         = WebService::PayflowPro::Response::FromHTTP->new(
@@ -102,7 +111,22 @@ sub get_response_from_redirect {
 
 sub get_response_from_silent_post {
     my $self = shift;
-    return $self->get_response_from_redirect( @_ );
+    return $self->get_response_from_redirect(@_);
+}
+
+sub iframe_uri {
+    my $self = shift;
+    state $check = compile( InstanceOf ['WebService::PayflowPro::Response'] );
+    my ($response) = $check->(@_);
+
+    my $uri = $self->payflow_uri->clone;
+    $uri->query_param(
+        SECURETOKEN => $response->secure_token,
+    );
+    $uri->query_param(
+        SECURETOKENID => $response->secure_token_id,
+    );
+    return $uri;
 }
 
 sub _validate_secure_token_id {
