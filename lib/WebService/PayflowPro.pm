@@ -142,7 +142,7 @@ sub iframe_uri {
     return $uri if $res->is_success;
 
     WebService::PayflowPro::Error::HTTP->throw(
-        message       => 'iframe URI does not validate',
+        message       => "iframe URI does not validate: $uri",
         http_response => $res,
         http_status   => $res->code,
     );
