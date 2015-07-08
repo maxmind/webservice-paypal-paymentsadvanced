@@ -11,10 +11,11 @@ my $ua = LWP::UserAgent->new();
 debug_ua($ua);
 
 my $flow = WebService::PayflowPro->new(
-    password => 'seekrit',
-    ua       => $ua,
-    user     => 'someuser',
-    vendor   => 'PayPal',
+    password            => 'seekrit',
+    ua                  => $ua,
+    user                => 'someuser',
+    validate_iframe_uri => 0,            # requires network access
+    vendor              => 'PayPal',
 );
 
 isa_ok( $flow, 'WebService::PayflowPro', 'new object' );

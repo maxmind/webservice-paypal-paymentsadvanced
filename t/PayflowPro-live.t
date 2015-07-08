@@ -53,7 +53,12 @@ SKIP: {
 
     my $create_token = {
         AMT           => 1.01,
+        BILLINGTYPE   => 'MerchantInitiatedBilling',
+        CANCELURL     => 'http://example.com/cancel',
+        ERRORURL      => 'http://example.com/error',
+        LBILLINGTYPE  => 'MerchantInitiatedBilling',
         NAME          => 'Foo Bar Baz',
+        RETURNURL     => 'http://example.com/return',
         SECURETOKENID => $token_id,
         TRXTYPE       => 'S',
         VERBOSITY     => 'HIGH',

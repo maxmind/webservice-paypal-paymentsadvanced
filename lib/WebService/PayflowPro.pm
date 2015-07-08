@@ -61,6 +61,12 @@ has user => (
     required => 1,
 );
 
+has validate_iframe_uri => (
+    is      => 'ro',
+    isa     => Bool,
+    default => 1,
+);
+
 has vendor => (
     is       => 'ro',
     isa      => Str,
@@ -126,7 +132,18 @@ sub iframe_uri {
     $uri->query_param(
         SECURETOKENID => $response->secure_token_id,
     );
-    return $uri;
+
+    return $uri unless $self->validate_iframe_uri;
+
+    my $res = $self->ua->head($uri);
+
+    return $uri if $res->is_success;
+
+    WebService::PayflowPro::Error::HTTP->throw(
+        message       => 'iframe URI does not validate',
+        http_response => $res,
+        http_status   => $res->code,
+    );
 }
 
 sub _validate_secure_token_id {
