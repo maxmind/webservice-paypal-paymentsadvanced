@@ -9,16 +9,13 @@ use LWP::UserAgent;
 use MooX::StrictConstructor;
 use Type::Params qw( compile );
 use Types::Standard qw( Bool InstanceOf Str );
+use Types::URI qw( Uri );
 use URI;
 use URI::FromHash qw( uri uri_object );
 use URI::QueryParam;
 use WebService::PayflowPro::Error::Generic;
 use WebService::PayflowPro::Response;
 use WebService::PayflowPro::Response::FromHTTP;
-
-has host => (
-    is => 'lazy',
-);
 
 has partner => (
     is       => 'ro',
@@ -33,13 +30,16 @@ has password => (
     required => 1,
 );
 
-has payflow_uri => (
-    is      => 'ro',
-    isa     => InstanceOf ['URI'],
-    lazy    => 1,
-    default => sub {
-        uri_object( scheme => 'https', host => $_[0]->host );
-    },
+has payflow_pro_uri => (
+    is     => 'lazy',
+    isa    => Uri,
+    coerce => 1,
+);
+
+has payflow_link_uri => (
+    is     => 'lazy',
+    isa    => Uri,
+    coerce => 1,
 );
 
 has production_mode => (
@@ -75,11 +75,26 @@ has vendor => (
     required => 1,
 );
 
-sub _build_host {
+sub _build_payflow_pro_uri {
     my $self = shift;
-    return $self->production_mode
+
+    return uri_object(
+        scheme => 'https',
+        host   => $self->production_mode
         ? 'payflowpro.paypal.com'
-        : 'pilot-payflowpro.paypal.com';
+        : 'pilot-payflowpro.paypal.com'
+    );
+}
+
+sub _build_payflow_link_uri {
+    my $self = shift;
+
+    return uri_object(
+        scheme => 'https',
+        host   => $self->production_mode
+        ? 'payflowlink.paypal.com'
+        : 'pilot-payflowlink.paypal.com'
+    );
 }
 
 sub create_secure_token {
@@ -94,7 +109,7 @@ sub create_secure_token {
         $self->_pseudo_encode_args($post);
 
     my $http_response
-        = $self->ua->post( $self->payflow_uri, Content => $content );
+        = $self->ua->post( $self->payflow_pro_uri, Content => $content );
 
     my $params
         = WebService::PayflowPro::Response::FromHTTP->new(
@@ -127,7 +142,7 @@ sub iframe_uri {
     state $check = compile( InstanceOf ['WebService::PayflowPro::Response'] );
     my ($response) = $check->(@_);
 
-    my $uri = $self->payflow_uri->clone;
+    my $uri = $self->payflow_link_uri->clone;
     $uri->query_param(
         SECURETOKEN => $response->secure_token,
     );
@@ -137,7 +152,8 @@ sub iframe_uri {
 
     return $uri unless $self->validate_iframe_uri;
 
-    my $res = $self->ua->head($uri);
+    # For whatever reason on the PayPal side, HEAD isn't useful here.
+    my $res = $self->ua->get($uri);
 
     return $uri if $res->is_success;
 

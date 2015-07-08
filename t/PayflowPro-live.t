@@ -43,21 +43,22 @@ SKIP: {
     my $config = eval $file->slurp;
 
     my $flow = WebService::PayflowPro->new(
-        password => $config->{password},
-        ua       => $ua,
-        user     => $config->{user},
-        vendor   => $config->{vendor},
+        password            => $config->{password},
+        ua                  => $ua,
+        user                => $config->{user},
+        validate_iframe_uri => 1,
+        vendor              => $config->{vendor},
     );
 
     my $token_id = Data::GUID->new->as_string;
 
     my $create_token = {
-        AMT           => 1.01,
+        AMT           => 100,
         BILLINGTYPE   => 'MerchantInitiatedBilling',
         CANCELURL     => 'http://example.com/cancel',
         ERRORURL      => 'http://example.com/error',
-        LBILLINGTYPE  => 'MerchantInitiatedBilling',
-        NAME          => 'Foo Bar Baz',
+        LBILLINGTYPE0 => 'MerchantInitiatedBilling',
+        NAME          => 'WebService::PayflowPro',
         RETURNURL     => 'http://example.com/return',
         SECURETOKENID => $token_id,
         TRXTYPE       => 'S',
@@ -81,6 +82,9 @@ SKIP: {
     {
         my $res = $flow->create_secure_token($create_token);
         ok( $res->secure_token, 'gets token when module generates own id' );
+
+        my $uri = $flow->iframe_uri($res);
+        ok( $uri, 'got uri for iframe ' . $uri );
     }
 }
 
