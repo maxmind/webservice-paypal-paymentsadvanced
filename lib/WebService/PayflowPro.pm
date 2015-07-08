@@ -51,7 +51,9 @@ has production_mode => (
 has ua => (
     is      => 'ro',
     default => sub {
-        LWP::UserAgent->new;
+        my $ua = LWP::UserAgent->new;
+        $ua->timeout(5);
+        return $ua;
     }
 );
 
