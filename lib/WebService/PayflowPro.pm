@@ -13,7 +13,9 @@ use Types::URI qw( Uri );
 use URI;
 use URI::FromHash qw( uri uri_object );
 use URI::QueryParam;
+use Web::Scraper;
 use WebService::PayflowPro::Error::Generic;
+use WebService::PayflowPro::Error::iFrame;
 use WebService::PayflowPro::Response;
 use WebService::PayflowPro::Response::FromHTTP;
 
@@ -155,12 +157,27 @@ sub iframe_uri {
     # For whatever reason on the PayPal side, HEAD isn't useful here.
     my $res = $self->ua->get($uri);
 
-    return $uri if $res->is_success;
+    unless ( $res->is_success ) {
 
-    WebService::PayflowPro::Error::HTTP->throw(
-        message       => "iframe URI does not validate: $uri",
+        WebService::PayflowPro::Error::HTTP->throw(
+            message       => "iframe URI does not validate: $uri",
+            http_response => $res,
+            http_status   => $res->code,
+        );
+
+    }
+
+    my $error_scraper = scraper {
+        process ".error", error => 'TEXT';
+    };
+
+    my $scraped_text = $error_scraper->scrape($res);
+
+    return $uri unless exists $scraped_text->{error};
+
+    WebService::PayflowPro::Error::iFrame->throw(
+        message => "iframe contains error message: $scraped_text->{error}",
         http_response => $res,
-        http_status   => $res->code,
     );
 }
 
