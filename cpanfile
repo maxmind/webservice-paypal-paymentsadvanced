@@ -6,12 +6,15 @@ requires "Moo::Role" => "0";
 requires "MooX::HandlesVia" => "0";
 requires "MooX::StrictConstructor" => "0";
 requires "Throwable::Error" => "0";
+requires "Type::Params" => "0";
 requires "Types::Standard" => "0";
+requires "Types::URI" => "0";
 requires "URI" => "0";
 requires "URI::FromHash" => "0";
 requires "URI::QueryParam" => "0";
+requires "Web::Scraper" => "0";
 requires "feature" => "0";
-requires "perl" => "5.010";
+requires "perl" => "5.01301";
 requires "strict" => "0";
 requires "warnings" => "0";
 
@@ -24,15 +27,16 @@ on 'test' => sub {
   requires "LWP::ConsoleLogger::Easy" => "0";
   requires "Path::Tiny" => "0";
   requires "Test::Fatal" => "0";
+  requires "Test::LWP::UserAgent" => "0";
   requires "Test::More" => "0";
   requires "Test::RequiresInternet" => "0";
-  requires "perl" => "5.010";
+  requires "perl" => "5.01301";
 };
 
 on 'configure' => sub {
   requires "ExtUtils::MakeMaker" => "0";
   requires "Module::Build" => "0.28";
-  requires "perl" => "5.010";
+  requires "perl" => "v5.10.0";
 };
 
 on 'develop' => sub {
