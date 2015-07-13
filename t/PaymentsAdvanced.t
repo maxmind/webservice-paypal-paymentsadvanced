@@ -13,7 +13,7 @@ use WebService::PayPal::PaymentsAdvanced;
 
 {
     my $ua = LWP::UserAgent->new();
-    debug_ua( $ua );
+    debug_ua($ua);
 
     my $payments = WebService::PayPal::PaymentsAdvanced->new(
         password                 => 'seekrit',
@@ -37,7 +37,8 @@ use WebService::PayPal::PaymentsAdvanced;
 
     is_deeply(
         $payments->_force_upper_case( { foo => 1, BaR => 2 } ),
-        { FOO => 1, BAR => 2 }, 'force upper case hash keys'
+        { FOO => 1, BAR => 2 },
+        'force upper case hash keys'
     );
 
     my $response = WebService::PayPal::PaymentsAdvanced::Response->new(
@@ -47,7 +48,7 @@ use WebService::PayPal::PaymentsAdvanced;
             SECURETOKENID => 'BAR',
         }
     );
-    my $url = $payments->hosted_form_uri( $response );
+    my $url = $payments->hosted_form_uri($response);
 
     ok( $url, "hosted_form url: $url" );
 }
@@ -55,10 +56,10 @@ use WebService::PayPal::PaymentsAdvanced;
 # Test parsing errors out of hosted_form content.
 {
     my ( $payments, $payments_res )
-        = get_mocked_payments( 'test-data/hosted-form-with-error.html' );
+        = get_mocked_payments('test-data/hosted-form-with-error.html');
 
     like(
-        exception { $payments->hosted_form_uri( $payments_res ) },
+        exception { $payments->hosted_form_uri($payments_res) },
         qr{Secure Token is not enabled},
         'HTML error is in exception'
     );
@@ -68,9 +69,11 @@ use WebService::PayPal::PaymentsAdvanced;
 {
 
     my ( $payments, $payments_res )
-        = get_mocked_payments( 'test-data/hosted-form.html' );
-    is( exception { $payments->hosted_form_uri( $payments_res ) },
-        undef, 'No exception when no HTML errors' );
+        = get_mocked_payments('test-data/hosted-form.html');
+    is(
+        exception { $payments->hosted_form_uri($payments_res) },
+        undef, 'No exception when no HTML errors'
+    );
 }
 
 sub get_mocked_payments {
@@ -91,7 +94,7 @@ sub get_mocked_payments {
         'pilot-payflowlink.paypal.com',
         HTTP::Response->new(
             '200', 'OK',
-            [ 'Content-Type' => 'text/html' ], path( "t/$file" )->slurp
+            [ 'Content-Type' => 'text/html' ], path("t/$file")->slurp
         )
     );
 

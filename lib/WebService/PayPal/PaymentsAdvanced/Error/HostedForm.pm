@@ -17,4 +17,4 @@ extends 'Throwable::Error';
 
 1;
 
-# ABSTRACT: An error message which has been parsed out of an iFrame
+# ABSTRACT: An error message which has been parsed out of a hosted form

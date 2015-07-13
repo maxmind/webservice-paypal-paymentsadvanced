@@ -24,7 +24,10 @@ debug_ua($ua);
             vendor          => 'PayPal',
         );
 
-        isa_ok( $payments, 'WebService::PayPal::PaymentsAdvanced', 'new object' );
+        isa_ok(
+            $payments, 'WebService::PayPal::PaymentsAdvanced',
+            'new object'
+        );
 
         isa_ok(
             exception {
@@ -36,7 +39,7 @@ debug_ua($ua);
     }
 }
 
-my $file = path( 't/config.pl' );
+my $file = path('t/config.pl');
 SKIP: {
     skip 'config file required for live tests', 2, unless $file->exists;
 
@@ -66,22 +69,24 @@ SKIP: {
     };
 
     {
-        my $res = $payments->create_secure_token( $create_token );
+        my $res = $payments->create_secure_token($create_token);
 
         ok( $res, 'got response' );
         like( $res->message, qr{approved}i, 'approved' );
         ok( $res->secure_token, 'secure token' );
-        cmp_ok( $res->secure_token_id, 'eq', $token_id,
-            'token id unchanged' );
+        cmp_ok(
+            $res->secure_token_id, 'eq', $token_id,
+            'token id unchanged'
+        );
     }
 
     delete $create_token->{SECURETOKENID};
 
     {
-        my $res = $payments->create_secure_token( $create_token );
+        my $res = $payments->create_secure_token($create_token);
         ok( $res->secure_token, 'gets token when module generates own id' );
 
-        my $uri = $payments->hosted_form_uri( $res );
+        my $uri = $payments->hosted_form_uri($res);
         ok( $uri, 'got uri for hosted_form ' . $uri );
     }
 }

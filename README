@@ -1,6 +1,6 @@
 NAME
-    WebService::PayflowPro - A simple wrapper around the PayflowPro web
-    service
+    WebService::PayPal::PaymentsAdvanced - A simple wrapper around the
+    PayPal Payments Advanced web service
 
 VERSION
     version 0.000001
