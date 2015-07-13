@@ -1,4 +1,4 @@
-package WebService::PayflowPro::Response::FromRedirect;
+package WebService::PayPal::PaymentsAdvanced::Response::FromRedirect;
 
 use Moo;
 
@@ -6,7 +6,7 @@ use List::AllUtils qw( any );
 use MooX::HandlesVia;
 use MooX::StrictConstructor;
 use Types::Standard qw( Bool HashRef Str );
-use WebService::PayflowPro::Error::IPVerification;
+use WebService::PayPal::PaymentsAdvanced::Error::IPVerification;
 
 sub BUILD {
     my $self = shift;
@@ -15,7 +15,7 @@ sub BUILD {
         if !$self->has_ip_address
         || $self->has_ip_address && $self->_ip_address_is_verified;
 
-    WebService::PayflowPro::Error::IPVerification->throw(
+    WebService::PayPal::PaymentsAdvanced::Error::IPVerification->throw(
         message    => $self->_ip_address . ' is not a verified PayPal address',
         ip_address => $self->_ip_address,
         params     => $self->params,
@@ -38,7 +38,7 @@ has _ip_address_is_verified => (
     builder => '_build_ip_address_is_verified',
 );
 
-# Payflow IPs listed at
+# Payments Advanced IPs listed at
 # https://ppmts.custhelp.com/app/answers/detail/a_id/883/kw/payflow%20Ip
 
 has _ip_addresses => (
@@ -83,4 +83,4 @@ sub _build_ip_address_is_verified {
 1;
 
 __END__
-# ABSTRACT: Response object for WebService::PayflowPro instatiated via HashRef of params
+# ABSTRACT: Response object for WebService::PayPal::PaymentsAdvanced instatiated via HashRef of params

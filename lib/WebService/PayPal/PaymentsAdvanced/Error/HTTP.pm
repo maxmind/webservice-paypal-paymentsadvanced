@@ -1,4 +1,4 @@
-package WebService::PayflowPro::Error::HTTP;
+package WebService::PayPal::PaymentsAdvanced::Error::HTTP;
 
 use Moo;
 

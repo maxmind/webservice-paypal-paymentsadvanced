@@ -9,13 +9,13 @@ use Test::LWP::UserAgent;
 
 use LWP::ConsoleLogger::Easy qw( debug_ua );
 use Path::Tiny qw( path );
-use WebService::PayflowPro;
+use WebService::PayPal::PaymentsAdvanced;
 
 {
     my $ua = LWP::UserAgent->new();
     debug_ua($ua);
 
-    my $flow = WebService::PayflowPro->new(
+    my $payments = WebService::PayPal::PaymentsAdvanced->new(
         password            => 'seekrit',
         ua                  => $ua,
         user                => 'someuser',
@@ -23,41 +23,41 @@ use WebService::PayflowPro;
         vendor              => 'PayPal',
     );
 
-    isa_ok( $flow, 'WebService::PayflowPro', 'new object' );
+    isa_ok( $payments, 'WebService::PayPal::PaymentsAdvanced', 'new object' );
 
-    my $encoded = $flow->_pseudo_encode_args(
+    my $encoded = $payments->_pseudo_encode_args(
         { foo => 'xxx', bar => 'a space', baz => 'a +' } );
 
     is( $encoded, 'bar[7]=a space&baz[3]=a +&foo[3]=xxx', 'pseudo encoding' );
     is(
-        $flow->_encode_credentials,
+        $payments->_encode_credentials,
         'PARTNER=PayPal&PWD=seekrit&USER=someuser&VENDOR=PayPal',
         'encode credentials'
     );
 
     is_deeply(
-        $flow->_force_upper_case( { foo => 1, BaR => 2 } ),
+        $payments->_force_upper_case( { foo => 1, BaR => 2 } ),
         { FOO => 1, BAR => 2 }, 'force upper case hash keys'
     );
 
-    my $response = WebService::PayflowPro::Response->new(
+    my $response = WebService::PayPal::PaymentsAdvanced::Response->new(
         params => {
             RESULT        => 0,
             SECURETOKEN   => 'FOO',
             SECURETOKENID => 'BAR',
         }
     );
-    my $url = $flow->iframe_uri($response);
+    my $url = $payments->iframe_uri($response);
 
     ok( $url, "iframe url: $url" );
 }
 
 # Test parsing errors out of iFrame content.
 {
-    my ( $flow, $flow_res ) = get_mocked_flow( 'iframe-with-error.html' );
+    my ( $payments, $payments_res ) = get_mocked_payments( 'iframe-with-error.html' );
 
     like(
-        exception { $flow->iframe_uri($flow_res) },
+        exception { $payments->iframe_uri($payments_res) },
         qr{Secure Token is not enabled}, 'HTML error is in exception'
     );
 }
@@ -65,14 +65,14 @@ use WebService::PayflowPro;
 # Test parsing iFrame content without errors.
 {
 
-    my ( $flow, $flow_res ) = get_mocked_flow( 'iframe.html' );
+    my ( $payments, $payments_res ) = get_mocked_payments( 'iframe.html' );
     is(
-        exception { $flow->iframe_uri($flow_res) },
+        exception { $payments->iframe_uri($payments_res) },
         undef, 'No exception when no HTML errors'
     );
 }
 
-sub get_mocked_flow {
+sub get_mocked_payments {
     my $file = shift;
 
     my $ua = Test::LWP::UserAgent->new;
@@ -95,14 +95,14 @@ sub get_mocked_flow {
         )
     );
 
-    my $flow = WebService::PayflowPro->new(
+    my $payments = WebService::PayPal::PaymentsAdvanced->new(
         password            => 'seekrit',
         ua                  => $ua,
         user                => 'someuser',
         validate_iframe_uri => 1,            # mocking network access
         vendor              => 'PayPal',
     );
-    my $flow_res = $flow->create_secure_token( { SECURETOKENID => 'BAR' } );
-    return ($flow, $flow_res );
+    my $payments_res = $payments->create_secure_token( { SECURETOKENID => 'BAR' } );
+    return ($payments, $payments_res );
 }
 done_testing();

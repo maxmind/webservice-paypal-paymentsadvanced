@@ -1,4 +1,4 @@
-package WebService::PayflowPro::Error::iFrame;
+package WebService::PayPal::PaymentsAdvanced::Error::iFrame;
 
 use strict;
 use warnings;

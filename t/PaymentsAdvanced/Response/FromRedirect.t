@@ -3,10 +3,10 @@ use warnings;
 
 use Test::More;
 use Test::Fatal qw( exception );
-use WebService::PayflowPro;
-use WebService::PayflowPro::Response::FromRedirect;
+use WebService::PayPal::PaymentsAdvanced;
+use WebService::PayPal::PaymentsAdvanced::Response::FromRedirect;
 
-my $flow = WebService::PayflowPro->new(
+my $payments = WebService::PayPal::PaymentsAdvanced->new(
     password => 'seekrit',
     user     => 'someuser',
     vendor   => 'PayPal',
@@ -55,7 +55,7 @@ foreach my $method (
     'get_response_from_silent_post'
     ) {
     {
-        my $res = $flow->$method(
+        my $res = $payments->$method(
             params => $params,
         );
 
@@ -65,19 +65,19 @@ foreach my $method (
     {
         isa_ok(
             exception {
-                my $res = $flow->$method(
+                my $res = $payments->$method(
                     ip_address => '4.4.4.4',
                     params     => $params,
                 );
             },
-            'WebService::PayflowPro::Error::IPVerification',
+            'WebService::PayPal::PaymentsAdvanced::Error::IPVerification',
             'Bad IP exception'
         );
 
     }
 
     {
-        my $res = $flow->$method(
+        my $res = $payments->$method(
             ip_address => '173.0.82.165',
             params     => $params,
         );

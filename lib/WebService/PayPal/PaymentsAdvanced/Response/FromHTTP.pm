@@ -1,4 +1,4 @@
-package WebService::PayflowPro::Response::FromHTTP;
+package WebService::PayPal::PaymentsAdvanced::Response::FromHTTP;
 
 use Moo;
 
@@ -7,7 +7,7 @@ use MooX::StrictConstructor;
 use Types::Standard qw( HashRef InstanceOf );
 use URI;
 use URI::QueryParam;
-use WebService::PayflowPro::Error::HTTP;
+use WebService::PayPal::PaymentsAdvanced::Error::HTTP;
 
 has params => (
     is  => 'lazy',
@@ -26,7 +26,7 @@ sub BUILD {
     my $self = shift;
     return if $self->_http_response->is_success;
 
-    WebService::PayflowPro::Error::HTTP->throw(
+    WebService::PayPal::PaymentsAdvanced::Error::HTTP->throw(
         message       => 'HTTP error: ' . $self->_code,
         http_response => $self->_http_response,
         http_status   => $self->_code,
@@ -42,4 +42,4 @@ sub _build_params {
 1;
 
 __END__
-# ABSTRACT: Response object for WebService::PayflowPro instantiated from HTTP::Response object
+# ABSTRACT: Response object for WebService::PayPal::PaymentsAdvanced instantiated from HTTP::Response object

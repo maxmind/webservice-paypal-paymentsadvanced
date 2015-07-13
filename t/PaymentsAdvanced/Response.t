@@ -1,7 +1,7 @@
 use strict;
 use warnings;
 
-use WebService::PayflowPro::Response;
+use WebService::PayPal::PaymentsAdvanced::Response;
 use Test::Fatal;
 use Test::More;
 
@@ -13,7 +13,7 @@ my %params = (
 );
 
 {
-    my $res = WebService::PayflowPro::Response->new( params => \%params );
+    my $res = WebService::PayPal::PaymentsAdvanced::Response->new( params => \%params );
 
     is( $res->message,         'Approved', 'message' );
     is( $res->secure_token,    'token',    'token' );
@@ -25,7 +25,7 @@ my %params = (
 {
     isa_ok(
         exception {
-            WebService::PayflowPro::Response->new(
+            WebService::PayPal::PaymentsAdvanced::Response->new(
                 params => {
                     %params,
                     RESULT  => 1,
@@ -33,7 +33,7 @@ my %params = (
                 }
             );
         },
-        'WebService::PayflowPro::Error::Authentication',
+        'WebService::PayPal::PaymentsAdvanced::Error::Authentication',
         'authentication exception'
     );
 }

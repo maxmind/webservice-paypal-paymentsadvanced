@@ -1,9 +1,9 @@
-package WebService::PayflowPro::Response;
+package WebService::PayPal::PaymentsAdvanced::Response;
 
 use Moo;
 
 use Types::Standard qw( Str );
-use WebService::PayflowPro::Error::Authentication;
+use WebService::PayPal::PaymentsAdvanced::Error::Authentication;
 
 has params => (
     is       => 'ro',
@@ -33,13 +33,13 @@ sub BUILD {
     return if defined $result && !$result;
 
     if ( $result == 1 ) {
-        WebService::PayflowPro::Error::Authentication->throw(
+        WebService::PayPal::PaymentsAdvanced::Error::Authentication->throw(
             message => 'Authentication error: ' . $self->message,
             params  => $self->params,
         );
     }
 
-    WebService::PayflowPro::Error::Generic->throw(
+    WebService::PayPal::PaymentsAdvanced::Error::Generic->throw(
         message => $self->message,
         params  => $self->params,
     );

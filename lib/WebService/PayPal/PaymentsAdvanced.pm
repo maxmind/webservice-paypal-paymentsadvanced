@@ -1,4 +1,4 @@
-package WebService::PayflowPro;
+package WebService::PayPal::PaymentsAdvanced;
 
 use Moo;
 
@@ -14,10 +14,10 @@ use URI;
 use URI::FromHash qw( uri uri_object );
 use URI::QueryParam;
 use Web::Scraper;
-use WebService::PayflowPro::Error::Generic;
-use WebService::PayflowPro::Error::iFrame;
-use WebService::PayflowPro::Response;
-use WebService::PayflowPro::Response::FromHTTP;
+use WebService::PayPal::PaymentsAdvanced::Error::Generic;
+use WebService::PayPal::PaymentsAdvanced::Error::iFrame;
+use WebService::PayPal::PaymentsAdvanced::Response;
+use WebService::PayPal::PaymentsAdvanced::Response::FromHTTP;
 
 has partner => (
     is       => 'ro',
@@ -114,10 +114,10 @@ sub create_secure_token {
         = $self->ua->post( $self->payflow_pro_uri, Content => $content );
 
     my $params
-        = WebService::PayflowPro::Response::FromHTTP->new(
+        = WebService::PayPal::PaymentsAdvanced::Response::FromHTTP->new(
         http_response => $http_response )->params;
 
-    my $res = WebService::PayflowPro::Response->new( params => $params );
+    my $res = WebService::PayPal::PaymentsAdvanced::Response->new( params => $params );
     $self->_validate_secure_token_id( $res, $post->{SECURETOKENID} );
 
     return $res;
@@ -128,9 +128,9 @@ sub get_response_from_redirect {
     my %args = @_;
 
     my $res_from_redirect
-        = WebService::PayflowPro::Response::FromRedirect->new(%args);
+        = WebService::PayPal::PaymentsAdvanced::Response::FromRedirect->new(%args);
 
-    return WebService::PayflowPro::Response->new(
+    return WebService::PayPal::PaymentsAdvanced::Response->new(
         params => $res_from_redirect->params );
 }
 
@@ -141,7 +141,7 @@ sub get_response_from_silent_post {
 
 sub iframe_uri {
     my $self = shift;
-    state $check = compile( InstanceOf ['WebService::PayflowPro::Response'] );
+    state $check = compile( InstanceOf ['WebService::PayPal::PaymentsAdvanced::Response'] );
     my ($response) = $check->(@_);
 
     my $uri = $self->payflow_link_uri->clone;
@@ -159,7 +159,7 @@ sub iframe_uri {
 
     unless ( $res->is_success ) {
 
-        WebService::PayflowPro::Error::HTTP->throw(
+        WebService::PayPal::PaymentsAdvanced::Error::HTTP->throw(
             message       => "iframe URI does not validate: $uri",
             http_response => $res,
             http_status   => $res->code,
@@ -175,7 +175,7 @@ sub iframe_uri {
 
     return $uri unless exists $scraped_text->{error};
 
-    WebService::PayflowPro::Error::iFrame->throw(
+    WebService::PayPal::PaymentsAdvanced::Error::iFrame->throw(
         message => "iframe contains error message: $scraped_text->{error}",
         http_response => $res,
     );
@@ -188,7 +188,7 @@ sub _validate_secure_token_id {
 
     # This should only happen if bad actors are involved.
     if ( $res->secure_token_id ne $token_id ) {
-        WebService::PayflowPro::Error::Generic->throw(
+        WebService::PayPal::PaymentsAdvanced::Error::Generic->throw(
             message => sprintf(
                 'Secure token ids do not match. Yours: %s. From response: %s.',
                 $token_id, $res->secure_token_id
@@ -212,7 +212,7 @@ sub _encode_credentials {
         VENDOR  => $self->vendor,
     );
 
-    # Create key/value pairs the way that PayflowPro wants them.
+    # Create key/value pairs the way that PayPal::PaymentsAdvanced wants them.
     my $pairs = join '&', map { $_ . '=' . $auth{$_} } sort keys %auth;
     return $pairs;
 }
@@ -224,8 +224,8 @@ sub _force_upper_case {
     return \%post;
 }
 
-# Payflow treats encoding key/value pairs like a special snowflake.
-# https://metacpan.org/source/PLOBBES/Business-OnlinePayment-PayflowPro-1.01/PayflowPro.pm#L276
+# Payments Advanced treats encoding key/value pairs like a special snowflake.
+# https://metacpan.org/source/PLOBBES/Business-OnlinePayment-PayPal::PaymentsAdvanced-1.01/PayPal::PaymentsAdvanced.pm#L276
 
 sub _pseudo_encode_args {
     my $self = shift;
@@ -240,4 +240,4 @@ sub _pseudo_encode_args {
 1;
 
 __END__
-#ABSTRACT: A simple wrapper around the PayflowPro web service
+#ABSTRACT: A simple wrapper around the PayPal::PaymentsAdvanced web service

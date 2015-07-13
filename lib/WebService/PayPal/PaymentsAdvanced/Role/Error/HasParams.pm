@@ -1,4 +1,4 @@
-package WebService::PayflowPro::Role::Error::HasParams;
+package WebService::PayPal::PaymentsAdvanced::Role::Error::HasParams;
 
 use Moo::Role;
 

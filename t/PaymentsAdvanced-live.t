@@ -9,14 +9,14 @@ use Path::Tiny qw( path );
 use Test::Fatal;
 use Test::More;
 use Test::RequiresInternet( 'pilot-payflowpro.paypal.com' => 443 );
-use WebService::PayflowPro;
+use WebService::PayPal::PaymentsAdvanced;
 
 my $ua = LWP::UserAgent->new();
 debug_ua($ua);
 
 {
     foreach my $production_mode ( 0, 1 ) {
-        my $flow = WebService::PayflowPro->new(
+        my $payments = WebService::PayPal::PaymentsAdvanced->new(
             password        => 'seekrit',
             production_mode => $production_mode,
             ua              => $ua,
@@ -24,13 +24,13 @@ debug_ua($ua);
             vendor          => 'PayPal',
         );
 
-        isa_ok( $flow, 'WebService::PayflowPro', 'new object' );
+        isa_ok( $payments, 'WebService::PayPal::PaymentsAdvanced', 'new object' );
 
         isa_ok(
             exception {
-                my $res = $flow->create_secure_token;
+                my $res = $payments->create_secure_token;
             },
-            'WebService::PayflowPro::Error::Authentication',
+            'WebService::PayPal::PaymentsAdvanced::Error::Authentication',
             $production_mode ? 'production' : 'sandbox'
         );
     }
@@ -42,7 +42,7 @@ SKIP: {
 
     my $config = eval $file->slurp;
 
-    my $flow = WebService::PayflowPro->new(
+    my $payments = WebService::PayPal::PaymentsAdvanced->new(
         password            => $config->{password},
         ua                  => $ua,
         user                => $config->{user},
@@ -58,7 +58,7 @@ SKIP: {
         CANCELURL     => 'http://example.com/cancel',
         ERRORURL      => 'http://example.com/error',
         LBILLINGTYPE0 => 'MerchantInitiatedBilling',
-        NAME          => 'WebService::PayflowPro',
+        NAME          => 'WebService::PayPal::PaymentsAdvanced',
         RETURNURL     => 'http://example.com/return',
         SECURETOKENID => $token_id,
         TRXTYPE       => 'S',
@@ -66,7 +66,7 @@ SKIP: {
     };
 
     {
-        my $res = $flow->create_secure_token($create_token);
+        my $res = $payments->create_secure_token($create_token);
 
         ok( $res, 'got response' );
         like( $res->message, qr{approved}i, 'approved' );
@@ -80,10 +80,10 @@ SKIP: {
     delete $create_token->{SECURETOKENID};
 
     {
-        my $res = $flow->create_secure_token($create_token);
+        my $res = $payments->create_secure_token($create_token);
         ok( $res->secure_token, 'gets token when module generates own id' );
 
-        my $uri = $flow->iframe_uri($res);
+        my $uri = $payments->iframe_uri($res);
         ok( $uri, 'got uri for iframe ' . $uri );
     }
 }
