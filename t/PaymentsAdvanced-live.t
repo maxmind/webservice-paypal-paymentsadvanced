@@ -36,18 +36,18 @@ debug_ua($ua);
     }
 }
 
-my $file = path('t/config.pl');
+my $file = path( 't/config.pl' );
 SKIP: {
     skip 'config file required for live tests', 2, unless $file->exists;
 
     my $config = eval $file->slurp;
 
     my $payments = WebService::PayPal::PaymentsAdvanced->new(
-        password            => $config->{password},
-        ua                  => $ua,
-        user                => $config->{user},
-        validate_iframe_uri => 1,
-        vendor              => $config->{vendor},
+        password                 => $config->{password},
+        ua                       => $ua,
+        user                     => $config->{user},
+        validate_hosted_form_uri => 1,
+        vendor                   => $config->{vendor},
     );
 
     my $token_id = Data::GUID->new->as_string;
@@ -66,25 +66,23 @@ SKIP: {
     };
 
     {
-        my $res = $payments->create_secure_token($create_token);
+        my $res = $payments->create_secure_token( $create_token );
 
         ok( $res, 'got response' );
         like( $res->message, qr{approved}i, 'approved' );
         ok( $res->secure_token, 'secure token' );
-        cmp_ok(
-            $res->secure_token_id, 'eq', $token_id,
-            'token id unchanged'
-        );
+        cmp_ok( $res->secure_token_id, 'eq', $token_id,
+            'token id unchanged' );
     }
 
     delete $create_token->{SECURETOKENID};
 
     {
-        my $res = $payments->create_secure_token($create_token);
+        my $res = $payments->create_secure_token( $create_token );
         ok( $res->secure_token, 'gets token when module generates own id' );
 
-        my $uri = $payments->iframe_uri($res);
-        ok( $uri, 'got uri for iframe ' . $uri );
+        my $uri = $payments->hosted_form_uri( $res );
+        ok( $uri, 'got uri for hosted_form ' . $uri );
     }
 }
 

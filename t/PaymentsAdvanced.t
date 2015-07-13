@@ -13,14 +13,14 @@ use WebService::PayPal::PaymentsAdvanced;
 
 {
     my $ua = LWP::UserAgent->new();
-    debug_ua($ua);
+    debug_ua( $ua );
 
     my $payments = WebService::PayPal::PaymentsAdvanced->new(
-        password            => 'seekrit',
-        ua                  => $ua,
-        user                => 'someuser',
-        validate_iframe_uri => 0,            # requires network access
-        vendor              => 'PayPal',
+        password                 => 'seekrit',
+        ua                       => $ua,
+        user                     => 'someuser',
+        validate_hosted_form_uri => 0,            # requires network access
+        vendor                   => 'PayPal',
     );
 
     isa_ok( $payments, 'WebService::PayPal::PaymentsAdvanced', 'new object' );
@@ -47,29 +47,30 @@ use WebService::PayPal::PaymentsAdvanced;
             SECURETOKENID => 'BAR',
         }
     );
-    my $url = $payments->iframe_uri($response);
+    my $url = $payments->hosted_form_uri( $response );
 
-    ok( $url, "iframe url: $url" );
+    ok( $url, "hosted_form url: $url" );
 }
 
-# Test parsing errors out of iFrame content.
+# Test parsing errors out of hosted_form content.
 {
-    my ( $payments, $payments_res ) = get_mocked_payments( 'iframe-with-error.html' );
+    my ( $payments, $payments_res )
+        = get_mocked_payments( 'test-data/hosted-form-with-error.html' );
 
     like(
-        exception { $payments->iframe_uri($payments_res) },
-        qr{Secure Token is not enabled}, 'HTML error is in exception'
+        exception { $payments->hosted_form_uri( $payments_res ) },
+        qr{Secure Token is not enabled},
+        'HTML error is in exception'
     );
 }
 
-# Test parsing iFrame content without errors.
+# Test parsing hosted_form content without errors.
 {
 
-    my ( $payments, $payments_res ) = get_mocked_payments( 'iframe.html' );
-    is(
-        exception { $payments->iframe_uri($payments_res) },
-        undef, 'No exception when no HTML errors'
-    );
+    my ( $payments, $payments_res )
+        = get_mocked_payments( 'test-data/hosted-form.html' );
+    is( exception { $payments->hosted_form_uri( $payments_res ) },
+        undef, 'No exception when no HTML errors' );
 }
 
 sub get_mocked_payments {
@@ -90,19 +91,19 @@ sub get_mocked_payments {
         'pilot-payflowlink.paypal.com',
         HTTP::Response->new(
             '200', 'OK',
-            [ 'Content-Type' => 'text/html' ],
-            path("t/$file")->slurp
+            [ 'Content-Type' => 'text/html' ], path( "t/$file" )->slurp
         )
     );
 
     my $payments = WebService::PayPal::PaymentsAdvanced->new(
-        password            => 'seekrit',
-        ua                  => $ua,
-        user                => 'someuser',
-        validate_iframe_uri => 1,            # mocking network access
-        vendor              => 'PayPal',
+        password                 => 'seekrit',
+        ua                       => $ua,
+        user                     => 'someuser',
+        validate_hosted_form_uri => 1,            # mocking network access
+        vendor                   => 'PayPal',
     );
-    my $payments_res = $payments->create_secure_token( { SECURETOKENID => 'BAR' } );
-    return ($payments, $payments_res );
+    my $payments_res
+        = $payments->create_secure_token( { SECURETOKENID => 'BAR' } );
+    return ( $payments, $payments_res );
 }
 done_testing();

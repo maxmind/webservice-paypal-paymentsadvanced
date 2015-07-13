@@ -15,7 +15,7 @@ use URI::FromHash qw( uri uri_object );
 use URI::QueryParam;
 use Web::Scraper;
 use WebService::PayPal::PaymentsAdvanced::Error::Generic;
-use WebService::PayPal::PaymentsAdvanced::Error::iFrame;
+use WebService::PayPal::PaymentsAdvanced::Error::HostedForm;
 use WebService::PayPal::PaymentsAdvanced::Response;
 use WebService::PayPal::PaymentsAdvanced::Response::FromHTTP;
 
@@ -65,7 +65,7 @@ has user => (
     required => 1,
 );
 
-has validate_iframe_uri => (
+has validate_hosted_form_uri => (
     is      => 'ro',
     isa     => Bool,
     default => 1,
@@ -136,31 +136,28 @@ sub get_response_from_redirect {
 
 sub get_response_from_silent_post {
     my $self = shift;
-    return $self->get_response_from_redirect(@_);
+    return $self->get_response_from_redirect( @_ );
 }
 
-sub iframe_uri {
+sub hosted_form_uri {
     my $self = shift;
-    state $check = compile( InstanceOf ['WebService::PayPal::PaymentsAdvanced::Response'] );
-    my ($response) = $check->(@_);
+    state $check = compile(
+        InstanceOf ['WebService::PayPal::PaymentsAdvanced::Response'] );
+    my ( $response ) = $check->( @_ );
 
     my $uri = $self->payflow_link_uri->clone;
-    $uri->query_param(
-        SECURETOKEN => $response->secure_token,
-    );
-    $uri->query_param(
-        SECURETOKENID => $response->secure_token_id,
-    );
+    $uri->query_param( SECURETOKEN   => $response->secure_token, );
+    $uri->query_param( SECURETOKENID => $response->secure_token_id, );
 
-    return $uri unless $self->validate_iframe_uri;
+    return $uri unless $self->validate_hosted_form_uri;
 
     # For whatever reason on the PayPal side, HEAD isn't useful here.
-    my $res = $self->ua->get($uri);
+    my $res = $self->ua->get( $uri );
 
     unless ( $res->is_success ) {
 
         WebService::PayPal::PaymentsAdvanced::Error::HTTP->throw(
-            message       => "iframe URI does not validate: $uri",
+            message       => "hosted_form URI does not validate: $uri",
             http_response => $res,
             http_status   => $res->code,
         );
@@ -171,12 +168,13 @@ sub iframe_uri {
         process ".error", error => 'TEXT';
     };
 
-    my $scraped_text = $error_scraper->scrape($res);
+    my $scraped_text = $error_scraper->scrape( $res );
 
     return $uri unless exists $scraped_text->{error};
 
-    WebService::PayPal::PaymentsAdvanced::Error::iFrame->throw(
-        message => "iframe contains error message: $scraped_text->{error}",
+    WebService::PayPal::PaymentsAdvanced::Error::HostedForm->throw(
+        message =>
+            "hosted_form contains error message: $scraped_text->{error}",
         http_response => $res,
     );
 }

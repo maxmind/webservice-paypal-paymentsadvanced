@@ -1,4 +1,4 @@
-package WebService::PayPal::PaymentsAdvanced::Error::iFrame;
+package WebService::PayPal::PaymentsAdvanced::Error::HostedForm;
 
 use strict;
 use warnings;
