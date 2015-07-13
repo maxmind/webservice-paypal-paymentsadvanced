@@ -1,4 +1,4 @@
-package WebService::PayPal::PaymentsAdvanced::Response::SilentPOST;
+package WebService::PayPal::PaymentsAdvanced::Response::FromSilentPOST;
 
 use Moo;
 

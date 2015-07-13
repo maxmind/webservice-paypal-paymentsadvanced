@@ -39,10 +39,11 @@ debug_ua($ua);
     }
 }
 
-my $file = path('t/config.pl');
+my $file = path('t/test-data/config.pl');
 SKIP: {
     skip 'config file required for live tests', 2, unless $file->exists;
 
+    ## no critic (BuiltinFunctions::ProhibitStringyEval)
     my $config = eval $file->slurp;
 
     my $payments = WebService::PayPal::PaymentsAdvanced->new(

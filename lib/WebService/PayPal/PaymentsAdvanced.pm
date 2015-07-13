@@ -23,7 +23,7 @@ has partner => (
     is       => 'ro',
     isa      => Str,
     required => 1,
-    default  => 'PayPal'
+    default  => 'PayPal',
 );
 
 has password => (
@@ -104,6 +104,7 @@ sub create_secure_token {
     my $args = shift;
 
     my $post = $self->_force_upper_case($args);
+
     $post->{CREATESECURETOKEN} = 'Y';
     $post->{SECURETOKENID} ||= Data::GUID->new->as_string;
 
@@ -167,7 +168,7 @@ sub hosted_form_uri {
     }
 
     my $error_scraper = scraper {
-        process ".error", error => 'TEXT';
+        process( '.error', error => 'TEXT' );
     };
 
     my $scraped_text = $error_scraper->scrape($res);
@@ -221,6 +222,7 @@ sub _force_upper_case {
     my $self = shift;
     my $args = shift;
     my %post = map { uc $_ => $args->{$_} } keys %{$args};
+
     return \%post;
 }
 

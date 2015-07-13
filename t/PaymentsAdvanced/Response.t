@@ -13,7 +13,8 @@ my %params = (
 );
 
 {
-    my $res = WebService::PayPal::PaymentsAdvanced::Response->new( params => \%params );
+    my $res = WebService::PayPal::PaymentsAdvanced::Response->new(
+        params => \%params );
 
     is( $res->message,         'Approved', 'message' );
     is( $res->secure_token,    'token',    'token' );

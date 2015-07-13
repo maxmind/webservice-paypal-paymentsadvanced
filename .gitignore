@@ -3,5 +3,5 @@
 cpanfile.snapshot
 local
 *.swp
-t/*config.pl
+t/test-data/*config.pl
 .tidyall.d

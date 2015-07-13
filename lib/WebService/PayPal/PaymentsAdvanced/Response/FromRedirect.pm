@@ -16,7 +16,7 @@ sub BUILD {
         || $self->has_ip_address && $self->_ip_address_is_verified;
 
     WebService::PayPal::PaymentsAdvanced::Error::IPVerification->throw(
-        message    => $self->_ip_address . ' is not a verified PayPal address',
+        message => $self->_ip_address . ' is not a verified PayPal address',
         ip_address => $self->_ip_address,
         params     => $self->params,
     );
@@ -25,7 +25,7 @@ sub BUILD {
 has _ip_address => (
     is        => 'ro',
     isa       => Str,
-    init_arg => 'ip_address',
+    init_arg  => 'ip_address',
     required  => 0,
     predicate => 'has_ip_address',
 );
@@ -35,7 +35,7 @@ has _ip_address_is_verified => (
     isa      => Bool,
     lazy     => 1,
     init_arg => undef,
-    builder => '_build_ip_address_is_verified',
+    builder  => '_build_ip_address_is_verified',
 );
 
 # Payments Advanced IPs listed at
