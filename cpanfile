@@ -15,8 +15,6 @@ requires "URI::QueryParam" => "0";
 requires "Web::Scraper" => "0";
 requires "feature" => "0";
 requires "perl" => "5.01301";
-requires "strict" => "0";
-requires "warnings" => "0";
 
 on 'build' => sub {
   requires "Module::Build" => "0.28";
@@ -31,6 +29,8 @@ on 'test' => sub {
   requires "Test::More" => "0";
   requires "Test::RequiresInternet" => "0";
   requires "perl" => "5.01301";
+  requires "strict" => "0";
+  requires "warnings" => "0";
 };
 
 on 'configure' => sub {
