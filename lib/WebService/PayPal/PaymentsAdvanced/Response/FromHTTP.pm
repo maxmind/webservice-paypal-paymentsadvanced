@@ -12,6 +12,7 @@ use WebService::PayPal::PaymentsAdvanced::Error::HTTP;
 has params => (
     is  => 'lazy',
     isa => HashRef,
+    init_arg => undef,
 );
 
 has _http_response => (
@@ -43,3 +44,31 @@ sub _build_params {
 
 __END__
 # ABSTRACT: Response object for WebService::PayPal::PaymentsAdvanced instantiated from HTTP::Response object
+
+=head1 DESCRIPTION
+
+This module provides an interface for extracting returned params from an
+L<HTTP::Response> object.  You won't need to this module directly if you are
+using L<PayPal::PaymentsAdvanced/create_secure_token>.
+
+Throws a L<WebService::PayPal::PaymentsAdvanced::Error::HTTP> exception if the
+HTTP request was not successful.
+
+=head1 OBJECT INSTANTIATION
+
+The following parameters can be supplied to C<new()> when creating a new object.
+
+=head2 Required Parameters
+
+=head3 http_response
+
+An L<HTTP::Response> object.
+
+=head2 Methods
+
+=head3 params
+
+Returns a C<HashRef> of parameters which have been extracted from the
+L<HTTP::Response> object.
+
+=cut

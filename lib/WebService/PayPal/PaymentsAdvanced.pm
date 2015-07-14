@@ -244,83 +244,210 @@ sub _pseudo_encode_args {
 __END__
 #ABSTRACT: A simple wrapper around the PayPal Payments Advanced web service
 
+=head1 SYNOPSIS
+
+    use WebService::PayPal::PaymentsAdvanced;
+    my $payments = WebService::PayPal::PaymentsAdvanced->new(
+        {
+            password => 'seekrit',
+            user     => 'username',
+            vendor   => 'somevendor',
+        }
+    );
+
+    my $response = $payments->create_secure_token(
+        {
+            AMT            => 100,
+            TRXTYPE        => 'S',
+            VERBOSITY      => 'HIGH',
+            BILLINGTYPE    => 'MerchantInitiatedBilling',
+            CANCELURL      => 'https://example.com/cancel',
+            ERRORURL       => 'https://example.com/error',
+            L_BILLINGTYPE0 => 'MerchantInitiatedBilling',
+            NAME           => 'Chuck Norris',
+            RETURNURL      => 'https://example.com/return',
+        }
+    );
+
+    my $uri = $payments->hosted_form_uri( $response );
+
+    # Store token data for later use.  You'll need to implement this yourself.
+    $foo->freeze_token_data(
+        token    => $response->secure_token,
+        token_id => $response->secure_token_id,
+    );
+
+    # Later, when PayPal returns a silent POST or redirects the user to your
+    # return URL:
+
+    my $redirect_response = $payments->get_response_from_redirect(
+        ip_address => $ip,
+        params     => $params,
+    );
+
+    # Fetch the tokens from the original request. You'll need to implement
+    # this yourself.
+
+    my $thawed = $foo->get_thawed_tokens(...);
+
+    # Don't do anything until you're sure the tokens are ok.
+    if (   $thawed->secure_token ne $redirect->secure_token
+        || $thawed->secure_token_id ne $response->secure_token_id ) {
+        die 'Fraud!';
+    }
+
+    # Everything looks good.  Carry on!
+
+print $response->secure_token;
+
 =head1 DESCRIPTION
 
-This is a wrapper around the "PayPal Payments Advanced" hosted forms.  This
-service is also known as "PayPal Payflow Link".  This code does things like
-facilitate secure token creation, providing an URL which you can use to insert
-an hosted_form into your pages and processing the various kinds of response you can
-get from PayPal.
+This is a wrapper around the "PayPal Payments Advanced" (AKA "PayPal Payflow
+Link") hosted forms.  This code does things like facilitating secure token
+creation, providing an URL which you can use to insert an hosted_form into
+your pages and processing the various kinds of response you can get from
+PayPal.
 
-We also use various exception classses to make it easier for you to decide how to
-handle the parts that go wrong.
+We also use various exception classses to make it easier for you to decide how
+to handle the parts that go wrong.
 
 =head1 OBJECT INSTANTIATION
 
 The following parameters can be supplied to C<new()> when creating a new object.
 
-=head2 partner
+=head2 Required Parameters
 
-The value of the C<partner> field you use when logging in to the Payflow
-Manager. Defaults to C<PayPal>.
-
-=head2 password
+=head3 password
 
 The value of the C<password> field you use when logging in to the Payflow
 Manager.  (You'll probably want to create a specific user just for API calls).
 
-=head2 payflow_pro_uri
+=head3 user
+
+The value of the C<user> field you use when logging in to the Payflow Manager.
+
+=head3 vendor
+
+The value of the C<vendor> field you use when logging in to the Payflow
+Manager.
+
+=head2 Optional Parameters
+
+=head3 partner
+
+The value of the C<partner> field you use when logging in to the Payflow
+Manager. Defaults to C<PayPal>.
+
+=head3 payflow_pro_uri
 
 The hostname for the Payflow Pro API.  This is where token creation requests
 get directed.  This already has a sensible (and correct) default, but it is
 settable so that you can more easily mock API calls when testing.
 
-=head2 payflow_link_uri
+=head3 payflow_link_uri
 
 The hostname for the Payflow Link website.  This is the hosted service where
 users will enter their payment information.  This already has a sensible (and
 correct) default, but it is settable in case you want to mock it while testing.
 
-=head2 production_mode
+=head3 production_mode
 
-This is a Boolean.  Set this to C<true> if when you are ready to process real
-transactions.  Defaults to C<false>.
+This is a C<Boolean>.  Set this to C<true> if when you are ready to process
+real transactions.  Defaults to C<false>.
 
-=head2 ua
+=head3 ua
 
-If you like, you can provide your own UserAgent.  It must be of the
-L<LWP::UserAgent family.  Check the tests which accompany this distribution for
-an example of how to mock API calls using L<Test::LWP::UserAgent>.
+You may provide your own UserAgent, but it must be of the L<LWP::UserAgent>
+family.  If you do provide a UserAgent, be sure to set a sensible timeout
+value.
 
-You can also use this parameter to get detailed information about the network
-calls which are being made.
+This can be useful for debugging.  You'll be able to get detailed information
+about the network calls which are being made.
 
-    use LWP::ConsoleLogger::Easy debug( ua );
+    use LWP::ConsoleLogger::Easy qw( debug_ua );
     use LWP::UserAgent;
     use WebService::PayPal::PaymentsAdvanced;
 
     my $ua = LWP::UserAgent;
-    debug_ua( $ua );
+    debug_ua($ua);
 
-    my $payments = WebService::PayPal::PaymentsAdvanced->new( ua => $ua, ... );
+    my $payments
+        = WebService::PayPal::PaymentsAdvanced->new( ua => $ua, ... );
+
     # Now fire up a console and watch your network activity.
 
-=head2 user
+Check the tests which accompany this distribution for an example of how to mock
+API calls using L<Test::LWP::UserAgent>.
 
-The value of the C<user> field you use when logging in to the Payflow Manager.
+=head3 validate_hosted_form_uri
 
-=head2 validate_hosted_form_uri
+C<Boolean>.  If enabled, this module will attempt to GET the uri which you'll
+be providing to the end user.  This can help you identify issues on the PayPal
+side.  This is helpful because you'll be able to log exceptions thrown by this
+method and deal with them accordingly.  If you disable this option, you'll need
+to rely on end users to report issues which may exist within PayPal's hosted
+pages.  Defaults to C<true>.
 
-=head2 vendor
+=head2 Methods
 
-The value of the C<vendor> field you use when logging in to the Payflow Manager.
+=head3 create_secure_token
 
-=head2 create_secure_token
+Create a secure token which you can use to create a hosted form uri.  Returns a
+L<WebService::PayPal::PaymentsAdvanced::Response> object.
 
-=head2 get_response_from_redirect
+    use WebService::PayPal::PaymentsAdvanced;
+    my $payments = WebService::PayPal::PaymentsAdvanced->new(...);
 
-=head2 get_response_from_silent_post
+    my $response = $payments->create_secure_token(
+        {
+            AMT            => 100,
+            TRXTYPE        => 'S',
+            VERBOSITY      => 'HIGH',
+            BILLINGTYPE    => 'MerchantInitiatedBilling',
+            CANCELURL      => 'https://example.com/cancel',
+            ERRORURL       => 'https://example.com/error',
+            L_BILLINGTYPE0 => 'MerchantInitiatedBilling',
+            NAME           => 'Chuck Norris',
+            RETURNURL      => 'https://example.com/return'
+        }
+    );
 
-=head2 hosted_form_uri
+    print $response->secure_token;
+
+=head3 get_response_from_redirect
+
+This method can be used to validate responses from PayPal to your return URL or
+your silent POST url.  It's essentially a wrapper around
+L<WebService::PayPal::PaymentsAdvanced::Response::FromRedirect>.  If you
+provide an ip_address parameter, it will be validated against a list of known
+IPs which PayPal provides.  You're encouraged to provide an IP address in order
+to prevent spoofing of payment responses.  See
+L<WebService::PayPal::PaymentsAdvanced::Response::FromRedirect> for more
+information on this behaviour.
+
+This method returns a L<WebService::PayPal::PaymentsAdvanced::Response> object.
+
+    my $response = $payments->get_response_from_redirect(
+        ip_address => $ip,
+        params     => $params,
+    );
+    print $response->message;
+
+=head3 get_response_from_silent_post
+
+This method is basically an alias for C<get_response_from_redirect>. See its
+documentation above.
+
+=head3 hosted_form_uri
+
+Returns a L<URI> object which you can use either to insert an iframe into your
+pages or redirect the user to PayPal directly in order to make a payment.
+
+    use WebService::PayPal::PaymentsAdvanced;
+    my $payments = WebService::PayPal::PaymentsAdvanced->new(
+        validate_hosted_form_uri => 1, ... );
+
+    my $response = $payments->create_secure_token(...);
+    my $uri      = $payments->hosted_form_uri($response);
 
 =cut

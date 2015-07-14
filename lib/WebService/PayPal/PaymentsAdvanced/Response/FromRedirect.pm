@@ -83,4 +83,46 @@ sub _build_ip_address_is_verified {
 1;
 
 __END__
-# ABSTRACT: Response object for WebService::PayPal::PaymentsAdvanced instatiated via HashRef of params
+# ABSTRACT: Response object for WebService::PayPal::PaymentsAdvanced instantiated via HashRef of params
+
+=head1 DESCRIPTION
+
+This module provides an interface for extracting returned params from an
+L<HTTP::Response> object.  You won't need to this module directly if you are
+using L<PayPal::PaymentsAdvanced/create_secure_token>.
+
+Throws a L<WebService::PayPal::PaymentsAdvanced::Error::HTTP> exception if the
+HTTP request was not successful.
+
+=head1 OBJECT INSTANTIATION
+
+The following parameters can be supplied to C<new()> when creating a new object.
+
+=head2 Required Parameters
+
+=head3 params
+
+Returns a C<HashRef> of parameters which have been returned from PayPal via a
+redirect or a silent POST.
+
+=head2 Optional Parameters
+
+=head3 ip_address
+
+This is the IP address from which the PayPal params have been returned.  If
+you provide an IP address, it will be validated against a list of known valid
+IP addresses which have been provided by PayPal.  You are encouraged to
+provide an IP in order to prevent spoofing.
+
+This module will throw a
+L<WebService::PayPal::PaymentsAdvanced::Error::IPVerification> exception if
+the provided IP address cannot be validated.
+
+=head2 Methods
+
+=head3 params
+
+Returns the same C<HashRef> of parameters which was initially provided to the
+C<new> method.
+
+=cut

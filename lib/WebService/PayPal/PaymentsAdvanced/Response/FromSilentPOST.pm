@@ -11,3 +11,10 @@ extends 'WebService::PayPal::PaymentsAdvanced::Response::FromRedirect';
 
 __END__
 # ABSTRACT: Parse Payments Advanced response params which originate from a silent POST
+
+=head1 DESCRIPTION
+
+This module has the same internals and public interface as
+L<WebService::PayPal::PaymentsAdvanced::Response::FromRedirect>.
+
+=cut
