@@ -18,6 +18,7 @@ use WebService::PayPal::PaymentsAdvanced::Error::Generic;
 use WebService::PayPal::PaymentsAdvanced::Error::HostedForm;
 use WebService::PayPal::PaymentsAdvanced::Response;
 use WebService::PayPal::PaymentsAdvanced::Response::FromHTTP;
+use WebService::PayPal::PaymentsAdvanced::Response::FromRedirect;
 
 has partner => (
     is       => 'ro',
