@@ -303,6 +303,8 @@ print $response->secure_token;
 
 =head1 DESCRIPTION
 
+BETA BETA BETA.  The interface is still subject to change.
+
 This is a wrapper around the "PayPal Payments Advanced" (AKA "PayPal Payflow
 Link") hosted forms.  This code does things like facilitating secure token
 creation, providing an URL which you can use to insert an hosted_form into
