@@ -311,7 +311,7 @@ creation, providing an URL which you can use to insert an hosted_form into
 your pages and processing the various kinds of response you can get from
 PayPal.
 
-We also use various exception classses to make it easier for you to decide how
+We also use various exception classes to make it easier for you to decide how
 to handle the parts that go wrong.
 
 =head1 OBJECT INSTANTIATION
