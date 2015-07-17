@@ -12,8 +12,8 @@ sub BUILD {
     my $self = shift;
 
     return
-        if !$self->has_ip_address
-        || $self->has_ip_address && $self->_ip_address_is_verified;
+        if !$self->_has_ip_address
+        || $self->_has_ip_address && $self->_ip_address_is_verified;
 
     WebService::PayPal::PaymentsAdvanced::Error::IPVerification->throw(
         message => $self->_ip_address . ' is not a verified PayPal address',
@@ -27,7 +27,7 @@ has _ip_address => (
     isa       => Str,
     init_arg  => 'ip_address',
     required  => 0,
-    predicate => 'has_ip_address',
+    predicate => '_has_ip_address',
 );
 
 has _ip_address_is_verified => (
