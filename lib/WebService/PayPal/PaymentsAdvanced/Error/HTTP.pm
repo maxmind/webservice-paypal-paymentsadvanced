@@ -66,4 +66,8 @@ inherited from L<Throwable::Error>.
 Returns the L<HTTP::Response> object which was returned when attempting to GET
 the hosted form.
 
+=head2 http_status
+
+Returns the HTTP status code for the response.
+
 =cut
