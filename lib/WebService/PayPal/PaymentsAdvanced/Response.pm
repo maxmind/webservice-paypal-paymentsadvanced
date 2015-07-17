@@ -7,25 +7,25 @@ use WebService::PayPal::PaymentsAdvanced::Error::Authentication;
 
 has params => (
     is       => 'ro',
-    isa => HashRef,
+    isa      => HashRef,
     required => 1,
 );
 
 has message => (
-    is  => 'lazy',
-    isa => Str,
+    is       => 'lazy',
+    isa      => Str,
     init_arg => undef,
 );
 
 has secure_token => (
-    is  => 'lazy',
-    isa => Str,
+    is       => 'lazy',
+    isa      => Str,
     init_arg => undef,
 );
 
 has secure_token_id => (
-    is  => 'lazy',
-    isa => Str,
+    is       => 'lazy',
+    isa      => Str,
     init_arg => undef,
 );
 

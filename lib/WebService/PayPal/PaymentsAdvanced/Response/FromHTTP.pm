@@ -10,8 +10,8 @@ use URI::QueryParam;
 use WebService::PayPal::PaymentsAdvanced::Error::HTTP;
 
 has params => (
-    is  => 'lazy',
-    isa => HashRef,
+    is       => 'lazy',
+    isa      => HashRef,
     init_arg => undef,
 );
 
