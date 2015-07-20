@@ -23,6 +23,7 @@ on 'build' => sub {
 on 'test' => sub {
   requires "HTTP::Response" => "0";
   requires "LWP::ConsoleLogger::Easy" => "0";
+  requires "Mozilla::CA" => "20130114";
   requires "Path::Tiny" => "0";
   requires "Test::Fatal" => "0";
   requires "Test::LWP::UserAgent" => "0";
