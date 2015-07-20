@@ -14,7 +14,7 @@ requires "URI::FromHash" => "0";
 requires "URI::QueryParam" => "0";
 requires "Web::Scraper" => "0";
 requires "feature" => "0";
-requires "perl" => "5.01301";
+requires "perl" => "5.014";
 
 on 'build' => sub {
   requires "Module::Build" => "0.28";
@@ -29,7 +29,6 @@ on 'test' => sub {
   requires "Test::LWP::UserAgent" => "0";
   requires "Test::More" => "0";
   requires "Test::RequiresInternet" => "0";
-  requires "perl" => "5.01301";
   requires "strict" => "0";
   requires "warnings" => "0";
 };
@@ -37,7 +36,6 @@ on 'test' => sub {
 on 'configure' => sub {
   requires "ExtUtils::MakeMaker" => "0";
   requires "Module::Build" => "0.28";
-  requires "perl" => "v5.10.0";
 };
 
 on 'develop' => sub {
