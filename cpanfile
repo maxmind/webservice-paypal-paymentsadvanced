@@ -1,5 +1,5 @@
 requires "Data::GUID" => "0";
-requires "LWP::Protocol::https" => "6.06";
+requires "LWP::Protocol::https" => "0";
 requires "LWP::UserAgent" => "0";
 requires "List::AllUtils" => "0";
 requires "Moo" => "0";
