@@ -62,6 +62,17 @@ foreach my $method (
         is( $res->message, 'Approved', 'response message' );
     }
 
+
+    {
+        my $res = $payments->$method(
+            ip_address => '173.0.82.165',
+            params     => $params,
+        );
+
+        is( $res->message, 'Approved', 'whitelisted IP' );
+    }
+
+    next unless $method eq 'get_response_from_silent_post';
     {
         isa_ok(
             exception {
@@ -74,15 +85,6 @@ foreach my $method (
             'Bad IP exception'
         );
 
-    }
-
-    {
-        my $res = $payments->$method(
-            ip_address => '173.0.82.165',
-            params     => $params,
-        );
-
-        is( $res->message, 'Approved', 'whitelisted IP' );
     }
 }
 

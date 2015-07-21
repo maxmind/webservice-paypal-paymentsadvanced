@@ -19,6 +19,7 @@ use WebService::PayPal::PaymentsAdvanced::Error::HostedForm;
 use WebService::PayPal::PaymentsAdvanced::Response;
 use WebService::PayPal::PaymentsAdvanced::Response::FromHTTP;
 use WebService::PayPal::PaymentsAdvanced::Response::FromRedirect;
+use WebService::PayPal::PaymentsAdvanced::Response::FromSilentPOST;
 
 has partner => (
     is       => 'ro',
@@ -130,17 +131,24 @@ sub get_response_from_redirect {
     my $self = shift;
     my %args = @_;
 
-    my $res_from_redirect
+    my $response
         = WebService::PayPal::PaymentsAdvanced::Response::FromRedirect->new(
         %args);
 
     return WebService::PayPal::PaymentsAdvanced::Response->new(
-        params => $res_from_redirect->params );
+        params => $response->params );
 }
 
 sub get_response_from_silent_post {
     my $self = shift;
-    return $self->get_response_from_redirect(@_);
+    my %args = @_;
+
+    my $response
+        = WebService::PayPal::PaymentsAdvanced::Response::FromSilentPOST
+        ->new(%args);
+
+    return WebService::PayPal::PaymentsAdvanced::Response->new(
+        params => $response->params );
 }
 
 sub hosted_form_uri {
@@ -419,13 +427,25 @@ L<WebService::PayPal::PaymentsAdvanced::Response> object.
 
 =head3 get_response_from_redirect
 
-This method can be used to validate responses from PayPal to your return URL or
-your silent POST url.  It's essentially a wrapper around
-L<WebService::PayPal::PaymentsAdvanced::Response::FromRedirect>.  If you
+This method can be used to parse responses from PayPal to your return URL.
+It's essentially a wrapper around
+L<WebService::PayPal::PaymentsAdvanced::Response::FromRedirect>.  Returns a
+L<WebService::PayPal::PaymentsAdvanced::Response> object.
+
+    my $response = $payments->get_response_from_redirect(
+        params     => $params,
+    );
+    print $response->message;
+
+=head3 get_response_from_silent_post
+
+This method can be used to validate responses from PayPal to your silent POST
+url.  It's essentially a wrapper around
+L<WebService::PayPal::PaymentsAdvanced::Response::FromSilentPost>.  If you
 provide an ip_address parameter, it will be validated against a list of known
 IPs which PayPal provides.  You're encouraged to provide an IP address in order
 to prevent spoofing of payment responses.  See
-L<WebService::PayPal::PaymentsAdvanced::Response::FromRedirect> for more
+L<WebService::PayPal::PaymentsAdvanced::Response::FromSilentPOST> for more
 information on this behaviour.
 
 This method returns a L<WebService::PayPal::PaymentsAdvanced::Response> object.
@@ -435,11 +455,6 @@ This method returns a L<WebService::PayPal::PaymentsAdvanced::Response> object.
         params     => $params,
     );
     print $response->message;
-
-=head3 get_response_from_silent_post
-
-This method is basically an alias for C<get_response_from_redirect>. See its
-documentation above.
 
 =head3 hosted_form_uri
 
