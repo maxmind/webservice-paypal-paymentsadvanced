@@ -4,7 +4,7 @@ use Moo;
 
 extends 'Throwable::Error';
 
-with 'WebService::PayPal::PaymentsAdvanced::Role::Error::HasParams';
+with 'WebService::PayPal::PaymentsAdvanced::Role::HasParams';
 
 1;
 

@@ -12,7 +12,7 @@ has ip_address => (
     required => 1,
 );
 
-with 'WebService::PayPal::PaymentsAdvanced::Role::Error::HasParams';
+with 'WebService::PayPal::PaymentsAdvanced::Role::HasParams';
 
 1;
 

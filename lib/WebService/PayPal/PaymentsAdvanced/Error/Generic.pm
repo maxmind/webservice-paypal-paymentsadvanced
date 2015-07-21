@@ -2,7 +2,7 @@ package WebService::PayPal::PaymentsAdvanced::Error::Generic;
 
 use Moo;
 
-with 'WebService::PayPal::PaymentsAdvanced::Role::Error::HasParams';
+with 'WebService::PayPal::PaymentsAdvanced::Role::HasParams';
 
 extends 'Throwable::Error';
 
