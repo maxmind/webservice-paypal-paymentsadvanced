@@ -167,13 +167,24 @@ OBJECT INSTANTIATION
         print $response->secure_token;
 
    get_response_from_redirect
-    This method can be used to validate responses from PayPal to your return
-    URL or your silent POST url. It's essentially a wrapper around
-    WebService::PayPal::PaymentsAdvanced::Response::FromRedirect. If you
+    This method can be used to parse responses from PayPal to your return
+    URL. It's essentially a wrapper around
+    WebService::PayPal::PaymentsAdvanced::Response::FromRedirect. Returns a
+    WebService::PayPal::PaymentsAdvanced::Response object.
+
+        my $response = $payments->get_response_from_redirect(
+            params     => $params,
+        );
+        print $response->message;
+
+   get_response_from_silent_post
+    This method can be used to validate responses from PayPal to your silent
+    POST url. It's essentially a wrapper around
+    WebService::PayPal::PaymentsAdvanced::Response::FromSilentPost. If you
     provide an ip_address parameter, it will be validated against a list of
     known IPs which PayPal provides. You're encouraged to provide an IP
     address in order to prevent spoofing of payment responses. See
-    WebService::PayPal::PaymentsAdvanced::Response::FromRedirect for more
+    WebService::PayPal::PaymentsAdvanced::Response::FromSilentPOST for more
     information on this behaviour.
 
     This method returns a WebService::PayPal::PaymentsAdvanced::Response
@@ -184,10 +195,6 @@ OBJECT INSTANTIATION
             params     => $params,
         );
         print $response->message;
-
-   get_response_from_silent_post
-    This method is basically an alias for "get_response_from_redirect". See
-    its documentation above.
 
    hosted_form_uri
     Returns a URI object which you can use either to insert an iframe into

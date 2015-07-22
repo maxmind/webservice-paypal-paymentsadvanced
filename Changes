@@ -2,6 +2,7 @@ Revision history for WebService-PayflowPro
 
 {{$NEXT}}
     - Adds LWP::Protocol::https to deps
+    - Removes IP address validation on redirect
 
 0.000002  2015-07-20 14:41:56-04:00 America/Toronto
     - Don't support Perls earlier than 5.14
