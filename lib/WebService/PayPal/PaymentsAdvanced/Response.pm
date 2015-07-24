@@ -36,7 +36,7 @@ sub BUILD {
 
     return if defined $result && !$result;
 
-    if ( $result == 1 ) {
+    if ( $result && $result == 1 ) {
         WebService::PayPal::PaymentsAdvanced::Error::Authentication->throw(
             message => 'Authentication error: ' . $self->message,
             params  => $self->params,
