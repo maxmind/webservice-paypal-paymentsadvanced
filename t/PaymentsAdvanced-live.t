@@ -5,11 +5,13 @@ use warnings;
 
 use Data::GUID;
 use LWP::ConsoleLogger::Easy qw( debug_ua );
-use Path::Tiny qw( path );
 use Test::Fatal qw( exception );
 use Test::More;
 use Test::RequiresInternet( 'pilot-payflowpro.paypal.com' => 443 );
 use WebService::PayPal::PaymentsAdvanced;
+
+use lib 't/lib';
+use Util;
 
 my $ua = LWP::UserAgent->new();
 debug_ua($ua);
@@ -39,20 +41,11 @@ debug_ua($ua);
     }
 }
 
-my $file = path('t/test-data/config.pl');
+my $config = Util::config();
 SKIP: {
-    skip 'config file required for live tests', 2, unless $file->exists;
+    skip 'config file required for live tests', 2, unless $config;
 
-    ## no critic (BuiltinFunctions::ProhibitStringyEval)
-    my $config = eval $file->slurp;
-
-    my $payments = WebService::PayPal::PaymentsAdvanced->new(
-        password                 => $config->{password},
-        ua                       => $ua,
-        user                     => $config->{user},
-        validate_hosted_form_uri => 1,
-        vendor                   => $config->{vendor},
-    );
+    my $payments = Util::ppa();
 
     my $token_id = Data::GUID->new->as_string;
 
