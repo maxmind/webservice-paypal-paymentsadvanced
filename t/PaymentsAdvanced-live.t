@@ -6,7 +6,7 @@ use warnings;
 use Data::GUID;
 use LWP::ConsoleLogger::Easy qw( debug_ua );
 use Path::Tiny qw( path );
-use Test::Fatal;
+use Test::Fatal qw( exception );
 use Test::More;
 use Test::RequiresInternet( 'pilot-payflowpro.paypal.com' => 443 );
 use WebService::PayPal::PaymentsAdvanced;
@@ -89,6 +89,30 @@ SKIP: {
 
         my $uri = $payments->hosted_form_uri($res);
         ok( $uri, 'got uri for hosted_form ' . $uri );
+    }
+
+    {
+        like(
+            exception(
+                sub {
+                    $payments->post( { trxtype => 'V', origid => 'xfoox', } );
+                }
+            ),
+            qr{Invalid tender}i,
+            'Exception on voiding invalid transaction'
+        );
+    }
+
+    {
+        like(
+            exception(
+                sub {
+                    $payments->void_transaction( 'xfoox' );
+                }
+            ),
+            qr{Invalid tender}i,
+            'Exception on voiding invalid transaction'
+        );
     }
 }
 

@@ -110,18 +110,8 @@ sub create_secure_token {
     $post->{CREATESECURETOKEN} = 'Y';
     $post->{SECURETOKENID} ||= Data::GUID->new->as_string;
 
-    my $content = join '&', $self->_encode_credentials,
-        $self->_pseudo_encode_args($post);
+    my $res = $self->post($post);
 
-    my $http_response
-        = $self->ua->post( $self->payflow_pro_uri, Content => $content );
-
-    my $params
-        = WebService::PayPal::PaymentsAdvanced::Response::FromHTTP->new(
-        http_response => $http_response )->params;
-
-    my $res = WebService::PayPal::PaymentsAdvanced::Response->new(
-        params => $params );
     $self->_validate_secure_token_id( $res, $post->{SECURETOKENID} );
 
     return $res;
@@ -189,6 +179,37 @@ sub hosted_form_uri {
             "hosted_form contains error message: $scraped_text->{error}",
         http_response => $res,
     );
+}
+
+sub post {
+    my $self = shift;
+
+    state $check = compile( HashRef );
+    my ($post) = $check->(@_);
+
+    $post = $self->_force_upper_case($post);
+
+    my $content = join '&', $self->_encode_credentials,
+        $self->_pseudo_encode_args($post);
+
+    my $http_response
+        = $self->ua->post( $self->payflow_pro_uri, Content => $content );
+
+    my $params
+        = WebService::PayPal::PaymentsAdvanced::Response::FromHTTP->new(
+        http_response => $http_response )->params;
+
+    return WebService::PayPal::PaymentsAdvanced::Response->new(
+        params => $params );
+}
+
+sub void_transaction {
+    my $self  = shift;
+
+    state $check = compile( Str );
+    my ($pnref) = $check->(@_);
+
+    return $self->post( { TRXTYPE => 'V', ORIGID => $pnref } );
 }
 
 sub _validate_secure_token_id {
@@ -467,5 +488,21 @@ pages or redirect the user to PayPal directly in order to make a payment.
 
     my $response = $payments->create_secure_token(...);
     my $uri      = $payments->hosted_form_uri($response);
+
+=head3 post
+
+Generic method to post arbitrary params to PayPal.  Requires a C<HashRef> of
+parameters and returns a L<WebService::PayPal::PaymentsAdvanced::Response>
+object.  Any lower case keys will be converted to upper case before this
+response is sent.
+
+    use WebService::PayPal::PaymentsAdvanced;
+    my $payments = WebService::PayPal::PaymentsAdvanced->new(...);
+
+    my $response = $payments->post( { TRXTYPE => 'V', ORIGID => $pnref, } );
+    say $response->message;
+
+    # OR
+    my $response = $payments->post( { trxtype => 'V', origid => $pnref, } );
 
 =cut
