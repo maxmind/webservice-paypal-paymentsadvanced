@@ -8,7 +8,7 @@ use Data::GUID;
 use LWP::UserAgent;
 use MooX::StrictConstructor;
 use Type::Params qw( compile );
-use Types::Standard qw( Bool InstanceOf Str );
+use Types::Standard qw( Bool HashRef InstanceOf Str );
 use Types::URI qw( Uri );
 use URI;
 use URI::FromHash qw( uri uri_object );
@@ -103,7 +103,9 @@ sub _build_payflow_link_uri {
 
 sub create_secure_token {
     my $self = shift;
-    my $args = shift;
+
+    state $check = compile( HashRef );
+    my ($args) = $check->(@_);
 
     my $post = $self->_force_upper_case($args);
 
@@ -119,11 +121,13 @@ sub create_secure_token {
 
 sub get_response_from_redirect {
     my $self = shift;
-    my %args = @_;
+
+    state $check = compile( HashRef );
+    my ($args) = $check->(@_);
 
     my $response
         = WebService::PayPal::PaymentsAdvanced::Response::FromRedirect->new(
-        %args);
+        $args);
 
     return WebService::PayPal::PaymentsAdvanced::Response->new(
         params => $response->params );
@@ -131,11 +135,13 @@ sub get_response_from_redirect {
 
 sub get_response_from_silent_post {
     my $self = shift;
-    my %args = @_;
+
+    state $check = compile( HashRef );
+    my ($args) = $check->(@_);
 
     my $response
         = WebService::PayPal::PaymentsAdvanced::Response::FromSilentPOST
-        ->new(%args);
+        ->new($args);
 
     return WebService::PayPal::PaymentsAdvanced::Response->new(
         params => $response->params );
@@ -143,6 +149,7 @@ sub get_response_from_silent_post {
 
 sub hosted_form_uri {
     my $self = shift;
+
     state $check = compile(
         InstanceOf ['WebService::PayPal::PaymentsAdvanced::Response'] );
     my ($response) = $check->(@_);

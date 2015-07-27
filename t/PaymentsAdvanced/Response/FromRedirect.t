@@ -55,17 +55,17 @@ foreach my $method (
     'get_response_from_silent_post'
     ) {
     {
-        my $res = $payments->$method(
-            params => $params,
-        );
+        my $res = $payments->$method( { params => $params } );
 
         is( $res->message, 'Approved', 'response message' );
     }
 
     {
         my $res = $payments->$method(
-            ip_address => '173.0.81.65',
-            params     => $params,
+            {
+                ip_address => '173.0.81.65',
+                params     => $params,
+            }
         );
 
         is( $res->message, 'Approved', 'whitelisted IP' );
@@ -76,8 +76,10 @@ foreach my $method (
         isa_ok(
             exception {
                 my $res = $payments->$method(
-                    ip_address => '4.4.4.4',
-                    params     => $params,
+                    {
+                        ip_address => '4.4.4.4',
+                        params     => $params,
+                    }
                 );
             },
             'WebService::PayPal::PaymentsAdvanced::Error::IPVerification',

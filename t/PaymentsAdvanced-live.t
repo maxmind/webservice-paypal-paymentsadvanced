@@ -31,10 +31,10 @@ debug_ua($ua);
 
         isa_ok(
             exception {
-                my $res = $payments->create_secure_token;
+                my $res = $payments->create_secure_token({});
             },
             'WebService::PayPal::PaymentsAdvanced::Error::Authentication',
-            $production_mode ? 'production' : 'sandbox'
+            ( $production_mode ? 'production' : 'sandbox' )
         );
     }
 }
