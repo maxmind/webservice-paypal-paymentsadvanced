@@ -62,10 +62,9 @@ foreach my $method (
         is( $res->message, 'Approved', 'response message' );
     }
 
-
     {
         my $res = $payments->$method(
-            ip_address => '173.0.82.165',
+            ip_address => '173.0.81.65',
             params     => $params,
         );
 
