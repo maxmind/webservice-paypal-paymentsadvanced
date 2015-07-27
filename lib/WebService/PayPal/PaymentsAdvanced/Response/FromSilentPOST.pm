@@ -41,7 +41,7 @@ has _ip_address_is_verified => (
 );
 
 # Payments Advanced IPs listed at
-# https://ppmts.custhelp.com/app/answers/detail/a_id/883/kw/payflow%20Ip
+# https://www.paypal-techsupport.com/app/answers/detail/a_id/883/kw/payflow%20Ip
 
 has _ip_addresses => (
     is          => 'ro',
@@ -50,22 +50,7 @@ has _ip_addresses => (
     handles     => { _all_verified_ip_addresses => 'values' },
     default     => sub {
         +{
-            'agw.paypal.com'                              => '173.0.82.33',
-            'buyerauth.verisign.com'                      => '173.0.82.36',
-            'cr.cybercash.com'                            => '173.0.82.40',
-            'manager.paypal.com'                          => '173.0.82.44',
-            'payflow.verisign.com'                        => '173.0.82.47',
-            'payflowlink.paypal.com'                      => '173.0.82.48',
-            'payflowpro.paypal.com'                       => '173.0.82.162',
-            'payflowpro.verisign.com'                     => '173.0.82.49',
-            'partnermanager.paypal.com'                   => '173.0.82.46',
-            'payments.verisign.com'                       => '173.0.82.51',
-            'payments.verisign.com.au'                    => '173.0.82.171',
-            'payments-reports.paypal.com/reportingengine' => '173.0.82.50',
-            'paypalmanager.paypal.com'                    => '173.0.82.164',
-            'registration.paypal.com'                     => '173.0.82.165',
-            'xml-reg.paypal.com'                          => '173.0.82.172',
-            'xml-reg.verisign.com/xmlreg'                 => '173.0.82.173',
+            'notify.paypal.com' => '173.0.81.65',
         };
     },
 );
