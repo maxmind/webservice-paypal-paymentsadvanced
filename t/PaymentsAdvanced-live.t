@@ -8,6 +8,7 @@ use LWP::ConsoleLogger::Easy qw( debug_ua );
 use Test::Fatal qw( exception );
 use Test::More;
 use Test::RequiresInternet( 'pilot-payflowpro.paypal.com' => 443 );
+use Try::Tiny;
 use WebService::PayPal::PaymentsAdvanced;
 
 use lib 't/lib';
@@ -33,7 +34,7 @@ debug_ua($ua);
 
         isa_ok(
             exception {
-                my $res = $payments->create_secure_token({});
+                my $res = $payments->create_secure_token( {} );
             },
             'WebService::PayPal::PaymentsAdvanced::Error::Authentication',
             ( $production_mode ? 'production' : 'sandbox' )
@@ -41,7 +42,9 @@ debug_ua($ua);
     }
 }
 
-my $config = Util::config();
+my $config;
+try { $config = Util::config() };
+
 SKIP: {
     skip 'config file required for live tests', 2, unless $config;
 
@@ -101,7 +104,7 @@ SKIP: {
         like(
             exception(
                 sub {
-                    $payments->void_transaction( 'xfoox' );
+                    $payments->void_transaction('xfoox');
                 }
             ),
             qr{Invalid tender}i,
@@ -113,7 +116,7 @@ SKIP: {
         like(
             exception(
                 sub {
-                    $payments->transaction_status( 'xfoox' );
+                    $payments->transaction_status('xfoox');
                 }
             ),
             qr{Field format error}i,
