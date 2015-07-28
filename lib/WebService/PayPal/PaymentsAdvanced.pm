@@ -8,7 +8,7 @@ use Data::GUID;
 use LWP::UserAgent;
 use MooX::StrictConstructor;
 use Type::Params qw( compile );
-use Types::Standard qw( Bool HashRef InstanceOf Str );
+use Types::Standard qw( Bool HashRef InstanceOf Num Str );
 use Types::URI qw( Uri );
 use URI;
 use URI::FromHash qw( uri uri_object );
@@ -77,6 +77,12 @@ has vendor => (
     is       => 'ro',
     isa      => Str,
     required => 1,
+);
+
+has verbose => (
+    is      => 'ro',
+    isa     => Bool,
+    default => 1,
 );
 
 sub _build_payflow_pro_uri {
@@ -162,8 +168,7 @@ sub transaction_status {
     state $check = compile(Str);
     my ($pnref) = $check->(@_);
 
-    return $self->post(
-        { TRXTYPE => 'I', ORIGID => $pnref, VERBOSITY => 'HIGH', } );
+    return $self->post( { TRXTYPE => 'I', ORIGID => $pnref, } );
 }
 
 sub hosted_form_uri {
@@ -214,6 +219,7 @@ sub post {
     my ($post) = $check->(@_);
 
     $post = $self->_force_upper_case($post);
+    $post->{VERBOSITY} = 'HIGH' if $self->verbose;
 
     my $content = join '&', $self->_encode_credentials,
         $self->_pseudo_encode_args($post);
@@ -315,7 +321,6 @@ __END__
         {
             AMT            => 100,
             TRXTYPE        => 'S',
-            VERBOSITY      => 'HIGH',
             BILLINGTYPE    => 'MerchantInitiatedBilling',
             CANCELURL      => 'https://example.com/cancel',
             ERRORURL       => 'https://example.com/error',
@@ -446,6 +451,11 @@ method and deal with them accordingly.  If you disable this option, you'll need
 to rely on end users to report issues which may exist within PayPal's hosted
 pages.  Defaults to C<true>.
 
+=head3 verbose
+
+C<Boolean>.  Sets C<VERBOSITY=HIGH> on all transactions if enabled.  Defaults
+to C<true>.
+
 =head2 Methods
 
 =head3 create_secure_token
@@ -460,7 +470,6 @@ L<WebService::PayPal::PaymentsAdvanced::Response> object.
         {
             AMT            => 100,
             TRXTYPE        => 'S',
-            VERBOSITY      => 'HIGH',
             BILLINGTYPE    => 'MerchantInitiatedBilling',
             CANCELURL      => 'https://example.com/cancel',
             ERRORURL       => 'https://example.com/error',
