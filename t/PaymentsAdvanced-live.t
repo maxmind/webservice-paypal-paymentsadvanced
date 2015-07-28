@@ -96,6 +96,7 @@ SKIP: {
         );
     }
 
+    # Some of these exception messages don't make a lot of sense.
     {
         like(
             exception(
@@ -105,6 +106,18 @@ SKIP: {
             ),
             qr{Invalid tender}i,
             'Exception on voiding invalid transaction'
+        );
+    }
+
+    {
+        like(
+            exception(
+                sub {
+                    $payments->transaction_status( 'xfoox' );
+                }
+            ),
+            qr{Field format error}i,
+            'Exception on getting transaction status for invalid id'
         );
     }
 }

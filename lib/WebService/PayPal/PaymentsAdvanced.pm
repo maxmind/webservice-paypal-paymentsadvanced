@@ -101,10 +101,19 @@ sub _build_payflow_link_uri {
     );
 }
 
+sub capture_delayed_transaction {
+    my $self = shift;
+
+    state $check = compile(Str);
+    my ($pnref) = $check->(@_);
+
+    return $self->post( { TRXTYPE => 'D', ORIGID => $pnref } );
+}
+
 sub create_secure_token {
     my $self = shift;
 
-    state $check = compile( HashRef );
+    state $check = compile(HashRef);
     my ($args) = $check->(@_);
 
     my $post = $self->_force_upper_case($args);
@@ -122,7 +131,7 @@ sub create_secure_token {
 sub get_response_from_redirect {
     my $self = shift;
 
-    state $check = compile( HashRef );
+    state $check = compile(HashRef);
     my ($args) = $check->(@_);
 
     my $response
@@ -136,7 +145,7 @@ sub get_response_from_redirect {
 sub get_response_from_silent_post {
     my $self = shift;
 
-    state $check = compile( HashRef );
+    state $check = compile(HashRef);
     my ($args) = $check->(@_);
 
     my $response
@@ -145,6 +154,16 @@ sub get_response_from_silent_post {
 
     return WebService::PayPal::PaymentsAdvanced::Response->new(
         params => $response->params );
+}
+
+sub transaction_status {
+    my $self = shift;
+
+    state $check = compile(Str);
+    my ($pnref) = $check->(@_);
+
+    return $self->post(
+        { TRXTYPE => 'I', ORIGID => $pnref, VERBOSITY => 'HIGH', } );
 }
 
 sub hosted_form_uri {
@@ -191,7 +210,7 @@ sub hosted_form_uri {
 sub post {
     my $self = shift;
 
-    state $check = compile( HashRef );
+    state $check = compile(HashRef);
     my ($post) = $check->(@_);
 
     $post = $self->_force_upper_case($post);
@@ -211,9 +230,9 @@ sub post {
 }
 
 sub void_transaction {
-    my $self  = shift;
+    my $self = shift;
 
-    state $check = compile( Str );
+    state $check = compile(Str);
     my ($pnref) = $check->(@_);
 
     return $self->post( { TRXTYPE => 'V', ORIGID => $pnref } );
