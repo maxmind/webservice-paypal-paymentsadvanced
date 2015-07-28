@@ -11,7 +11,7 @@ use Util;
 
 my $payments = Util::ppa();
 
-die "usage: perl examples/capture-delayed-transaction.pl baid 1.00 USD"
+die 'usage: perl examples/capture-delayed-transaction.pl baid 1.00 USD'
     unless scalar @ARGV == 3;
 
 my $response = $payments->sale_from_paypal_reference_transaction(@ARGV);

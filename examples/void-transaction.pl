@@ -13,7 +13,8 @@ my $payments = Util::ppa();
 
 my $txn_id = shift @ARGV;
 
-die "usage: perl examples/void-transaction.pl [transaction_id]" unless $txn_id;
+die 'usage: perl examples/void-transaction.pl [transaction_id]'
+    unless $txn_id;
 
-my $response = $payments->void_transaction( $txn_id );
+my $response = $payments->void_transaction($txn_id);
 p( $response->params );

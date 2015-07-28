@@ -23,5 +23,5 @@ my $response = $payments->create_secure_token(
     }
 );
 
-my $uri      = $payments->hosted_form_uri($response);
-say $uri;
+my $uri = $payments->hosted_form_uri($response);
+say $uri || die;
