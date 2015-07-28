@@ -235,6 +235,38 @@ sub post {
         params => $params );
 }
 
+sub sale_from_credit_card_reference_transaction {
+    my $self = shift;
+    state $check = compile( Str, Num );
+    my ( $origid, $amount ) = $check->(@_);
+
+    return $self->post(
+        {
+            AMT     => $amount,
+            ORIGID  => $origid,
+            TENDER  => 'C',
+            TRXTYPE => 'S',
+        }
+    );
+}
+
+sub sale_from_paypal_reference_transaction {
+    my $self = shift;
+    state $check = compile( Str, Num, Str );
+    my ( $baid, $amount, $currency ) = $check->(@_);
+
+    return $self->post(
+        {
+            ACTION   => 'D',
+            AMT      => $amount,
+            BAID     => $baid,
+            CURRENCY => $currency,
+            TENDER   => 'P',
+            TRXTYPE  => 'S',
+        }
+    );
+}
+
 sub void_transaction {
     my $self = shift;
 
@@ -539,5 +571,31 @@ response is sent.
 
     # OR
     my $response = $payments->post( { trxtype => 'V', origid => $pnref, } );
+
+=head3 sale_from_credit_card_reference_transaction( $ORIGID, $amount )
+
+Process a sale based on a reference transaction from a credit card.  Requires 2
+arguments: an ORIGID from a previous credit card transaction and an amount.
+
+    use WebService::PayPal::PaymentsAdvanced;
+    my $payments = WebService::PayPal::PaymentsAdvanced->new(...);
+
+    my $response = $payments->sale_from_credit_card_reference_transaction(
+        'BFOOBAR', 1.50'
+    );
+    say $response->message;
+
+=head3 sale_from_paypal_reference_transaction( $BAID, $amount, $currency )
+
+Process a sale based on a reference transaction from PayPal.  Requires 3
+arguments: a BAID from a previous PayPal transaction, an amount and a currency.
+
+    use WebService::PayPal::PaymentsAdvanced;
+    my $payments = WebService::PayPal::PaymentsAdvanced->new(...);
+
+    my $response = $payments->sale_from_paypal_reference_transaction(
+        'B-FOOBAR', 1.50, 'USD'
+    );
+    say $response->message;
 
 =cut
