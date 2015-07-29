@@ -19,6 +19,8 @@ sub config {
 }
 
 sub ppa {
+    my %args = @_;
+
     my $ua = LWP::UserAgent->new;
     debug_ua($ua);
     my $config = config();
@@ -28,6 +30,7 @@ sub ppa {
         user                     => $config->{user},
         validate_hosted_form_uri => 1,
         vendor                   => $config->{vendor},
+        %args,
     );
 }
 
