@@ -168,7 +168,13 @@ sub transaction_status {
     state $check = compile(Str);
     my ($pnref) = $check->(@_);
 
-    return $self->post( { TRXTYPE => 'I', ORIGID => $pnref, } );
+    return $self->post(
+        {
+            ORIGID  => $pnref,
+            TENDER  => 'C',
+            TRXTYPE => 'I',
+        }
+    );
 }
 
 sub hosted_form_uri {
