@@ -30,6 +30,8 @@ on 'test' => sub {
   requires "Test::LWP::UserAgent" => "0";
   requires "Test::More" => "0";
   requires "Test::RequiresInternet" => "0";
+  requires "Try::Tiny" => "0";
+  requires "lib" => "0";
   requires "strict" => "0";
   requires "warnings" => "0";
 };

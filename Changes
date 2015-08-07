@@ -2,6 +2,10 @@ Revision history for WebService-PayflowPro
 
 {{$NEXT}}
     - Adds post() and void_transaction methods to PaymentsAdvanced.pm
+    - Makes use of HashRefs more consistent in API
+    - Adds new methods: capture_delayed_transaction(), transaction_status() and
+      sale_from_reference_transaction
+    - Adds "verbose" attribute to constructor
 
 0.000004  2015-07-24 17:34:27-04:00 America/Toronto
     - Bumps up minimum version of Moo to 1.004005

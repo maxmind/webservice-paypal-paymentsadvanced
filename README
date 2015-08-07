@@ -19,7 +19,6 @@ SYNOPSIS
             {
                 AMT            => 100,
                 TRXTYPE        => 'S',
-                VERBOSITY      => 'HIGH',
                 BILLINGTYPE    => 'MerchantInitiatedBilling',
                 CANCELURL      => 'https://example.com/cancel',
                 ERRORURL       => 'https://example.com/error',
@@ -142,6 +141,10 @@ OBJECT INSTANTIATION
     disable this option, you'll need to rely on end users to report issues
     which may exist within PayPal's hosted pages. Defaults to "true".
 
+   verbose
+    "Boolean". Sets "VERBOSITY=HIGH" on all transactions if enabled.
+    Defaults to "true".
+
   Methods
    create_secure_token
     Create a secure token which you can use to create a hosted form uri.
@@ -154,7 +157,6 @@ OBJECT INSTANTIATION
             {
                 AMT            => 100,
                 TRXTYPE        => 'S',
-                VERBOSITY      => 'HIGH',
                 BILLINGTYPE    => 'MerchantInitiatedBilling',
                 CANCELURL      => 'https://example.com/cancel',
                 ERRORURL       => 'https://example.com/error',
@@ -207,6 +209,47 @@ OBJECT INSTANTIATION
 
         my $response = $payments->create_secure_token(...);
         my $uri      = $payments->hosted_form_uri($response);
+
+   post
+    Generic method to post arbitrary params to PayPal. Requires a "HashRef"
+    of parameters and returns a
+    WebService::PayPal::PaymentsAdvanced::Response object. Any lower case
+    keys will be converted to upper case before this response is sent.
+
+        use WebService::PayPal::PaymentsAdvanced;
+        my $payments = WebService::PayPal::PaymentsAdvanced->new(...);
+
+        my $response = $payments->post( { TRXTYPE => 'V', ORIGID => $pnref, } );
+        say $response->message;
+
+        # OR
+        my $response = $payments->post( { trxtype => 'V', origid => $pnref, } );
+
+   sale_from_credit_card_reference_transaction( $ORIGID, $amount )
+    Process a sale based on a reference transaction from a credit card.
+    Requires 2 arguments: an ORIGID from a previous credit card transaction
+    and an amount.
+
+        use WebService::PayPal::PaymentsAdvanced;
+        my $payments = WebService::PayPal::PaymentsAdvanced->new(...);
+
+        my $response = $payments->sale_from_credit_card_reference_transaction(
+            'BFOOBAR', 1.50'
+        );
+        say $response->message;
+
+   sale_from_paypal_reference_transaction( $BAID, $amount, $currency )
+    Process a sale based on a reference transaction from PayPal. Requires 3
+    arguments: a BAID from a previous PayPal transaction, an amount and a
+    currency.
+
+        use WebService::PayPal::PaymentsAdvanced;
+        my $payments = WebService::PayPal::PaymentsAdvanced->new(...);
+
+        my $response = $payments->sale_from_paypal_reference_transaction(
+            'B-FOOBAR', 1.50, 'USD'
+        );
+        say $response->message;
 
 AUTHOR
     Olaf Alders <olaf@wundercounter.com>
