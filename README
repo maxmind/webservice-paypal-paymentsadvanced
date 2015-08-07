@@ -3,7 +3,7 @@ NAME
     PayPal Payments Advanced web service
 
 VERSION
-    version 0.000004
+    version 0.000005
 
 SYNOPSIS
         use WebService::PayPal::PaymentsAdvanced;
