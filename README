@@ -225,6 +225,10 @@ OBJECT INSTANTIATION
         # OR
         my $response = $payments->post( { trxtype => 'V', origid => $pnref, } );
 
+   capture_delayed_transaction( $ORIGID )
+    Captures a sale which you have previously authorized. Requires the ID of
+    the original transaction. Returns a response object.
+
    sale_from_credit_card_reference_transaction( $ORIGID, $amount )
     Process a sale based on a reference transaction from a credit card.
     Requires 2 arguments: an ORIGID from a previous credit card transaction
@@ -250,6 +254,10 @@ OBJECT INSTANTIATION
             'B-FOOBAR', 1.50, 'USD'
         );
         say $response->message;
+
+  void_transaction( $ORIGID )
+    Voids a previous transaction. Requires the ID of the transaction to
+    void. Returns a response object.
 
 AUTHOR
     Olaf Alders <olaf@wundercounter.com>

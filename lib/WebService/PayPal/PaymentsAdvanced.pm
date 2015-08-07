@@ -578,6 +578,11 @@ response is sent.
     # OR
     my $response = $payments->post( { trxtype => 'V', origid => $pnref, } );
 
+=head3 capture_delayed_transaction( $ORIGID )
+
+Captures a sale which you have previously authorized.  Requires the ID of the
+original transaction.  Returns a response object.
+
 =head3 sale_from_credit_card_reference_transaction( $ORIGID, $amount )
 
 Process a sale based on a reference transaction from a credit card.  Requires 2
@@ -603,5 +608,10 @@ arguments: a BAID from a previous PayPal transaction, an amount and a currency.
         'B-FOOBAR', 1.50, 'USD'
     );
     say $response->message;
+
+=head2 void_transaction( $ORIGID )
+
+Voids a previous transaction.  Requires the ID of the transaction to void.
+Returns a response object.
 
 =cut
