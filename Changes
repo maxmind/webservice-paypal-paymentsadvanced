@@ -1,6 +1,8 @@
 Revision history for WebService-PayflowPro
 
 {{$NEXT}}
+
+0.000005  2015-08-07 10:52:50-04:00 America/Toronto
     - Adds post() and void_transaction methods to PaymentsAdvanced.pm
     - Makes use of HashRefs more consistent in API
     - Adds new methods: capture_delayed_transaction(), transaction_status() and
