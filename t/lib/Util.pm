@@ -10,8 +10,16 @@ use Path::Tiny qw( path );
 use WebService::PayPal::PaymentsAdvanced;
 
 sub config {
-    my $file = path('t/test-data/config.pl');
-    die 'config file required for this script' unless $file->exists;
+    return _get_config( 'config.pl' );
+}
+
+sub sample_config {
+    return _get_config( 'sample-config.pl' );
+}
+
+sub _get_config {
+    my $name = shift;
+    my $file = path('t/test-data/', $name );
 
     ## no critic (BuiltinFunctions::ProhibitStringyEval)
     my $config = eval $file->slurp;

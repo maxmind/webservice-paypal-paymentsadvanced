@@ -7,9 +7,11 @@ use Test::More;
 use Test::Fatal;
 use Test::LWP::UserAgent;
 
+use HTTP::Message::PSGI;
 use LWP::ConsoleLogger::Easy qw( debug_ua );
 use Path::Tiny qw( path );
 use WebService::PayPal::PaymentsAdvanced;
+use WebService::PayPal::PaymentsAdvanced::Mocker;
 
 {
     my $ua = LWP::UserAgent->new();
@@ -81,14 +83,11 @@ sub get_mocked_payments {
 
     my $ua = Test::LWP::UserAgent->new;
 
-    $ua->map_response(
-        'pilot-payflowpro.paypal.com',
-        HTTP::Response->new(
-            '200', 'OK',
-            [ 'Content-Type' => 'text/html' ],
-            'SECURETOKEN=FOO&SECURETOKENID=BAR&RESPMSG=approved&RESULT=0'
-        )
-    );
+    # Ensure Mojo knows to create a PSGI app
+    local $ENV{PLACK_ENV} = 'development';
+    my $mocker = WebService::PayPal::PaymentsAdvanced::Mocker->new;
+
+    $ua->register_psgi( 'pilot-payflowpro.paypal.com', $mocker->payflow_pro );
 
     $ua->map_response(
         'pilot-payflowlink.paypal.com',

@@ -1,0 +1,19 @@
+#!/usr/bin/env perl;
+
+use strict;
+use warnings;
+
+use lib 'lib';
+
+use WebService::PayPal::PaymentsAdvanced::Mocker;
+WebService::PayPal::PaymentsAdvanced::Mocker->payflow_link;
+
+=head1 NAME
+
+mock-payflow-link - Mock the Payflow Link web service
+
+=head1 SYNOPSIS
+
+    morbo bin/mock-payflow-link
+
+=cut
