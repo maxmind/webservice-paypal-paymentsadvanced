@@ -67,4 +67,17 @@ sub to_app {
 
 A simple app to enable easy PPA mocking.
 
+=head2 to_app
+
+    use WebService::PayPal::PaymentsAdvanced::Mocker::PayflowPro;
+    my $app = WebService::PayPal::PaymentsAdvanced::Mocker::PayflowPro->to_app;
+
+If you require a Plack app to be returned, you'll need to give Mojo the correct
+hint:
+
+    use WebService::PayPal::PaymentsAdvanced::Mocker::PayflowPro;
+
+    local $ENV{PLACK_ENV} = 'development'; #
+    my $app = WebService::PayPal::PaymentsAdvanced::Mocker::PayflowPro->to_app;
+
 =cut

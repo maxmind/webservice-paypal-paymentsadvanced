@@ -8,9 +8,10 @@ use lib 'lib';
 use WebService::PayPal::PaymentsAdvanced::Mocker;
 WebService::PayPal::PaymentsAdvanced::Mocker->payflow_link;
 
-=head1 NAME
+# PODNAME: mock-payflow-link
+# ABSTRACT: Mock the Payflow Link web service
 
-mock-payflow-link - Mock the Payflow Link web service
+__END__
 
 =head1 SYNOPSIS
 

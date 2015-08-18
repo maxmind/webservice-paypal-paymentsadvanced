@@ -8,9 +8,10 @@ use lib 'lib';
 use WebService::PayPal::PaymentsAdvanced::Mocker;
 WebService::PayPal::PaymentsAdvanced::Mocker->payflow_pro;
 
-=head1 NAME
+# PODNAME: mock-payflow-pro
+# ABSTRACT: Mock the Payflow Pro web service
 
-mock-payflow-pro - Mock the Payflow Pro web service
+__END__
 
 =head1 SYNOPSIS
 
