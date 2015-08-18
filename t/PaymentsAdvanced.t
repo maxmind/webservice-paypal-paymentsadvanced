@@ -83,9 +83,8 @@ sub get_mocked_payments {
 
     my $ua = Test::LWP::UserAgent->new;
 
-    # Ensure Mojo knows to create a PSGI app
-    local $ENV{PLACK_ENV} = 'development';
-    my $mocker = WebService::PayPal::PaymentsAdvanced::Mocker->new;
+    my $mocker
+        = WebService::PayPal::PaymentsAdvanced::Mocker->new( plack => 1 );
 
     $ua->register_psgi( 'pilot-payflowpro.paypal.com', $mocker->payflow_pro );
 
