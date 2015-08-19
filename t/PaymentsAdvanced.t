@@ -13,6 +13,9 @@ use Path::Tiny qw( path );
 use WebService::PayPal::PaymentsAdvanced;
 use WebService::PayPal::PaymentsAdvanced::Mocker;
 
+use lib 't/lib';
+use Util;
+
 {
     my $ua = LWP::UserAgent->new();
     debug_ua($ua);
@@ -76,6 +79,12 @@ use WebService::PayPal::PaymentsAdvanced::Mocker;
         exception { $payments->hosted_form_uri($payments_res) },
         undef, 'No exception when no HTML errors'
     );
+}
+
+{
+    my $ppa = Util::mocked_ppa();
+    my $res = $ppa->capture_delayed_transaction('FOO');
+    ok( $res, 'capture_delayed_transaction' );
 }
 
 sub get_mocked_payments {

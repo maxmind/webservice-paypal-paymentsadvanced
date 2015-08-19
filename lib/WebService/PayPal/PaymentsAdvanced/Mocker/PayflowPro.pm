@@ -3,8 +3,11 @@ package WebService::PayPal::PaymentsAdvanced::Mocker::PayflowPro;
 use Mojolicious::Lite;
 
 use Data::GUID;
+use DateTime;
 use Plack::Builder;
 use URI::FromHash qw( uri_object );
+
+app->types->type( nvp => 'text/namevalue' );
 
 # A GET request will be a request for the hosted form.  The GET is for an
 # entirely different host name, so would make sense to move this into a
@@ -23,8 +26,6 @@ post '/' => sub {
     my $c     = shift;
     my $clean = _filter_params($c);
 
-    use DDP;
-    p($clean);
     if ( $clean->{CREATESECURETOKEN} && $clean->{CREATESECURETOKEN} eq 'Y' ) {
         my %return = (
             RESULT        => 0,
@@ -33,14 +34,46 @@ post '/' => sub {
             SECURETOKEN   => Data::GUID->new->as_string,
         );
 
-        my $res = uri_object( query => \%return );
+        _render_response( $c, \%return );
+        return;
+    }
 
-        # Not sure if PayPal does any encoding on the way out
-        $c->render( text => $res->query );
+    if ( $clean->{TRXTYPE} && $clean->{TRXTYPE} eq 'D' ) {
+        my $dt     = DateTime->now;
+        my %return = (
+            CORRELATIONID => _new_id(12),
+            FEEAMT        => 1.75,
+            PAYMENTTYPE   => 'instant',
+            PENDINGREASON => 'completed',
+            PNREF         => 'B' . _new_id(11),
+            PPREF         => _new_id(17),
+            RESPMSG       => 'Approved',
+            RESULT        => 0,
+            TRANSTIME     => $dt->ymd . q{ } . $dt->hms,
+        );
+
+        _render_response( $c, \%return );
         return;
     }
     $c->render( text => 'Mocked URL not found', status => 404 );
 };
+
+sub _render_response {
+    my $c      = shift;
+    my $params = shift;
+
+    my $res    = uri_object( query => $params );
+    $c->render( text => $res->query, format => 'nvp' );
+}
+
+sub _new_id {
+    my $length = shift;
+
+    my $id     = Data::GUID->new->as_string;
+    $id =~ s{-}{}g;
+    $id = substr( $id, 0, $length );
+    return $id;
+}
 
 sub _filter_params {
     my $c      = shift;
