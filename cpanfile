@@ -1,5 +1,6 @@
-requires "DDP" => "0";
 requires "Data::GUID" => "0";
+requires "DateTime" => "0";
+requires "HTTP::Message::PSGI" => "0";
 requires "LWP::Protocol::https" => "0";
 requires "LWP::UserAgent" => "0";
 requires "List::AllUtils" => "0";
@@ -9,6 +10,7 @@ requires "Moo::Role" => "0";
 requires "MooX::HandlesVia" => "0";
 requires "MooX::StrictConstructor" => "0";
 requires "Plack::Builder" => "0";
+requires "Test::LWP::UserAgent" => "0";
 requires "Throwable::Error" => "0";
 requires "Type::Params" => "0";
 requires "Types::Standard" => "0";
@@ -25,13 +27,11 @@ on 'build' => sub {
 };
 
 on 'test' => sub {
-  requires "HTTP::Message::PSGI" => "0";
   requires "HTTP::Response" => "0";
   requires "LWP::ConsoleLogger::Easy" => "0";
   requires "Mozilla::CA" => "20130114";
   requires "Path::Tiny" => "0";
   requires "Test::Fatal" => "0";
-  requires "Test::LWP::UserAgent" => "0";
   requires "Test::More" => "0";
   requires "Test::RequiresInternet" => "0";
   requires "Try::Tiny" => "0";
