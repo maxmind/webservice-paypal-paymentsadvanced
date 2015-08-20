@@ -2,16 +2,32 @@ package WebService::PayPal::PaymentsAdvanced::Mocker;
 
 use Moo;
 
-use Types::Standard qw( Bool InstanceOf );
+use Types::Standard qw( Bool CodeRef InstanceOf );
 use WebService::PayPal::PaymentsAdvanced::Mocker::PayflowLink;
 use WebService::PayPal::PaymentsAdvanced::Mocker::PayflowPro;
 
 has mocked_ua => (
     is       => 'ro',
-    isa      => InstanceOf ['LWP::UserAgent'],
+    isa      => InstanceOf ['Test::LWP::UserAgent'],
     init_arg => undef,
     lazy     => 1,
     builder  => '_build_mocked_ua',
+);
+
+has payflow_link => (
+    is       => 'ro',
+    isa      => CodeRef,
+    init_arg => undef,
+    lazy     => 1,
+    builder  => '_build_payflow_link',
+);
+
+has payflow_pro => (
+    is       => 'ro',
+    isa      => CodeRef,
+    init_arg => undef,
+    lazy     => 1,
+    builder  => '_build_payflow_pro',
 );
 
 has plack => (
@@ -49,21 +65,21 @@ sub _build_mocked_ua {
     my $link = $self->payflow_link;
     my $pro  = $self->payflow_pro;
 
-    $self->_ua->register_psgi( 'payflowlink.paypal.com',       $link );
-    $self->_ua->register_psgi( 'payflowpro.paypal.com',        $pro );
-    $self->_ua->register_psgi( 'pilot-payflowlink.paypal.com', $link );
-    $self->_ua->register_psgi( 'pilot-payflowpro.paypal.com',  $pro );
+    $self->_ua->register_psgi( 'payflowlink.paypal.com',       $self->payflow_link );
+    $self->_ua->register_psgi( 'payflowpro.paypal.com',        $self->payflow_pro );
+    $self->_ua->register_psgi( 'pilot-payflowlink.paypal.com', $self->payflow_link );
+    $self->_ua->register_psgi( 'pilot-payflowpro.paypal.com',  $self->payflow_pro );
     return $self->_ua;
 }
 
-sub payflow_link {
+sub _build_payflow_link {
     my $self = shift;
 
     local $ENV{PLACK_ENV} = 'development' if $self->plack;
     return WebService::PayPal::PaymentsAdvanced::Mocker::PayflowLink->to_app;
 }
 
-sub payflow_pro {
+sub _build_payflow_pro {
     my $self = shift;
 
     local $ENV{PLACK_ENV} = 'development' if $self->plack;
