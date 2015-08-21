@@ -255,7 +255,11 @@ OBJECT INSTANTIATION
         );
         say $response->message;
 
-  void_transaction( $ORIGID )
+   transaction_status( $ORIGID )
+    Performs a transaction inquiry on a previously submitted transaction.
+    Requires the ID of the original transaction. Returns a response object.
+
+   void_transaction( $ORIGID )
     Voids a previous transaction. Requires the ID of the transaction to
     void. Returns a response object.
 

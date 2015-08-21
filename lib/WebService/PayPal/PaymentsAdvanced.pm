@@ -609,7 +609,12 @@ arguments: a BAID from a previous PayPal transaction, an amount and a currency.
     );
     say $response->message;
 
-=head2 void_transaction( $ORIGID )
+=head3 transaction_status( $ORIGID )
+
+Performs a transaction inquiry on a previously submitted transaction.  Requires
+the ID of the original transaction.  Returns a response object.
+
+=head3 void_transaction( $ORIGID )
 
 Voids a previous transaction.  Requires the ID of the transaction to void.
 Returns a response object.
