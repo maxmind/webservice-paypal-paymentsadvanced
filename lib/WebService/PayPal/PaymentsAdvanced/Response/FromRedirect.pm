@@ -2,7 +2,10 @@ package WebService::PayPal::PaymentsAdvanced::Response::FromRedirect;
 
 use Moo;
 
-with 'WebService::PayPal::PaymentsAdvanced::Role::HasParams';
+with(
+    'WebService::PayPal::PaymentsAdvanced::Role::HasParams',
+    'WebService::PayPal::PaymentsAdvanced::Role::HasMessage',
+);
 
 1;
 

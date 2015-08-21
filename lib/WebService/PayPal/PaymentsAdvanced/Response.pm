@@ -4,64 +4,20 @@ use Moo;
 
 use Types::Standard qw( HashRef Str );
 use WebService::PayPal::PaymentsAdvanced::Error::Authentication;
+use WebService::PayPal::PaymentsAdvanced::Error::Generic;
 
-has params => (
-    is       => 'ro',
-    isa      => HashRef,
-    required => 1,
-);
+# XXX responses with tokens should be in a different class
 
-has message => (
-    is       => 'lazy',
-    isa      => Str,
-    init_arg => undef,
-);
-
-has secure_token => (
-    is       => 'lazy',
-    isa      => Str,
-    init_arg => undef,
-);
-
-has secure_token_id => (
-    is       => 'lazy',
-    isa      => Str,
-    init_arg => undef,
+with(
+    'WebService::PayPal::PaymentsAdvanced::Role::HasParams',
+    'WebService::PayPal::PaymentsAdvanced::Role::HasMessage',
+    'WebService::PayPal::PaymentsAdvanced::Role::HasTokens',
+    'WebService::PayPal::PaymentsAdvanced::Role::HasResultValidation',
 );
 
 sub BUILD {
     my $self = shift;
-
-    my $result = $self->params->{RESULT};
-
-    return if defined $result && !$result;
-
-    if ( $result && $result == 1 ) {
-        WebService::PayPal::PaymentsAdvanced::Error::Authentication->throw(
-            message => 'Authentication error: ' . $self->message,
-            params  => $self->params,
-        );
-    }
-
-    WebService::PayPal::PaymentsAdvanced::Error::Generic->throw(
-        message => $self->message,
-        params  => $self->params,
-    );
-}
-
-sub _build_message {
-    my $self = shift;
-    return $self->params->{RESPMSG};
-}
-
-sub _build_secure_token {
-    my $self = shift;
-    return $self->params->{SECURETOKEN};
-}
-
-sub _build_secure_token_id {
-    my $self = shift;
-    return $self->params->{SECURETOKENID};
+    $self->_validate_result;
 }
 
 1;

@@ -20,6 +20,7 @@ use WebService::PayPal::PaymentsAdvanced::Response;
 use WebService::PayPal::PaymentsAdvanced::Response::FromHTTP;
 use WebService::PayPal::PaymentsAdvanced::Response::FromRedirect;
 use WebService::PayPal::PaymentsAdvanced::Response::FromSilentPOST;
+use WebService::PayPal::PaymentsAdvanced::Response::FromSilentPOST::CreditCard;
 
 has partner => (
     is       => 'ro',
@@ -54,6 +55,7 @@ has production_mode => (
 
 has ua => (
     is      => 'ro',
+    isa => InstanceOf ['LWP::UserAgent' ],
     default => sub {
         my $ua = LWP::UserAgent->new;
         $ua->timeout(5);
@@ -158,8 +160,11 @@ sub get_response_from_silent_post {
         = WebService::PayPal::PaymentsAdvanced::Response::FromSilentPOST
         ->new($args);
 
-    return WebService::PayPal::PaymentsAdvanced::Response->new(
-        params => $response->params );
+    return $response if $response->is_paypal_transaction;
+
+    return
+        WebService::PayPal::PaymentsAdvanced::Response::FromSilentPOST::CreditCard
+        ->new( params => $response->params );
 }
 
 sub transaction_status {
@@ -534,21 +539,29 @@ L<WebService::PayPal::PaymentsAdvanced::Response> object.
 =head3 get_response_from_silent_post
 
 This method can be used to validate responses from PayPal to your silent POST
-url.  It's essentially a wrapper around
-L<WebService::PayPal::PaymentsAdvanced::Response::FromSilentPost>.  If you
-provide an ip_address parameter, it will be validated against a list of known
-IPs which PayPal provides.  You're encouraged to provide an IP address in order
-to prevent spoofing of payment responses.  See
+url.  If you provide an ip_address parameter, it will be validated against a
+list of known IPs which PayPal provides.  You're encouraged to provide an IP
+address in order to prevent spoofing of payment responses.  See
 L<WebService::PayPal::PaymentsAdvanced::Response::FromSilentPOST> for more
 information on this behaviour.
 
-This method returns a L<WebService::PayPal::PaymentsAdvanced::Response> object.
+This method returns a
+L<WebService::PayPal::PaymentsAdvanced::Response::FromSilentPost> object for
+PayPal transactions.  It returns a
+L<WebService::PayPal::PaymentsAdvanced::Response::FromSilentPost::CreditCard>
+object for Credit Card transactions.  You can either inspect the class return
+to you or use the C<is_credit_card_transaction> or C<is_paypal_transaction>
+methods to learn which method the customer paid with.  Both methods return a
+C<Boolean>.
 
     my $response = $payments->get_response_from_redirect(
         ip_address => $ip,
         params     => $params,
     );
-    print $response->message;
+    print $response->message. "\n";
+    if ( $response->is_credit_card_transaction ) {
+        print $response->card_type, q{ }, $response->expiration_date;
+    }
 
 =head3 hosted_form_uri
 
