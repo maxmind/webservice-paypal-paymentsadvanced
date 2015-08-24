@@ -14,6 +14,8 @@ use URI;
 use URI::FromHash qw( uri uri_object );
 use URI::QueryParam;
 use Web::Scraper;
+
+#<<< don't perltidy
 use WebService::PayPal::PaymentsAdvanced::Error::Generic;
 use WebService::PayPal::PaymentsAdvanced::Error::HostedForm;
 use WebService::PayPal::PaymentsAdvanced::Response;
@@ -22,6 +24,7 @@ use WebService::PayPal::PaymentsAdvanced::Response::FromRedirect;
 use WebService::PayPal::PaymentsAdvanced::Response::FromSilentPOST;
 use WebService::PayPal::PaymentsAdvanced::Response::FromSilentPOST::CreditCard;
 use WebService::PayPal::PaymentsAdvanced::Response::SecureToken;
+#>>>
 
 has partner => (
     is       => 'ro',
@@ -119,6 +122,11 @@ sub capture_delayed_transaction {
     return $self->post( { TRXTYPE => 'D', ORIGID => $pnref } );
 }
 
+sub _class_for {
+    my $self = shift;
+    return 'WebService::PayPal::PaymentsAdvanced::' . shift;
+}
+
 sub create_secure_token {
     my $self = shift;
 
@@ -143,12 +151,9 @@ sub get_response_from_redirect {
     state $check = compile(HashRef);
     my ($args) = $check->(@_);
 
-    my $response
-        = WebService::PayPal::PaymentsAdvanced::Response::FromRedirect->new(
-        $args);
+    my $response = $self->_class_for('Response::FromRedirect')->new($args);
 
-    return WebService::PayPal::PaymentsAdvanced::Response->new(
-        params => $response->params );
+    return $self->_class_for('Response')->new( params => $response->params );
 }
 
 sub get_response_from_silent_post {
@@ -157,14 +162,11 @@ sub get_response_from_silent_post {
     state $check = compile(HashRef);
     my ($args) = $check->(@_);
 
-    my $response
-        = WebService::PayPal::PaymentsAdvanced::Response::FromSilentPOST
-        ->new($args);
+    my $response = $self->_class_for('Response::FromSilentPOST')->new($args);
 
     return $response if $response->is_paypal_transaction;
 
-    return
-        WebService::PayPal::PaymentsAdvanced::Response::FromSilentPOST::CreditCard
+    return $self->_class_for('Response::FromSilentPOST::CreditCard')
         ->new( params => $response->params );
 }
 
@@ -186,8 +188,7 @@ sub transaction_status {
 sub hosted_form_uri {
     my $self = shift;
 
-    state $check = compile(
-        InstanceOf ['WebService::PayPal::PaymentsAdvanced::Response::SecureToken'] );
+    state $check = compile( InstanceOf [ $self->_class_for('Response::SecureToken') ] );
     my ($response) = $check->(@_);
 
     my $uri = $self->payflow_link_uri->clone;
@@ -217,7 +218,7 @@ sub hosted_form_uri {
 
     return $uri unless exists $scraped_text->{error};
 
-    WebService::PayPal::PaymentsAdvanced::Error::HostedForm->throw(
+    $self->_class_for('Error::HostedForm')->throw(
         message =>
             "hosted_form contains error message: $scraped_text->{error}",
         http_response => $res,
@@ -240,10 +241,10 @@ sub post {
         = $self->ua->post( $self->payflow_pro_uri, Content => $content );
 
     my $params
-        = WebService::PayPal::PaymentsAdvanced::Response::FromHTTP->new(
-        http_response => $http_response )->params;
+        = $self->_class_for('Response::FromHTTP')
+        ->new( http_response => $http_response )->params;
 
-    my $response_class = 'WebService::PayPal::PaymentsAdvanced::Response';
+    my $response_class = $self->_class_for('Response');
 
     if ( $post->{CREATESECURETOKEN} && $post->{CREATESECURETOKEN} eq 'Y' ) {
         $response_class .= '::SecureToken';
