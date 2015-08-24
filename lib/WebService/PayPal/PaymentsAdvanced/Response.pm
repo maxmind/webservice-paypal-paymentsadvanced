@@ -2,6 +2,14 @@ package WebService::PayPal::PaymentsAdvanced::Response;
 
 use Moo;
 
+use Types::Standard qw( Str );
+
+has pnref => (
+    is      => 'lazy',
+    isa     => Str,
+    default => sub { shift->_params->{PNREF} },
+);
+
 with(
     'WebService::PayPal::PaymentsAdvanced::Role::HasParams',
     'WebService::PayPal::PaymentsAdvanced::Role::HasMessage',
@@ -41,6 +49,9 @@ The contents of PayPal's RESPMSG parameter.
 
 A C<HashRef> of parameters which have been returned by PayPal.
 
+=head2 pnref
+
+The contents of PayPal's PNREF parameter.
 
 =head1 SEE ALSO
 
