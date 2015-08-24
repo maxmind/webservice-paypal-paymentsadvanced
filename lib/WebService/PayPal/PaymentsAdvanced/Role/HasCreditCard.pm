@@ -2,6 +2,7 @@ package WebService::PayPal::PaymentsAdvanced::Role::HasCreditCard;
 
 use Moo::Role;
 
+use Types::Common::Numeric qw( PositiveInt );
 use Types::Standard qw( Str );
 
 # An array is the obvious choice for card_type, but the hash leaves no room for
@@ -21,6 +22,13 @@ has expiration_date => (
     isa      => Str,
     init_arg => undef,
     builder  => '_build_expiration_date',
+);
+
+has last_four_digits => (
+    is       => 'lazy',
+    isa      => PositiveInt,
+    init_arg => undef,
+    default  => sub { shift->params->{ACCT} },
 );
 
 sub _build_card_type {
