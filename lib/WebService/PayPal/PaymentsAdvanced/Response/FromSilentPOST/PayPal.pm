@@ -1,11 +1,10 @@
-package WebService::PayPal::PaymentsAdvanced::Response::FromSilentPOST::CreditCard;
+package WebService::PayPal::PaymentsAdvanced::Response::FromSilentPOST::PayPal;
 
 use Moo;
 
 extends 'WebService::PayPal::PaymentsAdvanced::Response::FromSilentPOST';
 
 with(
-    'WebService::PayPal::PaymentsAdvanced::Role::HasCreditCard',
     'WebService::PayPal::PaymentsAdvanced::Role::HasTender',
     'WebService::PayPal::PaymentsAdvanced::Role::HasTokens',
 );

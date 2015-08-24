@@ -75,10 +75,10 @@ __END__
 
 This module provides an interface for extracting returned params from an
 L<HTTP::Response> object.  You won't need to this module directly if you are
-using L<PayPal::PaymentsAdvanced/create_secure_token>.
+using L<PayPal::PaymentsAdvanced/get_response_from_silent_post>.
 
-Throws a L<WebService::PayPal::PaymentsAdvanced::Error::HTTP> exception if the
-HTTP request was not successful.
+This module inherits from L<WebService::PayPal::PaymentsAdvanced::Response>,
+please see its documentation for a list of the methods which it provides..
 
 =head1 OBJECT INSTANTIATION
 
@@ -103,12 +103,5 @@ provide an IP in order to prevent spoofing.
 This module will throw a
 L<WebService::PayPal::PaymentsAdvanced::Error::IPVerification> exception if
 the provided IP address cannot be validated.
-
-=head2 Methods
-
-=head3 params
-
-Returns the same C<HashRef> of parameters which was initially provided to the
-C<new> method.
 
 =cut

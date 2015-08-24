@@ -23,6 +23,7 @@ use WebService::PayPal::PaymentsAdvanced::Response::FromHTTP;
 use WebService::PayPal::PaymentsAdvanced::Response::FromRedirect;
 use WebService::PayPal::PaymentsAdvanced::Response::FromSilentPOST;
 use WebService::PayPal::PaymentsAdvanced::Response::FromSilentPOST::CreditCard;
+use WebService::PayPal::PaymentsAdvanced::Response::FromSilentPOST::PayPal;
 use WebService::PayPal::PaymentsAdvanced::Response::SecureToken;
 #>>>
 
@@ -157,12 +158,20 @@ sub get_response_from_silent_post {
     state $check = compile(HashRef);
     my ($args) = $check->(@_);
 
-    my $response = $self->_class_for('Response::FromSilentPOST')->new($args);
+    # First we create a SilentPOST response, which may or may not validate the
+    # IP. If there's no exception we query the object to find out if this was a
+    # PayPal or CreditCard transaction and then return the appropriate class.
+    # IPs will only be validate once as the PayPal/CreditCard object
+    # instantiation will not provide an IP address.
 
-    return $response if $response->is_paypal_transaction;
+    my $response_class = $self->_class_for('Response::FromSilentPOST');
+    my $response       = $response_class->new($args);
 
-    return $self->_class_for('Response::FromSilentPOST::CreditCard')
-        ->new( params => $response->params );
+    $response_class
+        .= '::'
+        . ( $response->is_paypal_transaction ? 'PayPal' : 'CreditCard' );
+
+    return $response_class->new( params => $response->params );
 }
 
 sub transaction_status {
@@ -211,9 +220,8 @@ sub post {
     }
 
     if ( $post->{TRXTYPE} && $post->{TRXTYPE} eq 'D' ) {
-        return $self->_class_for('Response::Capture')->new(
-            params => $params
-        );
+        return $self->_class_for('Response::Capture')
+            ->new( params => $params );
     }
 
     return $response_class->new( params => $params );
@@ -519,8 +527,8 @@ L<WebService::PayPal::PaymentsAdvanced::Response::FromSilentPOST> for more
 information on this behaviour.
 
 This method returns a
-L<WebService::PayPal::PaymentsAdvanced::Response::FromSilentPost> object for
-PayPal transactions.  It returns a
+L<WebService::PayPal::PaymentsAdvanced::Response::FromSilentPost::PayPal>
+object for PayPal transactions.  It returns a
 L<WebService::PayPal::PaymentsAdvanced::Response::FromSilentPost::CreditCard>
 object for Credit Card transactions.  You can either inspect the class return
 to you or use the C<is_credit_card_transaction> or C<is_paypal_transaction>
