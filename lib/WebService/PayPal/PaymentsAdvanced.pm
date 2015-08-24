@@ -56,12 +56,12 @@ has production_mode => (
 
 has ua => (
     is      => 'ro',
-    isa => InstanceOf ['LWP::UserAgent' ],
+    isa     => InstanceOf ['LWP::UserAgent'],
     default => sub {
         my $ua = LWP::UserAgent->new;
         $ua->timeout(5);
         return $ua;
-    }
+    },
 );
 
 has user => (
