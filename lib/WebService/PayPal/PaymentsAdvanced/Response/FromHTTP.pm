@@ -9,6 +9,8 @@ use URI;
 use URI::QueryParam;
 use WebService::PayPal::PaymentsAdvanced::Error::HTTP;
 
+# Don't use HasParams role as we want to build params rather than require them.
+
 has params => (
     is       => 'lazy',
     isa      => HashRef,
