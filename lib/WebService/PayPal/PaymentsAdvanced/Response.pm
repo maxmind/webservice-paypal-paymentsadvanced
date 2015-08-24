@@ -3,6 +3,8 @@ package WebService::PayPal::PaymentsAdvanced::Response;
 use Moo;
 
 use Types::Standard qw( Str );
+use WebService::PayPal::PaymentsAdvanced::Error::Authentication;
+use WebService::PayPal::PaymentsAdvanced::Error::Generic;
 
 has pnref => (
     is      => 'lazy',
@@ -17,14 +19,29 @@ has ppref => (
 );
 
 with(
+    'WebService::PayPal::PaymentsAdvanced::Role::ClassFor',
     'WebService::PayPal::PaymentsAdvanced::Role::HasParams',
     'WebService::PayPal::PaymentsAdvanced::Role::HasMessage',
-    'WebService::PayPal::PaymentsAdvanced::Role::HasResultValidation',
 );
 
 sub BUILD {
     my $self = shift;
-    $self->_validate_result;
+
+    my $result = $self->params->{RESULT};
+
+    return if defined $result && !$result;
+
+    if ( $result && $result == 1 ) {
+        $self->_class_for('Error::Authentication')->throw(
+            message => 'Authentication error: ' . $self->message,
+            params  => $self->params,
+        );
+    }
+
+    $self->_class_for('Error::Generic')->throw(
+        message => $self->message,
+        params  => $self->params,
+    );
 }
 
 1;

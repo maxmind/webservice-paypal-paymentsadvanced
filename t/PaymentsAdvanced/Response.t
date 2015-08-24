@@ -6,8 +6,9 @@ use Test::Fatal;
 use Test::More;
 
 my %params = (
-    RESULT        => 0,
     RESPMSG       => 'Approved',
+    RESPMSG       => 'User authentication failed',
+    RESULT        => 1,
     SECURETOKEN   => 'token',
     SECURETOKENID => 'token_id',
 );
@@ -16,12 +17,7 @@ my %params = (
     isa_ok(
         exception {
             WebService::PayPal::PaymentsAdvanced::Response->new(
-                params => {
-                    %params,
-                    RESULT  => 1,
-                    RESPMSG => 'User authentication failed'
-                }
-            );
+                params => \%params );
         },
         'WebService::PayPal::PaymentsAdvanced::Error::Authentication',
         'authentication exception'
