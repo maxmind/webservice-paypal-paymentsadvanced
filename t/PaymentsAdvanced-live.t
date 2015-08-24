@@ -83,7 +83,7 @@ SKIP: {
         my $res = $payments->create_secure_token($create_token);
         ok( $res->secure_token, 'gets token when module generates own id' );
 
-        my $uri = $payments->hosted_form_uri($res);
+        my $uri = $res->hosted_form_uri;
         ok( $uri, 'got uri for hosted_form ' . $uri );
     }
 

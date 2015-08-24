@@ -13,7 +13,6 @@ use Types::URI qw( Uri );
 use URI;
 use URI::FromHash qw( uri uri_object );
 use URI::QueryParam;
-use Web::Scraper;
 
 #<<< don't perltidy
 use WebService::PayPal::PaymentsAdvanced::Error::Generic;
@@ -57,16 +56,6 @@ has production_mode => (
     default => 0,
 );
 
-has ua => (
-    is      => 'ro',
-    isa     => InstanceOf ['LWP::UserAgent'],
-    default => sub {
-        my $ua = LWP::UserAgent->new;
-        $ua->timeout(5);
-        return $ua;
-    },
-);
-
 has user => (
     is       => 'ro',
     isa      => Str,
@@ -89,6 +78,11 @@ has verbose => (
     is      => 'ro',
     isa     => Bool,
     default => 1,
+);
+
+with(
+    'WebService::PayPal::PaymentsAdvanced::Role::HasUA',
+    'WebService::PayPal::PaymentsAdvanced::Role::ClassFor'
 );
 
 sub _build_payflow_pro_uri {
@@ -185,46 +179,6 @@ sub transaction_status {
     );
 }
 
-sub hosted_form_uri {
-    my $self = shift;
-
-    state $check = compile( InstanceOf [ $self->_class_for('Response::SecureToken') ] );
-    my ($response) = $check->(@_);
-
-    my $uri = $self->payflow_link_uri->clone;
-    $uri->query_param( SECURETOKEN   => $response->secure_token, );
-    $uri->query_param( SECURETOKENID => $response->secure_token_id, );
-
-    return $uri unless $self->validate_hosted_form_uri;
-
-    # For whatever reason on the PayPal side, HEAD isn't useful here.
-    my $res = $self->ua->get($uri);
-
-    unless ( $res->is_success ) {
-
-        WebService::PayPal::PaymentsAdvanced::Error::HTTP->throw(
-            message       => "hosted_form URI does not validate: $uri",
-            http_response => $res,
-            http_status   => $res->code,
-        );
-
-    }
-
-    my $error_scraper = scraper {
-        process( '.error', error => 'TEXT' );
-    };
-
-    my $scraped_text = $error_scraper->scrape($res);
-
-    return $uri unless exists $scraped_text->{error};
-
-    $self->_class_for('Error::HostedForm')->throw(
-        message =>
-            "hosted_form contains error message: $scraped_text->{error}",
-        http_response => $res,
-    );
-}
-
 sub post {
     my $self = shift;
 
@@ -247,8 +201,14 @@ sub post {
     my $response_class = $self->_class_for('Response');
 
     if ( $post->{CREATESECURETOKEN} && $post->{CREATESECURETOKEN} eq 'Y' ) {
-        $response_class .= '::SecureToken';
+        return $self->_class_for('Response::SecureToken')->new(
+            params                   => $params,
+            payflow_link_uri         => $self->payflow_link_uri,
+            ua                       => $self->ua,
+            validate_hosted_form_uri => $self->validate_hosted_form_uri,
+        );
     }
+
     return $response_class->new( params => $params );
 }
 
@@ -379,7 +339,7 @@ __END__
         }
     );
 
-    my $uri = $payments->hosted_form_uri( $response );
+    my $uri = $response->hosted_form_uri;
 
     # Store token data for later use.  You'll need to implement this yourself.
     $foo->freeze_token_data(
@@ -568,18 +528,6 @@ C<Boolean>.
     if ( $response->is_credit_card_transaction ) {
         print $response->card_type, q{ }, $response->expiration_date;
     }
-
-=head3 hosted_form_uri
-
-Returns a L<URI> object which you can use either to insert an iframe into your
-pages or redirect the user to PayPal directly in order to make a payment.
-
-    use WebService::PayPal::PaymentsAdvanced;
-    my $payments = WebService::PayPal::PaymentsAdvanced->new(
-        validate_hosted_form_uri => 1, ... );
-
-    my $response = $payments->create_secure_token(...);
-    my $uri      = $payments->hosted_form_uri($response);
 
 =head3 post
 

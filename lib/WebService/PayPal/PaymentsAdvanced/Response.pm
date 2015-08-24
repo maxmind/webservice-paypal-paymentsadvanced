@@ -2,12 +2,6 @@ package WebService::PayPal::PaymentsAdvanced::Response;
 
 use Moo;
 
-use Types::Standard qw( HashRef Str );
-use WebService::PayPal::PaymentsAdvanced::Error::Authentication;
-use WebService::PayPal::PaymentsAdvanced::Error::Generic;
-
-# XXX responses with tokens should be in a different class
-
 with(
     'WebService::PayPal::PaymentsAdvanced::Role::HasParams',
     'WebService::PayPal::PaymentsAdvanced::Role::HasMessage',
@@ -33,28 +27,20 @@ __END__
 =head1 DESCRIPTION
 
 This module provides a consistent interface for getting information from a
-PayPal response, regardless of whether it comes from token creation, a
-redirect or a silent POST.
+PayPal response, regardless of whether it comes from token creation, a redirect
+or a silent POST.  It will be used as a parent class for other response
+classes.  You should never need to create this object yourself.
 
-=head1 OBJECT INSTANTIATION
+=head1 METHODS
 
-The following parameters can be supplied to C<new()> when creating a new object.
+=head2 message
 
-=head2 Required Parameters
+The contents of PayPal's RESPMSG parameter.
 
-=head3 params
+=head2 params
 
 A C<HashRef> of parameters which have been returned by PayPal.
 
-=head2 secure_token
-
-Returns the PayPal SECURETOKEN param.
-
-=head2 secure_token_id
-
-Returns the PayPal SECURETOKENID param.  If you are using this module
-directly, you should check that the returned value is the same as the
-SECURETOKENID which you initially provided to PayPal.
 
 =head1 SEE ALSO
 

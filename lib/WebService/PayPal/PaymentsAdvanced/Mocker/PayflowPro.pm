@@ -62,14 +62,14 @@ sub _render_response {
     my $c      = shift;
     my $params = shift;
 
-    my $res    = uri_object( query => $params );
+    my $res = uri_object( query => $params );
     $c->render( text => $res->query, format => 'nvp' );
 }
 
 sub _new_id {
     my $length = shift;
 
-    my $id     = Data::GUID->new->as_string;
+    my $id = Data::GUID->new->as_string;
     $id =~ s{-}{}g;
     $id = substr( $id, 0, $length );
     return $id;

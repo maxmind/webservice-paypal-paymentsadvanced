@@ -45,17 +45,6 @@ use Util;
         { FOO => 1, BAR => 2 },
         'force upper case hash keys'
     );
-
-    my $response = WebService::PayPal::PaymentsAdvanced::Response::SecureToken->new(
-        params => {
-            RESULT        => 0,
-            SECURETOKEN   => 'FOO',
-            SECURETOKENID => 'BAR',
-        }
-    );
-    my $url = $payments->hosted_form_uri($response);
-
-    ok( $url, "hosted_form url: $url" );
 }
 
 # Test parsing errors out of hosted_form content.
@@ -64,7 +53,7 @@ use Util;
         = get_mocked_payments('test-data/hosted-form-with-error.html');
 
     like(
-        exception { $payments->hosted_form_uri($payments_res) },
+        exception { $payments_res->hosted_form_uri },
         qr{Secure Token is not enabled},
         'HTML error is in exception'
     );
@@ -76,7 +65,7 @@ use Util;
     my ( $payments, $payments_res )
         = get_mocked_payments('test-data/hosted-form.html');
     is(
-        exception { $payments->hosted_form_uri($payments_res) },
+        exception { $payments_res->hosted_form_uri },
         undef, 'No exception when no HTML errors'
     );
 }

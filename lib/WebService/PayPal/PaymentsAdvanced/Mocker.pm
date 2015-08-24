@@ -65,10 +65,19 @@ sub _build_mocked_ua {
     my $link = $self->payflow_link;
     my $pro  = $self->payflow_pro;
 
-    $self->_ua->register_psgi( 'payflowlink.paypal.com',       $self->payflow_link );
-    $self->_ua->register_psgi( 'payflowpro.paypal.com',        $self->payflow_pro );
-    $self->_ua->register_psgi( 'pilot-payflowlink.paypal.com', $self->payflow_link );
-    $self->_ua->register_psgi( 'pilot-payflowpro.paypal.com',  $self->payflow_pro );
+    $self->_ua->register_psgi(
+        'payflowlink.paypal.com',
+        $self->payflow_link
+    );
+    $self->_ua->register_psgi( 'payflowpro.paypal.com', $self->payflow_pro );
+    $self->_ua->register_psgi(
+        'pilot-payflowlink.paypal.com',
+        $self->payflow_link
+    );
+    $self->_ua->register_psgi(
+        'pilot-payflowpro.paypal.com',
+        $self->payflow_pro
+    );
     return $self->_ua;
 }
 
