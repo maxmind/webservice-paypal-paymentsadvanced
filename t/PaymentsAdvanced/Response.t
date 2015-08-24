@@ -13,17 +13,6 @@ my %params = (
 );
 
 {
-    my $res = WebService::PayPal::PaymentsAdvanced::Response->new(
-        params => \%params );
-
-    is( $res->message,         'Approved', 'message' );
-    is( $res->secure_token,    'token',    'token' );
-    is( $res->secure_token_id, 'token_id', 'secure_token_id' );
-
-    ok( $res, 'can create response object' );
-}
-
-{
     isa_ok(
         exception {
             WebService::PayPal::PaymentsAdvanced::Response->new(
