@@ -8,17 +8,10 @@ use MooX::StrictConstructor;
 use Types::Standard qw( Bool HashRef Str );
 use WebService::PayPal::PaymentsAdvanced::Error::IPVerification;
 
-with(
-    'WebService::PayPal::PaymentsAdvanced::Role::HasParams',
-    'WebService::PayPal::PaymentsAdvanced::Role::HasTender',
-    'WebService::PayPal::PaymentsAdvanced::Role::HasTokens',
-    'WebService::PayPal::PaymentsAdvanced::Role::HasResultValidation',
-);
+extends 'WebService::PayPal::PaymentsAdvanced::Response';
 
 sub BUILD {
     my $self = shift;
-
-    $self->_validate_result;
 
     return
         if !$self->_has_ip_address
@@ -60,6 +53,11 @@ has _ip_addresses => (
             'notify.paypal.com' => '173.0.81.65',
         };
     },
+);
+
+with(
+    'WebService::PayPal::PaymentsAdvanced::Role::HasTender',
+    'WebService::PayPal::PaymentsAdvanced::Role::HasTokens',
 );
 
 sub _build_ip_address_is_verified {
