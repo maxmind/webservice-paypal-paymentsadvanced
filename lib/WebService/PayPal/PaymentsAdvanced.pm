@@ -18,6 +18,7 @@ use URI::QueryParam;
 use WebService::PayPal::PaymentsAdvanced::Error::Generic;
 use WebService::PayPal::PaymentsAdvanced::Error::HostedForm;
 use WebService::PayPal::PaymentsAdvanced::Response;
+use WebService::PayPal::PaymentsAdvanced::Response::Capture;
 use WebService::PayPal::PaymentsAdvanced::Response::FromHTTP;
 use WebService::PayPal::PaymentsAdvanced::Response::FromRedirect;
 use WebService::PayPal::PaymentsAdvanced::Response::FromSilentPOST;
@@ -206,6 +207,12 @@ sub post {
             payflow_link_uri         => $self->payflow_link_uri,
             ua                       => $self->ua,
             validate_hosted_form_uri => $self->validate_hosted_form_uri,
+        );
+    }
+
+    if ( $post->{TRXTYPE} && $post->{TRXTYPE} eq 'D' ) {
+        return $self->_class_for('Response::Capture')->new(
+            params => $params
         );
     }
 
