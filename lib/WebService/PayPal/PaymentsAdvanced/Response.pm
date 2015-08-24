@@ -10,6 +10,12 @@ has pnref => (
     default => sub { shift->_params->{PNREF} },
 );
 
+has ppref => (
+    is      => 'lazy',
+    isa     => Str,
+    default => sub { shift->_params->{PPREF} },
+);
+
 with(
     'WebService::PayPal::PaymentsAdvanced::Role::HasParams',
     'WebService::PayPal::PaymentsAdvanced::Role::HasMessage',
@@ -50,6 +56,10 @@ The contents of PayPal's RESPMSG parameter.
 A C<HashRef> of parameters which have been returned by PayPal.
 
 =head2 pnref
+
+The contents of PayPal's PNREF parameter.
+
+=head2 ppref
 
 The contents of PayPal's PNREF parameter.
 
