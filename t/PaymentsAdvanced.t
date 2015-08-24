@@ -46,7 +46,7 @@ use Util;
         'force upper case hash keys'
     );
 
-    my $response = WebService::PayPal::PaymentsAdvanced::Response->new(
+    my $response = WebService::PayPal::PaymentsAdvanced::Response::SecureToken->new(
         params => {
             RESULT        => 0,
             SECURETOKEN   => 'FOO',

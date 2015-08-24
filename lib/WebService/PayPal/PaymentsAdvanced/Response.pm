@@ -11,7 +11,6 @@ use WebService::PayPal::PaymentsAdvanced::Error::Generic;
 with(
     'WebService::PayPal::PaymentsAdvanced::Role::HasParams',
     'WebService::PayPal::PaymentsAdvanced::Role::HasMessage',
-    'WebService::PayPal::PaymentsAdvanced::Role::HasTokens',
     'WebService::PayPal::PaymentsAdvanced::Role::HasResultValidation',
 );
 

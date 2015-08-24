@@ -21,6 +21,7 @@ use WebService::PayPal::PaymentsAdvanced::Response::FromHTTP;
 use WebService::PayPal::PaymentsAdvanced::Response::FromRedirect;
 use WebService::PayPal::PaymentsAdvanced::Response::FromSilentPOST;
 use WebService::PayPal::PaymentsAdvanced::Response::FromSilentPOST::CreditCard;
+use WebService::PayPal::PaymentsAdvanced::Response::SecureToken;
 
 has partner => (
     is       => 'ro',
@@ -186,7 +187,7 @@ sub hosted_form_uri {
     my $self = shift;
 
     state $check = compile(
-        InstanceOf ['WebService::PayPal::PaymentsAdvanced::Response'] );
+        InstanceOf ['WebService::PayPal::PaymentsAdvanced::Response::SecureToken'] );
     my ($response) = $check->(@_);
 
     my $uri = $self->payflow_link_uri->clone;
@@ -242,8 +243,12 @@ sub post {
         = WebService::PayPal::PaymentsAdvanced::Response::FromHTTP->new(
         http_response => $http_response )->params;
 
-    return WebService::PayPal::PaymentsAdvanced::Response->new(
-        params => $params );
+    my $response_class = 'WebService::PayPal::PaymentsAdvanced::Response';
+
+    if ( $post->{CREATESECURETOKEN} && $post->{CREATESECURETOKEN} eq 'Y' ) {
+        $response_class .= '::SecureToken';
+    }
+    return $response_class->new( params => $params );
 }
 
 sub sale_from_credit_card_reference_transaction {
@@ -504,7 +509,7 @@ to C<true>.
 =head3 create_secure_token
 
 Create a secure token which you can use to create a hosted form uri.  Returns a
-L<WebService::PayPal::PaymentsAdvanced::Response> object.
+L<WebService::PayPal::PaymentsAdvanced::Response::SecureToken> object.
 
     use WebService::PayPal::PaymentsAdvanced;
     my $payments = WebService::PayPal::PaymentsAdvanced->new(...);
