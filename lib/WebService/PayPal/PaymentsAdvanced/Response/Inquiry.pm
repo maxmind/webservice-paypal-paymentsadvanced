@@ -4,6 +4,8 @@ use Moo;
 
 extends 'WebService::PayPal::PaymentsAdvanced::Response';
 
+with 'WebService::PayPal::PaymentsAdvanced::Role::HasTransactionTime';
+
 use Types::Standard qw( Bool );
 
 has is_credit_card_transaction => (

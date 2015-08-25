@@ -74,6 +74,10 @@ use Util;
     my $ppa = Util::mocked_ppa();
     my $res = $ppa->capture_delayed_transaction('FOO');
     ok( $res, 'capture_delayed_transaction' );
+    ok(
+        $res->transaction_time,
+        'transaction_time: ' . $res->transaction_time
+    );
 }
 
 sub get_mocked_payments {
