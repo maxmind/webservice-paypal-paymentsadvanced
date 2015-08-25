@@ -2,8 +2,11 @@ package WebService::PayPal::PaymentsAdvanced::Mocker::PayflowPro;
 
 use Mojolicious::Lite;
 
+use feature qw( state );
+
 use Data::GUID;
 use DateTime;
+use DateTime::TimeZone;
 use Plack::Builder;
 use URI::FromHash qw( uri_object );
 
@@ -39,13 +42,14 @@ post '/' => sub {
     }
 
     if ( $clean->{TRXTYPE} && $clean->{TRXTYPE} eq 'D' ) {
-        my $dt     = DateTime->now;
+        state $time_zone = DateTime::TimeZone->new( name => 'America/Los_Angeles' );
+        my $dt     = DateTime->now( time_zone => $time_zone );
         my %return = (
             CORRELATIONID => _new_id(12),
             FEEAMT        => 1.75,
             PAYMENTTYPE   => 'instant',
             PENDINGREASON => 'completed',
-            PNREF         => 'B' . _new_id(11),
+            PNREF         => $clean->{ORIGID},
             PPREF         => _new_id(17),
             RESPMSG       => 'Approved',
             RESULT        => 0,
