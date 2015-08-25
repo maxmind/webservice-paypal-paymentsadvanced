@@ -42,8 +42,9 @@ post '/' => sub {
     }
 
     if ( $clean->{TRXTYPE} && $clean->{TRXTYPE} eq 'D' ) {
-        state $time_zone = DateTime::TimeZone->new( name => 'America/Los_Angeles' );
-        my $dt     = DateTime->now( time_zone => $time_zone );
+        state $time_zone
+            = DateTime::TimeZone->new( name => 'America/Los_Angeles' );
+        my $dt = DateTime->now( time_zone => $time_zone );
         my %return = (
             CORRELATIONID => _new_id(12),
             FEEAMT        => 1.75,
@@ -59,6 +60,33 @@ post '/' => sub {
         _render_response( $c, \%return );
         return;
     }
+
+    if ( $clean->{TRXTYPE} && $clean->{TRXTYPE} eq 'I' ) {
+        state $time_zone
+            = DateTime::TimeZone->new( name => 'America/Los_Angeles' );
+        my $dt = DateTime->now( time_zone => $time_zone );
+        my %return = (
+            ACCT          => 7603,
+            AMT           => 50.00,
+            CARDTYPE      => 1,
+            CORRELATIONID => '11966f056525',
+            EXPDATE       => 1221,
+            LASTNAME      => 'NotProvided',
+            ORIGPNREF     => $clean->{ORIGID},
+            ORIGPPREF     => _new_id(17),
+            ORIGRESULT    => 0,
+            PNREF         => _new_id(17),
+            RESPMSG       => 'Approved',
+            RESULT        => 0,
+            SETTLE_DATE   => '2015-08-19 13:23:06',
+            TRANSSTATE    => 8,
+            TRANSTIME     => '2015-08-19 13:23:06',
+        );
+
+        _render_response( $c, \%return );
+        return;
+    }
+
     $c->render( text => 'Mocked URL not found', status => 404 );
 };
 

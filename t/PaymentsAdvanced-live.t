@@ -116,11 +116,11 @@ SKIP: {
         like(
             exception(
                 sub {
-                    $payments->transaction_status('xfoox');
+                    $payments->inquiry_transaction('xfoox');
                 }
             ),
             qr{Field format error}i,
-            'Exception on getting transaction status for invalid id'
+            'Exception on getting inquiry transaction for invalid id'
         );
     }
 }

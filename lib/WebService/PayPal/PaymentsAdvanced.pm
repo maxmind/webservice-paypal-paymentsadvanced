@@ -177,7 +177,7 @@ sub get_response_from_silent_post {
     return $response_class->new( params => $response->params );
 }
 
-sub transaction_status {
+sub inquiry_transaction {
     my $self = shift;
 
     state $check = compile(Str);
@@ -229,10 +229,12 @@ sub post {
         if ( $post->{TRXTYPE} eq 'I' ) {
             $response_class = $self->_class_for('Response::Inquiry');
             my $response = $response_class->new( params => $params );
-            $response_class .=
+            $response_class .= '::'
+                . (
                 $response->is_credit_card_transaction
                 ? 'CreditCard'
-                : 'PayPal';
+                : 'PayPal'
+                );
         }
         return $response_class->new( params => $params );
     }
@@ -554,7 +556,7 @@ C<Boolean>.
     );
     print $response->message. "\n";
     if ( $response->is_credit_card_transaction ) {
-        print $response->card_type, q{ }, $response->expiration_date;
+        print $response->card_type, q{ }, $response->card_expiration;
     }
 
 =head3 post
@@ -604,7 +606,7 @@ arguments: a BAID from a previous PayPal transaction, an amount and a currency.
     );
     say $response->message;
 
-=head3 transaction_status( $ORIGID )
+=head3 perform_inquiry_transaction( $ORIGID )
 
 Performs a transaction inquiry on a previously submitted transaction.  Requires
 the ID of the original transaction.  Returns a response object.

@@ -28,7 +28,7 @@ SYNOPSIS
             }
         );
 
-        my $uri = $payments->hosted_form_uri( $response );
+        my $uri = $response->hosted_form_uri;
 
         # Store token data for later use.  You'll need to implement this yourself.
         $foo->freeze_token_data(
@@ -148,7 +148,8 @@ OBJECT INSTANTIATION
   Methods
    create_secure_token
     Create a secure token which you can use to create a hosted form uri.
-    Returns a WebService::PayPal::PaymentsAdvanced::Response object.
+    Returns a WebService::PayPal::PaymentsAdvanced::Response::SecureToken
+    object.
 
         use WebService::PayPal::PaymentsAdvanced;
         my $payments = WebService::PayPal::PaymentsAdvanced->new(...);
@@ -181,34 +182,29 @@ OBJECT INSTANTIATION
 
    get_response_from_silent_post
     This method can be used to validate responses from PayPal to your silent
-    POST url. It's essentially a wrapper around
-    WebService::PayPal::PaymentsAdvanced::Response::FromSilentPost. If you
-    provide an ip_address parameter, it will be validated against a list of
-    known IPs which PayPal provides. You're encouraged to provide an IP
-    address in order to prevent spoofing of payment responses. See
-    WebService::PayPal::PaymentsAdvanced::Response::FromSilentPOST for more
-    information on this behaviour.
+    POST url. If you provide an ip_address parameter, it will be validated
+    against a list of known IPs which PayPal provides. You're encouraged to
+    provide an IP address in order to prevent spoofing of payment responses.
+    See WebService::PayPal::PaymentsAdvanced::Response::FromSilentPOST for
+    more information on this behaviour.
 
-    This method returns a WebService::PayPal::PaymentsAdvanced::Response
-    object.
+    This method returns a
+    WebService::PayPal::PaymentsAdvanced::Response::FromSilentPost::PayPal
+    object for PayPal transactions. It returns a
+    WebService::PayPal::PaymentsAdvanced::Response::FromSilentPost::CreditCa
+    rd object for Credit Card transactions. You can either inspect the class
+    return to you or use the "is_credit_card_transaction" or
+    "is_paypal_transaction" methods to learn which method the customer paid
+    with. Both methods return a "Boolean".
 
         my $response = $payments->get_response_from_redirect(
             ip_address => $ip,
             params     => $params,
         );
-        print $response->message;
-
-   hosted_form_uri
-    Returns a URI object which you can use either to insert an iframe into
-    your pages or redirect the user to PayPal directly in order to make a
-    payment.
-
-        use WebService::PayPal::PaymentsAdvanced;
-        my $payments = WebService::PayPal::PaymentsAdvanced->new(
-            validate_hosted_form_uri => 1, ... );
-
-        my $response = $payments->create_secure_token(...);
-        my $uri      = $payments->hosted_form_uri($response);
+        print $response->message. "\n";
+        if ( $response->is_credit_card_transaction ) {
+            print $response->card_type, q{ }, $response->expiration_date;
+        }
 
    post
     Generic method to post arbitrary params to PayPal. Requires a "HashRef"

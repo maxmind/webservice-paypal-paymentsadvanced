@@ -10,21 +10,18 @@ use Types::Standard qw( Str );
 # https://developer.paypal.com/docs/classic/payflow/integration-guide/#transaction-responses
 
 has card_type => (
-    is       => 'ro',
-    isa      => Str,
-    init_arg => undef,
-    lazy     => 1,
-    builder  => '_build_card_type',
-);
-
-has expiration_date => (
     is       => 'lazy',
     isa      => Str,
     init_arg => undef,
-    builder  => '_build_expiration_date',
 );
 
-has last_four_digits => (
+has card_expiration => (
+    is       => 'lazy',
+    isa      => Str,
+    init_arg => undef,
+);
+
+has card_last_four_digits => (
     is       => 'lazy',
     isa      => PositiveInt,
     init_arg => undef,
@@ -42,14 +39,14 @@ sub _build_card_type {
         4 => q{Diner's Club},
         5 => 'JCB',
     );
-    return $card_types{ $self->_params->{CARDTYPE} };
+    return $card_types{ $self->params->{CARDTYPE} };
 }
 
-sub _build_expiration_date {
+sub _build_card_expiration {
     my $self = shift;
 
     # Will be in MMYY
-    my $date = $self->_params->{EXPDATE};
+    my $date = $self->params->{EXPDATE};
 
     # This breaks in about 75 years.
     return sprintf( '20%s-%s', substr( $date, 2, 2 ), substr( $date, 0, 2 ) );

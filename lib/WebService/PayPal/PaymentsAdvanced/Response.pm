@@ -9,13 +9,13 @@ use WebService::PayPal::PaymentsAdvanced::Error::Generic;
 has pnref => (
     is      => 'lazy',
     isa     => Str,
-    default => sub { shift->_params->{PNREF} },
+    default => sub { shift->params->{PNREF} },
 );
 
 has ppref => (
     is      => 'lazy',
     isa     => Str,
-    default => sub { shift->_params->{PPREF} },
+    default => sub { shift->params->{PPREF} },
 );
 
 with(

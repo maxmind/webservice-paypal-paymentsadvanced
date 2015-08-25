@@ -78,6 +78,24 @@ use Util;
         $res->transaction_time,
         'transaction_time: ' . $res->transaction_time
     );
+    ok( $res->pnref, 'pnref' );
+    ok( $res->ppref, 'ppref' );
+}
+
+{
+    my $ppa = Util::mocked_ppa();
+    my $res = $ppa->inquiry_transaction('FOO');
+    ok( $res, 'inquiry_transaction' );
+    ok(
+        $res->transaction_time,
+        'transaction_time: ' . $res->transaction_time
+    );
+    ok( $res->pnref, 'pnref' );
+
+    # XXX this blows up on ppref
+    ok( $res->card_type,             'card_type' );
+    ok( $res->card_last_four_digits, 'credit_card' );
+    ok( $res->card_expiration,       'expiration' );
 }
 
 sub get_mocked_payments {

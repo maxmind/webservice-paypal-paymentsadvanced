@@ -16,5 +16,5 @@ my $txn_id = shift @ARGV;
 die 'usage: perl examples/inquiry.pl [transaction_id]'
     unless $txn_id;
 
-my $response = $payments->transaction_status($txn_id);
+my $response = $payments->inquiry_transaction($txn_id);
 p( $response->params );
