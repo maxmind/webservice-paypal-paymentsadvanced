@@ -14,13 +14,13 @@ app->types->type( nvp => 'text/namevalue' );
 
 post '/' => sub {
     my $c     = shift;
-    my $clean = _filter_params($c);
+    my $params = _filter_params($c);
 
-    if ( $clean->{CREATESECURETOKEN} && $clean->{CREATESECURETOKEN} eq 'Y' ) {
+    if ( $params->{CREATESECURETOKEN} && $params->{CREATESECURETOKEN} eq 'Y' ) {
         my %return = (
             RESULT        => 0,
             RESPMSG       => 'Approved',
-            SECURETOKENID => $clean->{SECURETOKENID},
+            SECURETOKENID => $params->{SECURETOKENID},
             SECURETOKEN   => Data::GUID->new->as_string,
         );
 
@@ -28,14 +28,14 @@ post '/' => sub {
         return;
     }
 
-    if ( $clean->{TRXTYPE} && $clean->{TRXTYPE} eq 'D' ) {
+    if ( $params->{TRXTYPE} && $params->{TRXTYPE} eq 'D' ) {
         my $dt     = $helper->datetime_now;
         my %return = (
             CORRELATIONID => $helper->unique_id(12),
             FEEAMT        => 1.75,
             PAYMENTTYPE   => 'instant',
             PENDINGREASON => 'completed',
-            PNREF         => $clean->{ORIGID},
+            PNREF         => $params->{ORIGID},
             PPREF         => $helper->ppref,
             RESPMSG       => 'Approved',
             RESULT        => 0,
@@ -46,7 +46,7 @@ post '/' => sub {
         return;
     }
 
-    if ( $clean->{TRXTYPE} && $clean->{TRXTYPE} eq 'I' ) {
+    if ( $params->{TRXTYPE} && $params->{TRXTYPE} eq 'I' ) {
         my $dt     = $helper->datetime_now;
         my %return = (
             ACCT          => 7603,
@@ -55,7 +55,7 @@ post '/' => sub {
             CORRELATIONID => $helper->correlationid,
             EXPDATE       => 1221,
             LASTNAME      => 'NotProvided',
-            ORIGPNREF     => $clean->{ORIGID},
+            ORIGPNREF     => $params->{ORIGID},
             ORIGPPREF     => $helper->unique_id(17),
             ORIGRESULT    => 0,
             PNREF         => $helper->unique_id(17),
