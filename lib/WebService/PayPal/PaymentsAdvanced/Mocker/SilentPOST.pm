@@ -2,9 +2,22 @@ package WebService::PayPal::PaymentsAdvanced::Mocker::SilentPOST;
 
 use Moo;
 
+use Types::Standard qw( InstanceOf );
+use WebService::PayPal::PaymentsAdvanced::Mocker::Helpers;
+
+has _helper => (
+    is => 'lazy',
+    isa =>
+        InstanceOf ['WebService::PayPal::PaymentsAdvanced::Mocker::Helpers'],
+    default =>
+        sub { WebService::PayPal::PaymentsAdvanced::Mocker::Helpers->new },
+);
+
 sub paypal_success_params {
     my $self = shift;
     my %args = @_;
+
+    die 'SECURETOKENID missing' unless $args{SECURETOKENID};
 
     return {
         'ADDRESSTOSHIP'   => '1 Main St',
@@ -12,14 +25,14 @@ sub paypal_success_params {
         'AVSADDR'         => 'Y',
         'AVSDATA'         => 'YYY',
         'AVSZIP'          => 'Y',
-        'BAID'            => 'B-0R272292V1545574R',
+        'BAID'            => $self->_helper->baid,
         'BILLTOCOUNTRY'   => 'US',
         'BILLTOEMAIL'     => 'paypal_buyer@example.com',
         'BILLTOFIRSTNAME' => 'Test',
         'BILLTOLASTNAME'  => 'Buyer',
         'BILLTONAME'      => 'Test Buyer',
         'CITYTOSHIP'      => 'San Jose',
-        'CORRELATIONID'   => '60dee20fe6b74',
+        'CORRELATIONID'   => $self->_helper->correlationid,
         'COUNTRY'         => 'US',
         'COUNTRYTOSHIP'   => 'US',
         'EMAIL'           => 'paypal_buyer@example.com',
@@ -33,12 +46,11 @@ sub paypal_success_params {
         'PAYERID'         => 'R8RAGUNASE6VA',
         'PAYMENTTYPE'     => 'instant',
         'PENDINGREASON'   => 'authorization',
-        'PNREF'           => 'B1PP8A36E2A6',
-        'PPREF'           => '2CN92845U6332150A',
+        'PNREF'           => $self->_helper->pnref,
+        'PPREF'           => $self->_helper->ppref,
         'RESPMSG'         => 'Approved',
         'RESULT'          => '0',
-        'SECURETOKEN'     => '8mabQcfgohUm3WeCIv1jVvQiz',
-        'SECURETOKENID'   => 'EF2CB000-4BFB-11E5-8575-FE909B07F07B',
+        'SECURETOKEN'     => $self->_helper->secure_token,
         'SHIPTOCITY'      => 'San Jose',
         'SHIPTOCOUNTRY'   => 'US',
         'SHIPTOSTATE'     => 'CA',
@@ -47,8 +59,8 @@ sub paypal_success_params {
         'STATETOSHIP'     => 'CA',
         'TAX'             => '0.00',
         'TENDER'          => 'P',
-        'TOKEN'           => 'EC-0NY99380TU249803G',
-        'TRANSTIME'       => '2015-08-26 07:08:55',
+        'TOKEN'           => $self->_helper->token,
+        'TRANSTIME'       => $self->_helper->transtime,
         'TRXTYPE'         => 'A',
         'TYPE'            => 'A',
         'ZIPTOSHIP'       => '95131',

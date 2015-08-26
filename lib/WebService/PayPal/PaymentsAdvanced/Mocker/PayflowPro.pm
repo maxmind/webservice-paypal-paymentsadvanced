@@ -49,7 +49,7 @@ post '/' => sub {
             PAYMENTTYPE   => 'instant',
             PENDINGREASON => 'completed',
             PNREF         => $clean->{ORIGID},
-            PPREF         => $helper->unique_id(17),
+            PPREF         => $helper->ppref,
             RESPMSG       => 'Approved',
             RESULT        => 0,
             TRANSTIME     => $dt->ymd . q{ } . $dt->hms,
@@ -65,7 +65,7 @@ post '/' => sub {
             ACCT          => 7603,
             AMT           => 50.00,
             CARDTYPE      => 1,
-            CORRELATIONID => '11966f056525',
+            CORRELATIONID => $helper->correlationid,
             EXPDATE       => 1221,
             LASTNAME      => 'NotProvided',
             ORIGPNREF     => $clean->{ORIGID},
@@ -74,9 +74,9 @@ post '/' => sub {
             PNREF         => $helper->unique_id(17),
             RESPMSG       => 'Approved',
             RESULT        => 0,
-            SETTLE_DATE   => '2015-08-19 13:23:06',
+            SETTLE_DATE   => $helper->transtime,
             TRANSSTATE    => 8,
-            TRANSTIME     => '2015-08-19 13:23:06',
+            TRANSTIME     => $helper->transtime,
         );
 
         _render_response( $c, \%return );
