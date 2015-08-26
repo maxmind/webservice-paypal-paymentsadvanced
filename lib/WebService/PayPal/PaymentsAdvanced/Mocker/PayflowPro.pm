@@ -5,10 +5,10 @@ use Mojolicious::Lite;
 use feature qw( state );
 
 use Data::GUID;
-use DateTime;
-use DateTime::TimeZone;
-use Plack::Builder;
 use URI::FromHash qw( uri_object );
+use WebService::PayPal::PaymentsAdvanced::Mocker::Helpers;
+
+my $helper = WebService::PayPal::PaymentsAdvanced::Mocker::Helpers->new;
 
 app->types->type( nvp => 'text/namevalue' );
 
@@ -42,16 +42,14 @@ post '/' => sub {
     }
 
     if ( $clean->{TRXTYPE} && $clean->{TRXTYPE} eq 'D' ) {
-        state $time_zone
-            = DateTime::TimeZone->new( name => 'America/Los_Angeles' );
-        my $dt = DateTime->now( time_zone => $time_zone );
+        my $dt     = $helper->datetime_now;
         my %return = (
-            CORRELATIONID => _new_id(12),
+            CORRELATIONID => $helper->unique_id(12),
             FEEAMT        => 1.75,
             PAYMENTTYPE   => 'instant',
             PENDINGREASON => 'completed',
             PNREF         => $clean->{ORIGID},
-            PPREF         => _new_id(17),
+            PPREF         => $helper->unique_id(17),
             RESPMSG       => 'Approved',
             RESULT        => 0,
             TRANSTIME     => $dt->ymd . q{ } . $dt->hms,
@@ -62,9 +60,7 @@ post '/' => sub {
     }
 
     if ( $clean->{TRXTYPE} && $clean->{TRXTYPE} eq 'I' ) {
-        state $time_zone
-            = DateTime::TimeZone->new( name => 'America/Los_Angeles' );
-        my $dt = DateTime->now( time_zone => $time_zone );
+        my $dt     = $helper->datetime_now;
         my %return = (
             ACCT          => 7603,
             AMT           => 50.00,
@@ -73,9 +69,9 @@ post '/' => sub {
             EXPDATE       => 1221,
             LASTNAME      => 'NotProvided',
             ORIGPNREF     => $clean->{ORIGID},
-            ORIGPPREF     => _new_id(17),
+            ORIGPPREF     => $helper->unique_id(17),
             ORIGRESULT    => 0,
-            PNREF         => _new_id(17),
+            PNREF         => $helper->unique_id(17),
             RESPMSG       => 'Approved',
             RESULT        => 0,
             SETTLE_DATE   => '2015-08-19 13:23:06',
@@ -96,15 +92,6 @@ sub _render_response {
 
     my $res = uri_object( query => $params );
     $c->render( text => $res->query, format => 'nvp' );
-}
-
-sub _new_id {
-    my $length = shift;
-
-    my $id = Data::GUID->new->as_string;
-    $id =~ s{-}{}g;
-    $id = substr( $id, 0, $length );
-    return $id;
 }
 
 sub _filter_params {
