@@ -2,8 +2,6 @@ package WebService::PayPal::PaymentsAdvanced::Mocker::PayflowLink;
 
 use Mojolicious::Lite;
 
-use Plack::Builder;
-
 # A GET request will be a request for the hosted form.
 
 get '/' => sub {
@@ -13,9 +11,7 @@ get '/' => sub {
 
 sub to_app {
     app->secrets( ['Tempus fugit'] );
-    builder {
-        app->start;
-    }
+    app->start;
 }
 
 1;

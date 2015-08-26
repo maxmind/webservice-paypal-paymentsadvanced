@@ -121,9 +121,7 @@ sub _filter_params {
 
 sub to_app {
     app->secrets( ['Tempus fugit'] );
-    builder {
-        app->start;
-    }
+    app->start;
 }
 
 1;
