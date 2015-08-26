@@ -6,9 +6,9 @@ use feature qw( state );
 
 use Data::GUID;
 use URI::FromHash qw( uri_object );
-use WebService::PayPal::PaymentsAdvanced::Mocker::Helpers;
+use WebService::PayPal::PaymentsAdvanced::Mocker::Helper;
 
-my $helper = WebService::PayPal::PaymentsAdvanced::Mocker::Helpers->new;
+my $helper = WebService::PayPal::PaymentsAdvanced::Mocker::Helper->new;
 
 app->types->type( nvp => 'text/namevalue' );
 

@@ -1,4 +1,4 @@
-package WebService::PayPal::PaymentsAdvanced::Mocker::Helpers;
+package WebService::PayPal::PaymentsAdvanced::Mocker::Helper;
 
 use Moo;
 

@@ -3,14 +3,14 @@ package WebService::PayPal::PaymentsAdvanced::Mocker::SilentPOST;
 use Moo;
 
 use Types::Standard qw( InstanceOf );
-use WebService::PayPal::PaymentsAdvanced::Mocker::Helpers;
+use WebService::PayPal::PaymentsAdvanced::Mocker::Helper;
 
 has _helper => (
     is => 'lazy',
     isa =>
-        InstanceOf ['WebService::PayPal::PaymentsAdvanced::Mocker::Helpers'],
+        InstanceOf ['WebService::PayPal::PaymentsAdvanced::Mocker::Helper'],
     default =>
-        sub { WebService::PayPal::PaymentsAdvanced::Mocker::Helpers->new },
+        sub { WebService::PayPal::PaymentsAdvanced::Mocker::Helper->new },
 );
 
 sub paypal_success_params {
