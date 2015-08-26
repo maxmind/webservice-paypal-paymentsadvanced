@@ -58,6 +58,7 @@ has _ip_addresses => (
 with(
     'WebService::PayPal::PaymentsAdvanced::Role::HasTender',
     'WebService::PayPal::PaymentsAdvanced::Role::HasTokens',
+    'WebService::PayPal::PaymentsAdvanced::Role::HasTransactionTime',
 );
 
 sub _build_ip_address_is_verified {
