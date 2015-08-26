@@ -14,9 +14,14 @@ has mocked_ua => (
     builder  => '_build_mocked_ua',
 );
 
+# The app builders return different things under different conditions.  The
+# return a CodeRef under Plack.  They return a Mojolicious::Lite object when
+# deployed via morbo.  They return a "1" when not run via Plack, using the test
+# suite.
+
 has payflow_link => (
     is       => 'ro',
-    isa      => CodeRef,
+    isa      => CodeRef | InstanceOf ['Mojolicious::Lite'] | Bool,
     init_arg => undef,
     lazy     => 1,
     builder  => '_build_payflow_link',
@@ -24,7 +29,7 @@ has payflow_link => (
 
 has payflow_pro => (
     is       => 'ro',
-    isa      => CodeRef,
+    isa      => CodeRef | InstanceOf ['Mojolicious::Lite'] | Bool,
     init_arg => undef,
     lazy     => 1,
     builder  => '_build_payflow_pro',

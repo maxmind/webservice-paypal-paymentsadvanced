@@ -12,19 +12,6 @@ my $helper = WebService::PayPal::PaymentsAdvanced::Mocker::Helper->new;
 
 app->types->type( nvp => 'text/namevalue' );
 
-# A GET request will be a request for the hosted form.  The GET is for an
-# entirely different host name, so would make sense to move this into a
-# different package.  One for mocking payflowpro and one for mocking
-# payflowlink.  That would be less confusing in the case of stray GET requests.
-
-# To summarize, GETs are requests for pilot-payflowlink.paypal.com and POSTs are
-# requests for pilot-payflowpro.com
-
-get '/' => sub {
-    my $c = shift;
-    $c->render( text => 'Hosted form would be here' );
-};
-
 post '/' => sub {
     my $c     = shift;
     my $clean = _filter_params($c);

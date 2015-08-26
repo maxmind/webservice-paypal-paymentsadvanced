@@ -6,7 +6,7 @@ use warnings;
 use lib 'lib';
 
 use WebService::PayPal::PaymentsAdvanced::Mocker;
-WebService::PayPal::PaymentsAdvanced::Mocker->payflow_link;
+WebService::PayPal::PaymentsAdvanced::Mocker->new->payflow_link;
 
 # PODNAME: mock-payflow-link
 # ABSTRACT: Mock the Payflow Link web service
