@@ -5,10 +5,6 @@ use Moo::Role;
 use Types::Common::Numeric qw( PositiveInt );
 use Types::Standard qw( Str );
 
-# An array is the obvious choice for card_type, but the hash leaves no room for
-# error. List taken from
-# https://developer.paypal.com/docs/classic/payflow/integration-guide/#transaction-responses
-
 has card_type => (
     is       => 'lazy',
     isa      => Str,
@@ -26,6 +22,13 @@ has card_last_four_digits => (
     isa      => PositiveInt,
     init_arg => undef,
     default  => sub { shift->params->{ACCT} },
+);
+
+has reference_transaction_id => (
+    is       => 'lazy',
+    isa      => Str,
+    init_arg => undef,
+    default  => sub { shift->pnref },
 );
 
 sub _build_card_type {

@@ -4,4 +4,6 @@ use Moo;
 
 extends 'WebService::PayPal::PaymentsAdvanced::Response::Inquiry';
 
+with 'WebService::PayPal::PaymentsAdvanced::Role::HasPayPal';
+
 1;
