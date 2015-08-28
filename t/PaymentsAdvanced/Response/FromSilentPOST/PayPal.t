@@ -16,5 +16,7 @@ my $response = $ppa->get_response_from_silent_post(
 
 ok( $response->transaction_time, 'transaction_time' );
 ok( $response->ppref,            'ppref' );
+ok( $response->is_paypal_transaction, 'is_paypal_transaction');
+ok( !$response->is_credit_card_transaction, 'not credit card');
 
 done_testing();

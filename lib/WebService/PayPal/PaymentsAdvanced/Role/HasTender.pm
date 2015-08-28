@@ -9,7 +9,7 @@ has is_credit_card_transaction => (
     isa     => Bool,
     lazy    => 1,
     default => sub {
-        shift->params->{TENDER} eq 'C';
+        shift->params->{TENDER} eq 'CC';
     },
 );
 
