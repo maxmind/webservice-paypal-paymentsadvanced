@@ -11,7 +11,6 @@ requires "Moo" => "1.004005";
 requires "Moo::Role" => "0";
 requires "MooX::HandlesVia" => "0";
 requires "MooX::StrictConstructor" => "0";
-requires "Plack::Builder" => "0";
 requires "Test::LWP::UserAgent" => "0";
 requires "Throwable::Error" => "0";
 requires "Type::Params" => "0";
