@@ -203,7 +203,7 @@ OBJECT INSTANTIATION
         );
         print $response->message. "\n";
         if ( $response->is_credit_card_transaction ) {
-            print $response->card_type, q{ }, $response->expiration_date;
+            print $response->card_type, q{ }, $response->card_expiration;
         }
 
    post
@@ -251,7 +251,7 @@ OBJECT INSTANTIATION
         );
         say $response->message;
 
-   transaction_status( $ORIGID )
+   perform_inquiry_transaction( $ORIGID )
     Performs a transaction inquiry on a previously submitted transaction.
     Requires the ID of the original transaction. Returns a response object.
 
