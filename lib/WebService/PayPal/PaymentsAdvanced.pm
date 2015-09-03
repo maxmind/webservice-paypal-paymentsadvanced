@@ -175,7 +175,7 @@ sub get_response_from_silent_post {
 
     $response_class
         .= '::'
-        . ( $response->is_paypal_transaction ? 'PayPal' : 'CreditCard' );
+        . ( $response->is_credit_card_transaction ? 'CreditCard' : 'PayPal' );
 
     return $response_class->new( params => $response->params );
 }

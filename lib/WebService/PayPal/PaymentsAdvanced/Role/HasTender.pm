@@ -34,7 +34,7 @@ sub _build_is_credit_card_transaction {
 sub _build_is_paypal_transaction {
     my $self = shift;
     return ( exists $self->params->{TENDER}
-            && $self->params->{TENDER} eq 'CC' )
+            && $self->params->{TENDER} eq 'P' )
         || exists $self->params->{BAID}
         || !$self->is_credit_card_transaction;
 }

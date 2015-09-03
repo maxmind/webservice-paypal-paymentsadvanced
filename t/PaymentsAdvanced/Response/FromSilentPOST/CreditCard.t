@@ -3,6 +3,7 @@ use warnings;
 
 use Test::More;
 
+use Scalar::Util qw( blessed );
 use WebService::PayPal::PaymentsAdvanced::Mocker::SilentPOST;
 
 use lib 't/lib';
@@ -15,6 +16,11 @@ my $mocker = WebService::PayPal::PaymentsAdvanced::Mocker::SilentPOST->new(
 my $response = Util::mocked_ppa->get_response_from_silent_post(
     { params => $mocker->credit_card_success } );
 
+is(
+    blessed $response,
+    'WebService::PayPal::PaymentsAdvanced::Response::FromSilentPOST::CreditCard',
+    'CreditCard class'
+);
 ok( $response->transaction_time,           'transaction_time' );
 ok( $response->pnref,                      'ppref' );
 ok( !$response->is_paypal_transaction,     'not paypal transaction' );
