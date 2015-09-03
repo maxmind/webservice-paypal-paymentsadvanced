@@ -2,7 +2,13 @@ package WebService::PayPal::PaymentsAdvanced::Role::HasTender;
 
 use Moo::Role;
 
-use Types::Standard qw( Bool );
+use Types::Standard qw( Bool StrictNum );
+
+has amount => (
+    is       => 'lazy',
+    isa      => StrictNum,
+    default => sub { shift->params->{AMT} },
+);
 
 has is_credit_card_transaction => (
     is      => 'lazy',

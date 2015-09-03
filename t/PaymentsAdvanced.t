@@ -96,24 +96,30 @@ use Util;
     ok( $res->card_type,             'card_type' );
     ok( $res->card_last_four_digits, 'credit_card' );
     ok( $res->card_expiration,       'expiration' );
+    ok( $res->amount, 'amount' );
 }
 
 {
     my $ppa = Util::mocked_ppa();
+    my $amount = 15;
     my $res
-        = $ppa->sale_from_credit_card_reference_transaction( 'FOO', '15.00' );
+        = $ppa->sale_from_credit_card_reference_transaction( 'FOO', 15 );
     ok( $res, 'sale_from_credit_card_reference_transaction' );
     ok(
         $res->transaction_time,
         'transaction_time: ' . $res->transaction_time
     );
     ok( $res->pnref, 'pnref' );
+    ok( $res->ppref, 'ppref' );
+    is( $res->amount, $amount, 'amount' );
 }
 
 {
-    my $ppa = Util::mocked_ppa();
-    my $res = $ppa->sale_from_paypal_reference_transaction(
-        'FOO', '24.99',
+    my $ppa    = Util::mocked_ppa();
+    my $amount = 24.99;
+    my $res    = $ppa->sale_from_paypal_reference_transaction(
+        'FOO',
+        $amount,
         'USD'
     );
     ok( $res, 'sale_from_paypal_reference_transaction' );
@@ -123,6 +129,7 @@ use Util;
     );
     ok( $res->pnref, 'pnref' );
     ok( $res->ppref, 'ppref' );
+    is( $res->amount, $amount, 'amount' );
 }
 
 sub get_mocked_payments {
