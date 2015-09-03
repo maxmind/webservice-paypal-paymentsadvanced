@@ -97,6 +97,8 @@ use Util;
     ok( $res->card_last_four_digits, 'credit_card' );
     ok( $res->card_expiration,       'expiration' );
     ok( $res->amount, 'amount' );
+    ok( $res->is_credit_card_transaction, 'is_credit_card_transaction' );
+    ok( !$res->is_paypal_transaction, 'is_paypal_transaction' );
 }
 
 {
@@ -112,6 +114,8 @@ use Util;
     ok( $res->pnref, 'pnref' );
     ok( $res->ppref, 'ppref' );
     is( $res->amount, $amount, 'amount' );
+    ok( $res->is_credit_card_transaction, 'is_credit_card_transaction' );
+    ok( !$res->is_paypal_transaction, 'is_paypal_transaction' );
 }
 
 {
@@ -130,6 +134,8 @@ use Util;
     ok( $res->pnref, 'pnref' );
     ok( $res->ppref, 'ppref' );
     is( $res->amount, $amount, 'amount' );
+    ok( !$res->is_credit_card_transaction, 'is_credit_card_transaction' );
+    ok( $res->is_paypal_transaction, 'is_paypal_transaction' );
 }
 
 sub get_mocked_payments {
