@@ -41,7 +41,7 @@ sub token {
 }
 
 sub transtime {
-    return DateTime::Format::MySQL->format_datetime(shift->datetime_now );
+    return DateTime::Format::MySQL->format_datetime( shift->datetime_now );
 }
 
 sub unique_id {
