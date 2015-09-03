@@ -27,6 +27,9 @@ use WebService::PayPal::PaymentsAdvanced::Response::FromSilentPOST::PayPal;
 use WebService::PayPal::PaymentsAdvanced::Response::Inquiry;
 use WebService::PayPal::PaymentsAdvanced::Response::Inquiry::CreditCard;
 use WebService::PayPal::PaymentsAdvanced::Response::Inquiry::PayPal;
+use WebService::PayPal::PaymentsAdvanced::Response::Sale;
+use WebService::PayPal::PaymentsAdvanced::Response::Sale::CreditCard;
+use WebService::PayPal::PaymentsAdvanced::Response::Sale::PayPal;
 use WebService::PayPal::PaymentsAdvanced::Response::SecureToken;
 #>>>
 
@@ -228,6 +231,16 @@ sub post {
         }
         if ( $post->{TRXTYPE} eq 'I' ) {
             $response_class = $self->_class_for('Response::Inquiry');
+            my $response = $response_class->new( params => $params );
+            $response_class .= '::'
+                . (
+                $response->is_credit_card_transaction
+                ? 'CreditCard'
+                : 'PayPal'
+                );
+        }
+        if ( $post->{TRXTYPE} eq 'S' ) {
+            $response_class = $self->_class_for('Response::Sale');
             my $response = $response_class->new( params => $params );
             $response_class .= '::'
                 . (

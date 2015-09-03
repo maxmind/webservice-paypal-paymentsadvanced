@@ -98,6 +98,33 @@ use Util;
     ok( $res->card_expiration,       'expiration' );
 }
 
+{
+    my $ppa = Util::mocked_ppa();
+    my $res
+        = $ppa->sale_from_credit_card_reference_transaction( 'FOO', '15.00' );
+    ok( $res, 'sale_from_credit_card_reference_transaction' );
+    ok(
+        $res->transaction_time,
+        'transaction_time: ' . $res->transaction_time
+    );
+    ok( $res->pnref, 'pnref' );
+}
+
+{
+    my $ppa = Util::mocked_ppa();
+    my $res = $ppa->sale_from_paypal_reference_transaction(
+        'FOO', '24.99',
+        'USD'
+    );
+    ok( $res, 'sale_from_paypal_reference_transaction' );
+    ok(
+        $res->transaction_time,
+        'transaction_time: ' . $res->transaction_time
+    );
+    ok( $res->pnref, 'pnref' );
+    ok( $res->ppref, 'ppref' );
+}
+
 sub get_mocked_payments {
     my $file = shift;
 

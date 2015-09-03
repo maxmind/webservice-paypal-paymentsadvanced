@@ -13,10 +13,11 @@ my $helper = WebService::PayPal::PaymentsAdvanced::Mocker::Helper->new;
 app->types->type( nvp => 'text/namevalue' );
 
 post '/' => sub {
-    my $c     = shift;
+    my $c      = shift;
     my $params = _filter_params($c);
 
-    if ( $params->{CREATESECURETOKEN} && $params->{CREATESECURETOKEN} eq 'Y' ) {
+    if ( $params->{CREATESECURETOKEN} && $params->{CREATESECURETOKEN} eq 'Y' )
+    {
         my %return = (
             RESULT        => 0,
             RESPMSG       => 'Approved',
@@ -56,9 +57,9 @@ post '/' => sub {
             EXPDATE       => 1221,
             LASTNAME      => 'NotProvided',
             ORIGPNREF     => $params->{ORIGID},
-            ORIGPPREF     => $helper->unique_id(17),
+            ORIGPPREF     => $helper->ppref,
             ORIGRESULT    => 0,
-            PNREF         => $helper->unique_id(17),
+            PNREF         => $helper->pnref,
             RESPMSG       => 'Approved',
             RESULT        => 0,
             SETTLE_DATE   => $helper->transtime,
@@ -68,6 +69,53 @@ post '/' => sub {
 
         _render_response( $c, \%return );
         return;
+    }
+
+    if ( $params->{TRXTYPE} && $params->{TRXTYPE} eq 'S' ) {
+
+        if ( $params->{TENDER} && $params->{TENDER} eq 'C' ) {
+
+            my %return = (
+                ACCT          => 4482,
+                AMT           => $params->{AMT},
+                AUTHCODE      => 111111,
+                AVSADDR       => 'Y',
+                AVSZIP        => 'Y',
+                CARDTYPE      => 3,
+                CORRELATIONID => $helper->correlationid,
+                CVV2MATCH     => 'Y',
+                EXPDATE       => 1221,
+                IAVS          => 'N',
+                LASTNAME      => 'NotProvided',
+                PNREF         => $helper->pnref,
+                PPREF         => $helper->ppref,
+                PROCAVS       => 'X',
+                PROCCVV2      => 'M',
+                RESPMSG       => 'Approved',
+                RESULT        => 0,
+                TRANSTIME     => $helper->transtime,
+            );
+            _render_response( $c, \%return );
+            return;
+        }
+
+        if ( $params->{TENDER} && $params->{TENDER} eq 'P' ) {
+            my %return = (
+                AMT           => $params->{AMT},
+                BAID          => $helper->baid,
+                CORRELATIONID => $helper->correlationid,
+                CVV2MATCH     => 'Y',
+                PNREF         => $helper->pnref,
+                PPREF         => $helper->ppref,
+                PROCAVS       => 'X',
+                PROCCVV2      => 'M',
+                RESPMSG       => 'Approved',
+                RESULT        => 0,
+                TRANSTIME     => $helper->transtime,
+            );
+            _render_response( $c, \%return );
+            return;
+        }
     }
 
     $c->render( text => 'Mocked URL not found', status => 404 );

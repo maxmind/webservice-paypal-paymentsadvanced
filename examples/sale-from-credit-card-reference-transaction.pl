@@ -12,9 +12,14 @@ use Util;
 my $payments = Util::ppa();
 
 my $txn_id = shift @ARGV;
+my $amount = shift @ARGV;
 
-die 'usage: perl examples/capture-delayed-transaction.pl [transaction_id]'
-    unless $txn_id;
+die
+    'usage: perl examples/sale-from-credit-card-reference-transaction.pl [transaction_id] [amount]'
+    unless $txn_id && $amount;
 
-my $response = $payments->capture_delayed_transaction($txn_id);
+my $response = $payments->sale_from_credit_card_reference_transaction(
+    $txn_id,
+    $amount
+);
 p( $response->params );
