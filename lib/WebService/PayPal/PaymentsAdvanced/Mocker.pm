@@ -137,7 +137,7 @@ Disabled by default.
 =head2 ua
 
 If may provide your own UserAgent object to this class.  This is only
-neccessary if you intend to call the C<mocked_ua> method and need to provide
+necessary if you intend to call the C<mocked_ua> method and need to provide
 your own customized UserAgent.  The object must be L<Test::LWP::UserAgent>
 object, or a subclass of it.
 
