@@ -164,6 +164,16 @@ sub get_response_from_silent_post {
     state $check = compile(HashRef);
     my ($args) = $check->(@_);
 
+    # If the RESPMSG param is missing, then this may just be a garbage, random
+    # POST from a bot.
+
+    unless ( $args->{params}->{RESPMSG} ) {
+        WebService::PayPal::PaymentsAdvanced::Error::Generic->throw(
+            message => 'Bad params supplied from silent POST',
+            params  => $args->{params},
+        );
+    }
+
     # First we create a SilentPOST response, which may or may not validate the
     # IP. If there's no exception we query the object to find out if this was a
     # PayPal or CreditCard transaction and then return the appropriate class.
