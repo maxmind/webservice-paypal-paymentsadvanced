@@ -33,6 +33,7 @@ on 'test' => sub {
   requires "LWP::ConsoleLogger::Easy" => "0";
   requires "Mozilla::CA" => "20130114";
   requires "Path::Tiny" => "0";
+  requires "Scalar::Util" => "0";
   requires "Test::Fatal" => "0";
   requires "Test::More" => "0";
   requires "Test::RequiresInternet" => "0";
