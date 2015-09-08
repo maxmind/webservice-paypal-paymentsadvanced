@@ -341,8 +341,7 @@ sub _force_upper_case {
 }
 
 # Payments Advanced treats encoding key/value pairs like a special snowflake.
-# https://metacpan.org/source/PLOBBES/Business-OnlinePayment-PayPal::PaymentsAdvanced-1.01/PayPal::PaymentsAdvanced.pm#L276
-
+# https://metacpan.org/source/PLOBBES/Business-OnlinePayment-PayflowPro-1.01/PayflowPro.pm#L276
 sub _pseudo_encode_args {
     my $self = shift;
     my $args = shift;
