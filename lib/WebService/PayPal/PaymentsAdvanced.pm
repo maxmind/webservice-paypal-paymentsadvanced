@@ -358,7 +358,7 @@ sub _pseudo_encode_args {
 
     my $uri = join '&', map {
         join '=', sprintf( '%s[%i]', $_, length( $args->{$_} ) ), $args->{$_}
-    } sort keys %{$args};
+    } grep { $args->{$_} } sort keys %{$args};
     return $uri;
 }
 
