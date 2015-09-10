@@ -87,6 +87,13 @@ SKIP: {
         ok( $uri, 'got uri for hosted_form ' . $uri );
     }
 
+    # zero dollar auth
+    $create_token->{AMT} = 0;
+    {
+        my $res = $payments->create_secure_token($create_token);
+        ok( $res->secure_token, 'gets token for zero dollar auth' );
+    }
+
     {
         like(
             exception(
