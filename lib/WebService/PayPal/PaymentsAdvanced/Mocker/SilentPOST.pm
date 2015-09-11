@@ -234,3 +234,51 @@ sub _set_defaults {
 }
 
 1;
+
+__END__
+
+# ABSTRACT: Easily mock Silent POST transactions
+
+=head1 DESCRIPTION
+
+Use these methods to get a HashRef of params which you can POST to your
+application's silent POST endpoint. Keep in mind that if you have IP
+validation enabled you'll either need to spoof the originating IP of the
+request or disable the IP validation in test mode.  I'd encourage you to do
+the former, if at all possible.
+
+=head1 SYNOPSIS
+
+    use LWP::UserAgent;
+    use WebService::PayPal::PaymentsAdvanced::Mocker::SilentPOST;
+
+    my $mocker
+        = WebService::PayPal::PaymentsAdvanced::Mocker::SilentPOST->new();
+
+    my $ua = LWP::UserAgent->new(...);
+    $ua->post(
+        '/silent-post-url',
+        $mocker->paypal_success,
+        'X-Forwarded-For' => '173.0.81.65'
+    );
+
+=head2 paypal_success
+
+Returns a C<HashRef> of POST params which can be used to mock a successful
+PayPal authorization.
+
+=head2 credit_card success
+
+Returns a C<HashRef> of POST params which can be used to mock a successful
+credit card authorization.
+
+=head2 credit_card_auth_verification_success
+
+Returns a C<HashRef> of POST params which can be used to mock a successful zero
+dollar credit card authorization.
+
+=head2 credit_card_duplicate_invoice_id
+
+Returns a C<HashRef> of POST params which can be used to mock a unsuccessful
+credit card payment.  In this case you've sent an invoice ID which is already
+attached to a previously successful transaction.

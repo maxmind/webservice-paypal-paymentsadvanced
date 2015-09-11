@@ -27,3 +27,15 @@ sub _build_secure_token_id {
 }
 
 1;
+
+__END__
+
+# ABSTRACT: Provides roles for dealing with secure tokens
+
+=head2 secure_token
+
+Returns C<SECURETOKEN> param
+
+=head2 secure_token_id
+
+Returns C<SECURETOKENID> param

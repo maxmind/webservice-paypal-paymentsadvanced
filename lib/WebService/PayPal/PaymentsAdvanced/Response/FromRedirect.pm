@@ -39,4 +39,8 @@ redirect or a silent POST.
 Returns the same C<HashRef> of parameters which was initially provided to the
 C<new> method.
 
+=head2 message
+
+Returns the value of the C<RESPMSG> param.
+
 =cut

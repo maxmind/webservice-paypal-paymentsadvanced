@@ -192,7 +192,7 @@ OBJECT INSTANTIATION
     WebService::PayPal::PaymentsAdvanced::Response::FromSilentPost::PayPal
     object for PayPal transactions. It returns a
     WebService::PayPal::PaymentsAdvanced::Response::FromSilentPost::CreditCa
-    rd object for Credit Card transactions. You can either inspect the class
+    rd object for credit card transactions. You can either inspect the class
     return to you or use the "is_credit_card_transaction" or
     "is_paypal_transaction" methods to learn which method the customer paid
     with. Both methods return a "Boolean".

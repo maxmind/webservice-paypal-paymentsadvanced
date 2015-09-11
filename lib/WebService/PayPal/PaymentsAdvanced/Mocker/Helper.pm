@@ -58,3 +58,55 @@ sub datetime_now {
 }
 
 1;
+
+__END__
+
+# ABSTRACT: Helper methods used when mocking PayPal web services
+
+=head1 DESCRIPTION
+
+Helper methods used when mocking PayPal web
+
+=head1 SYNOPSIS
+
+    use WebService::PayPal::PaymentsAdvanced::Mocker::Helper;
+    my $helper = WebService::PayPal::PaymentsAdvanced::Mocker::Helper->new;
+
+    print $helper->transtime;
+
+=head2 baid
+
+Returns a new, unique BAID
+
+=head2 correlationid
+
+Returns a new, unique CORRELATIONID
+
+=head2 pnref
+
+Returns a new, unique PNREF
+
+=head2 ppref
+
+Returns a new, unique PPREF
+
+=head2 token
+
+Returns a new, unique SECURETOKEN
+
+=head2 token_id
+
+Returns a new, unique SECURETOKENID
+
+=head2 transtime
+
+Returns a TRANSTIME based on the current time
+
+=head2 unique_id( $length )
+
+A generic method for creating unique ids.
+
+=head2 datetime_now
+
+Returns a new DateTime object with the current time, using the same time zone
+which the PayPal services use.

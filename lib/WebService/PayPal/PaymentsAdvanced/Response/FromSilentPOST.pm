@@ -78,8 +78,11 @@ This module provides an interface for extracting returned params from an
 L<HTTP::Response> object.  You won't need to this module directly if you are
 using L<PayPal::PaymentsAdvanced/get_response_from_silent_post>.
 
-This module inherits from L<WebService::PayPal::PaymentsAdvanced::Response>,
-please see its documentation for a list of the methods which it provides..
+This module inherits from L<WebService::PayPal::PaymentsAdvanced::Response> and
+includes the methods provided by
+L<WebService::PayPal::PaymentsAdvanced::Role::HasTender>,
+L<WebService::PayPal::PaymentsAdvanced::Role::HasTokens> and
+L<WebService::PayPal::PaymentsAdvanced::Role::HasTransactionTime>.
 
 =head1 OBJECT INSTANTIATION
 

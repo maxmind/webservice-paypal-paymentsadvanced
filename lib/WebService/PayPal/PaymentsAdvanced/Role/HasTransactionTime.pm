@@ -24,3 +24,11 @@ sub _build_transaction_time {
     return $dt;
 }
 1;
+
+__END__
+
+# ABSTRACT: Role which converts TRANSTIME into a DateTime object
+
+=head2 transaction_time
+
+Returns C<TRANSTIME> in the form of a DateTime object

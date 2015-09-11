@@ -16,6 +16,10 @@ sub to_app {
 
 1;
 
+__END__
+
+# ABSTRACT: A simple app to enable easy Payflow Link (hosted form) mocking
+
 =head1 DESCRIPTION
 
 A simple app to enable easy Payflow Link (hosted form) mocking.

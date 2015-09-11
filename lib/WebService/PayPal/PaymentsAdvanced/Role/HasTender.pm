@@ -40,3 +40,19 @@ sub _build_is_paypal_transaction {
 }
 
 1;
+
+__END__
+
+# ABSTRACT: Role which provides some methods describing a transaction
+
+=head2 amount
+
+The C<AMT> param
+
+=head2 is_credit_card_transaction
+
+C<Boolean>.  Returns true if this is a credit card transaction.
+
+=head2 is_paypal_transaction
+
+C<Boolean>.  Returns true if this is a PayPal transaction.

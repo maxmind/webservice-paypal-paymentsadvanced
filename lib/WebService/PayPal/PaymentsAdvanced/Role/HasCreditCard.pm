@@ -56,3 +56,29 @@ sub _build_card_expiration {
 }
 
 1;
+
+__END__
+# ABSTRACT: Role which provides methods specifically for credit card transactions
+
+=head2 card_type
+
+A human readable credit card type.  One of:
+
+    VISA
+    MasterCard
+    Discover
+    American Express
+    Diner's Club
+    JCB
+
+=head2 card_expiration
+
+The month and year of the credit card expiration.
+
+=head card_last_four_digits
+
+The last four digits of the credit card.
+
+=head2 reference_transaction_id
+
+The id you will use in order to use this as a reference transaction (C<pnref>).
