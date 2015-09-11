@@ -92,6 +92,17 @@ __END__
 You should not create this response object directly.  It will be provided to
 you via L<WebService::PayPal::PaymentsAdvanced/<create_secure_token>.
 
+=head1 OPTIONS
+
+=head2 payflow_link_uri
+
+The URL for the PayflowLink web service.  Can be a mocked URL.
+
+=head2 validate_hosted_form_uri
+
+C<Bool> which indicates whether we should pre-fetch the hosted form and do some
+error checking (recommended).
+
 =head1 METHODS
 
 This module inherits from L<WebService::PayPal::PaymentsAdvanced::Response>,

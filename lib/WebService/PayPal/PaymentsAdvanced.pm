@@ -628,7 +628,7 @@ arguments: a BAID from a previous PayPal transaction, an amount and a currency.
     );
     say $response->message;
 
-=head3 perform_inquiry_transaction( $ORIGID )
+=head3 inquiry_transaction( $ORIGID )
 
 Performs a transaction inquiry on a previously submitted transaction.  Requires
 the ID of the original transaction.  Returns a response object.

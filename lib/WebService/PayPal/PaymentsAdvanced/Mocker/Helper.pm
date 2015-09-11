@@ -90,7 +90,7 @@ Returns a new, unique PNREF
 
 Returns a new, unique PPREF
 
-=head2 token
+=head2 secure_token
 
 Returns a new, unique SECURETOKEN
 

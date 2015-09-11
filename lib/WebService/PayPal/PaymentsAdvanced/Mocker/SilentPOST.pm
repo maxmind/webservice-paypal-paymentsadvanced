@@ -267,7 +267,7 @@ the former, if at all possible.
 Returns a C<HashRef> of POST params which can be used to mock a successful
 PayPal authorization.
 
-=head2 credit_card success
+=head2 credit_card_success
 
 Returns a C<HashRef> of POST params which can be used to mock a successful
 credit card authorization.
