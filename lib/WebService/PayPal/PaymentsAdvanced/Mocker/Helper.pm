@@ -94,7 +94,7 @@ Returns a new, unique PPREF
 
 Returns a new, unique SECURETOKEN
 
-=head2 token_id
+=head2 token
 
 Returns a new, unique SECURETOKENID
 
