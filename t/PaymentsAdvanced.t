@@ -103,9 +103,26 @@ use Util;
 
 {
     my $ppa = Util::mocked_ppa();
+    my $amount = 16;
+    my $res
+        = $ppa->auth_from_credit_card_reference_transaction( 'FOO', $amount );
+    ok( $res, 'auth_from_credit_card_reference_transaction' );
+    ok(
+        $res->transaction_time,
+        'transaction_time: ' . $res->transaction_time
+    );
+    ok( $res->pnref, 'pnref' );
+    ok( $res->ppref, 'ppref' );
+    is( $res->amount, $amount, 'amount' );
+    ok( $res->is_credit_card_transaction, 'is_credit_card_transaction' );
+    ok( !$res->is_paypal_transaction, 'is_paypal_transaction' );
+}
+
+{
+    my $ppa = Util::mocked_ppa();
     my $amount = 15;
     my $res
-        = $ppa->sale_from_credit_card_reference_transaction( 'FOO', 15 );
+        = $ppa->sale_from_credit_card_reference_transaction( 'FOO', $amount );
     ok( $res, 'sale_from_credit_card_reference_transaction' );
     ok(
         $res->transaction_time,

@@ -18,6 +18,9 @@ use URI::QueryParam;
 use WebService::PayPal::PaymentsAdvanced::Error::Generic;
 use WebService::PayPal::PaymentsAdvanced::Error::HostedForm;
 use WebService::PayPal::PaymentsAdvanced::Response;
+use WebService::PayPal::PaymentsAdvanced::Response::Authorization;
+use WebService::PayPal::PaymentsAdvanced::Response::Authorization::CreditCard;
+use WebService::PayPal::PaymentsAdvanced::Response::Authorization::PayPal;
 use WebService::PayPal::PaymentsAdvanced::Response::Capture;
 use WebService::PayPal::PaymentsAdvanced::Response::FromHTTP;
 use WebService::PayPal::PaymentsAdvanced::Response::FromRedirect;
@@ -235,55 +238,73 @@ sub post {
         );
     }
 
-    if ( $post->{TRXTYPE} ) {
-        if ( $post->{TRXTYPE} eq 'D' ) {
-            $response_class = $self->_class_for('Response::Capture');
-        }
-        if ( $post->{TRXTYPE} eq 'I' ) {
-            $response_class = $self->_class_for('Response::Inquiry');
+    my %class_for_type = (
+        A => 'Response::Authorization',
+        D => 'Response::Capture',
+        I => 'Response::Inquiry',
+        S => 'Response::Sale',
+    );
+
+    my $type = $post->{TRXTYPE};
+    if ( $type && exists $class_for_type{$type} ) {
+
+        $response_class = $self->_class_for( $class_for_type{$type} );
+
+        # Get more specific response classes for CC and PayPal txns.
+        unless ( $type eq 'D' ) {
             my $response = $response_class->new( params => $params );
-            $response_class .= '::'
-                . (
+
+            $response_class = sprintf(
+                '%s::%s', $response_class,
                 $response->is_credit_card_transaction
                 ? 'CreditCard'
                 : 'PayPal'
-                );
+            );
         }
-        if ( $post->{TRXTYPE} eq 'S' ) {
-            $response_class = $self->_class_for('Response::Sale');
-            my $response = $response_class->new( params => $params );
-            $response_class .= '::'
-                . (
-                $response->is_credit_card_transaction
-                ? 'CreditCard'
-                : 'PayPal'
-                );
-        }
-        return $response_class->new( params => $params );
     }
 
     return $response_class->new( params => $params );
 }
 
+sub auth_from_credit_card_reference_transaction {
+    my $self = shift;
+    return $self->_credit_card_reference_transaction( 'A', @_ );
+}
+
 sub sale_from_credit_card_reference_transaction {
     my $self = shift;
-    state $check = compile( Str, Num );
-    my ( $origid, $amount ) = $check->(@_);
+    return $self->_credit_card_reference_transaction( 'S', @_ );
+}
+
+sub _credit_card_reference_transaction {
+    my $self = shift;
+    state $check = compile( Str, Str, Num );
+    my ( $type, $origid, $amount ) = $check->(@_);
 
     return $self->post(
         {
             AMT     => $amount,
             ORIGID  => $origid,
             TENDER  => 'C',
-            TRXTYPE => 'S',
+            TRXTYPE => $type,
         }
     );
 }
 
+sub auth_from_paypal_reference_transaction {
+    my $self = shift;
+    return $self->_paypal_reference_transaction( 'A', @_ );
+}
+
 sub sale_from_paypal_reference_transaction {
     my $self = shift;
-    state $check = compile( Str, Num, Str );
-    my ( $baid, $amount, $currency ) = $check->(@_);
+    return $self->_paypal_reference_transaction( 'S', @_ );
+}
+
+sub _paypal_reference_transaction {
+    my $self = shift;
+    state $check = compile( Str, Str, Num, Str );
+    my ( $type, $baid, $amount, $currency ) = $check->(@_);
 
     return $self->post(
         {
@@ -292,7 +313,7 @@ sub sale_from_paypal_reference_transaction {
             BAID     => $baid,
             CURRENCY => $currency,
             TENDER   => 'P',
-            TRXTYPE  => 'S',
+            TRXTYPE  => $type,
         }
     );
 }
@@ -602,16 +623,45 @@ response is sent.
 Captures a sale which you have previously authorized.  Requires the ID of the
 original transaction.  Returns a response object.
 
+=head3 auth_from_credit_card_reference_transaction( $ORIGID, $amount )
+
+Process a authorization based on a reference transaction from a credit card.
+Requires 2 arguments: an ORIGID from a previous credit card transaction and an
+amount.
+
+    use WebService::PayPal::PaymentsAdvanced;
+    my $payments = WebService::PayPal::PaymentsAdvanced->new(...);
+
+    my $response = $payments->auth_from_credit_card_reference_transaction(
+        'BFOOBAR', 1.50'
+    );
+    say $response->message;
+
 =head3 sale_from_credit_card_reference_transaction( $ORIGID, $amount )
 
-Process a sale based on a reference transaction from a credit card.  Requires 2
-arguments: an ORIGID from a previous credit card transaction and an amount.
+Process a sale based on a reference transaction from a credit card.  See
+Requires 2 arguments: an ORIGID from a previous credit card transaction and an
+amount.
 
     use WebService::PayPal::PaymentsAdvanced;
     my $payments = WebService::PayPal::PaymentsAdvanced->new(...);
 
     my $response = $payments->sale_from_credit_card_reference_transaction(
         'BFOOBAR', 1.50'
+    );
+    say $response->message;
+
+=head3 auth_from_paypal_reference_transaction( $BAID, $amount, $currency )
+
+Process an authorization based on a reference transaction from PayPal.
+Requires 3 arguments: a BAID from a previous PayPal transaction, an amount and
+a currency.
+
+    use WebService::PayPal::PaymentsAdvanced;
+    my $payments = WebService::PayPal::PaymentsAdvanced->new(...);
+
+    my $response = $payments->auth_from_paypal_reference_transaction(
+        'B-FOOBAR', 1.50, 'USD'
     );
     say $response->message;
 

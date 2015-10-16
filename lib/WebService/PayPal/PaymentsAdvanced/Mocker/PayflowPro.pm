@@ -4,7 +4,8 @@ use Mojolicious::Lite;
 
 use feature qw( state );
 
-use Data::GUID;
+use Data::GUID ();
+use List::AllUtils qw( none );
 use URI::FromHash qw( uri_object );
 use WebService::PayPal::PaymentsAdvanced::Mocker::Helper;
 
@@ -29,10 +30,41 @@ post '/' => sub {
         return;
     }
 
-    if ( $params->{TRXTYPE} && $params->{TRXTYPE} eq 'D' ) {
-        my $dt     = $helper->datetime_now;
+    if ( !$params->{TRXTYPE}
+        || none { $params->{TRXTYPE} eq $_ } ( 'A', 'D', 'I', 'S' ) ) {
+        $c->render( text => 'Mocked URL not found', status => 404 );
+        return;
+    }
+
+    if ( $params->{TRXTYPE} eq 'A' ) {
         my %return = (
-            CORRELATIONID => $helper->unique_id(12),
+            ACCT          => 1762,
+            AMT           => $params->{AMT},
+            AUTHCODE      => 111111,
+            AVSADDR       => 'Y',
+            AVSZIP        => 'Y',
+            CARDTYPE      => 3,
+            CORRELATIONID => $helper->correlationid,
+            CVV2MATCH     => 'Y',
+            EXPDATE       => 1221,
+            IAVS          => 'N',
+            LASTNAME      => 'NotProvided',
+            PNREF         => $helper->pnref,
+            PPREF         => $helper->ppref,
+            PROCAVS       => 'X',
+            PROCCVV2      => 'M',
+            RESPMSG       => 'Approved',
+            RESULT        => 0,
+            TRANSTIME     => $helper->transtime,
+        );
+
+        _render_response( $c, \%return );
+        return;
+    }
+
+    if ( $params->{TRXTYPE} eq 'D' ) {
+        my %return = (
+            CORRELATIONID => $helper->correlationid,
             FEEAMT        => 1.75,
             PAYMENTTYPE   => 'instant',
             PENDINGREASON => 'completed',
@@ -40,15 +72,14 @@ post '/' => sub {
             PPREF         => $helper->ppref,
             RESPMSG       => 'Approved',
             RESULT        => 0,
-            TRANSTIME     => $dt->ymd . q{ } . $dt->hms,
+            TRANSTIME     => $helper->transtime,
         );
 
         _render_response( $c, \%return );
         return;
     }
 
-    if ( $params->{TRXTYPE} && $params->{TRXTYPE} eq 'I' ) {
-        my $dt     = $helper->datetime_now;
+    if ( $params->{TRXTYPE} eq 'I' ) {
         my %return = (
             ACCT          => 7603,
             AMT           => 50.00,
@@ -71,7 +102,7 @@ post '/' => sub {
         return;
     }
 
-    if ( $params->{TRXTYPE} && $params->{TRXTYPE} eq 'S' ) {
+    if ( $params->{TRXTYPE} eq 'S' ) {
 
         if ( $params->{TENDER} && $params->{TENDER} eq 'C' ) {
 
