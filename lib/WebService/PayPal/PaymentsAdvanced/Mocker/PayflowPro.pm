@@ -37,27 +37,46 @@ post '/' => sub {
     }
 
     if ( $params->{TRXTYPE} eq 'A' ) {
-        my %return = (
-            ACCT          => 1762,
-            AMT           => $params->{AMT},
-            AUTHCODE      => 111111,
-            AVSADDR       => 'Y',
-            AVSZIP        => 'Y',
-            CARDTYPE      => 3,
-            CORRELATIONID => $helper->correlationid,
-            CVV2MATCH     => 'Y',
-            EXPDATE       => 1221,
-            IAVS          => 'N',
-            LASTNAME      => 'NotProvided',
-            PNREF         => $helper->pnref,
-            PPREF         => $helper->ppref,
-            PROCAVS       => 'X',
-            PROCCVV2      => 'M',
-            RESPMSG       => 'Approved',
-            RESULT        => 0,
-            TRANSTIME     => $helper->transtime,
-        );
+        my %return;
 
+        if ( $params->{TENDER} eq 'C' ) {
+
+            %return = (
+                ACCT          => 1762,
+                AMT           => $params->{AMT},
+                AUTHCODE      => 111111,
+                AVSADDR       => 'Y',
+                AVSZIP        => 'Y',
+                CARDTYPE      => 3,
+                CORRELATIONID => $helper->correlationid,
+                CVV2MATCH     => 'Y',
+                EXPDATE       => 1221,
+                IAVS          => 'N',
+                LASTNAME      => 'NotProvided',
+                PNREF         => $helper->pnref,
+                PPREF         => $helper->ppref,
+                PROCAVS       => 'X',
+                PROCCVV2      => 'M',
+                RESPMSG       => 'Approved',
+                RESULT        => 0,
+                TRANSTIME     => $helper->transtime,
+            );
+
+        }
+        elsif ( $params->{TENDER} eq 'P' ) {
+            %return = (
+                AMT           => $params->{AMT},
+                BAID          => $helper->baid,
+                CORRELATIONID => $helper->correlationid,
+                PAYMENTTYPE   => 'instant',
+                PENDINGREASON => 'authorization',
+                PNREF         => $helper->pnref,
+                PPREF         => $helper->ppref,
+                RESPMSG       => 'Approved',
+                RESULT        => 0,
+                TRANSTIME     => $helper->transtime,
+            );
+        }
         _render_response( $c, \%return );
         return;
     }
