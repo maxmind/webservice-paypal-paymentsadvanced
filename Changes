@@ -1,6 +1,8 @@
 Revision history for WebService-PayflowPro
 
 {{$NEXT}}
+    - Adds auth_from_credit_card_reference_transaction()
+    - Adds auth_from_paypal_reference_transaction()
 
 0.000006  2015-09-14 10:20:56-04:00 America/Toronto
     - Adds built-in mocking for testing and running your own local mocked
