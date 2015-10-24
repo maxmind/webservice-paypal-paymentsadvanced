@@ -78,7 +78,7 @@ The contents of PayPal's PNREF parameter.
 
 =head2 ppref
 
-The contents of PayPal's PNREF parameter.
+The contents of PayPal's PPREF parameter.
 
 =head1 SEE ALSO
 
