@@ -9,6 +9,7 @@ extends 'WebService::PayPal::PaymentsAdvanced::Response';
 use Type::Params qw( compile );
 use Types::Standard qw( Bool InstanceOf );
 use Types::URI qw( Uri );
+use URI::QueryParam;
 use Web::Scraper;
 use WebService::PayPal::PaymentsAdvanced::Error::HTTP;
 use WebService::PayPal::PaymentsAdvanced::Error::HostedForm;
