@@ -1,6 +1,7 @@
 Revision history for WebService-PayflowPro
 
 {{$NEXT}}
+    - Fixes an error when adding query params to a URI object
 
 0.000007  2015-10-16 21:05:02-04:00 America/Toronto
     - Adds auth_from_credit_card_reference_transaction()

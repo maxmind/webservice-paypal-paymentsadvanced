@@ -1,6 +1,7 @@
+MANIFEST.SKIP
 .build
 .git
 .gitignore
 local
-MANIFEST.SKIP
 .tidyallrc
+t/test-data/config.pl
