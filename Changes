@@ -1,6 +1,8 @@
 Revision history for WebService-PayflowPro
 
 {{$NEXT}}
+
+0.000008  2015-10-27 17:58:19-04:00 America/Toronto
     - Fixes an error when adding query params to a URI object
 
 0.000007  2015-10-16 21:05:02-04:00 America/Toronto
