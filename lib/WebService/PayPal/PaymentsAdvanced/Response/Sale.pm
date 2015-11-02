@@ -17,4 +17,4 @@ Response class for Sale transactions C<TRXTYPE=S>  You should not create this
 response object directly. This module inherits from
 L<WebService::PayPal::PaymentsAdvanced::Response> and includes the methods
 provided by L<WebService::PayPal::PaymentsAdvanced::Role::HasTransactionTime>
-and L<WebService::PayPal::PaymentsAdvanced::Role::HasTransactionTender>.
+and L<WebService::PayPal::PaymentsAdvanced::Role::HasTender>.
