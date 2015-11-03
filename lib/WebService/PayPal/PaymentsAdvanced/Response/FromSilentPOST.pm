@@ -5,7 +5,8 @@ use Moo;
 use List::AllUtils qw( any );
 use MooX::HandlesVia;
 use MooX::StrictConstructor;
-use Types::Standard qw( Bool HashRef Str );
+use Types::Common::String qw( NonEmptyStr );
+use Types::Standard qw( Bool HashRef );
 use WebService::PayPal::PaymentsAdvanced::Error::IPVerification;
 
 extends 'WebService::PayPal::PaymentsAdvanced::Response';
@@ -26,7 +27,7 @@ sub BUILD {
 
 has _ip_address => (
     is        => 'ro',
-    isa       => Str,
+    isa       => NonEmptyStr,
     init_arg  => 'ip_address',
     required  => 0,
     predicate => '_has_ip_address',

@@ -4,11 +4,11 @@ use Moo;
 
 extends 'Throwable::Error';
 
-use Types::Standard qw( Str );
+use Types::Common::String qw( NonEmptyStr );
 
 has ip_address => (
     is       => 'ro',
-    isa      => Str,
+    isa      => NonEmptyStr,
     required => 1,
 );
 

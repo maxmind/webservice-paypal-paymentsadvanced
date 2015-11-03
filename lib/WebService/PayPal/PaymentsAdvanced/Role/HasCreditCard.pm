@@ -3,17 +3,17 @@ package WebService::PayPal::PaymentsAdvanced::Role::HasCreditCard;
 use Moo::Role;
 
 use Types::Common::Numeric qw( PositiveInt );
-use Types::Standard qw( Str );
+use Types::Common::String qw( NonEmptyStr );
 
 has card_type => (
     is       => 'lazy',
-    isa      => Str,
+    isa      => NonEmptyStr,
     init_arg => undef,
 );
 
 has card_expiration => (
     is       => 'lazy',
-    isa      => Str,
+    isa      => NonEmptyStr,
     init_arg => undef,
 );
 
@@ -26,7 +26,7 @@ has card_last_four_digits => (
 
 has reference_transaction_id => (
     is       => 'lazy',
-    isa      => Str,
+    isa      => NonEmptyStr,
     init_arg => undef,
     default  => sub { shift->pnref },
 );

@@ -8,7 +8,8 @@ use Data::GUID;
 use LWP::UserAgent;
 use MooX::StrictConstructor;
 use Type::Params qw( compile );
-use Types::Standard qw( Bool HashRef InstanceOf Num Str );
+use Types::Common::String qw( NonEmptyStr );
+use Types::Standard qw( Bool HashRef InstanceOf Num );
 use Types::URI qw( Uri );
 use URI;
 use URI::FromHash qw( uri uri_object );
@@ -38,14 +39,14 @@ use WebService::PayPal::PaymentsAdvanced::Response::SecureToken;
 
 has partner => (
     is       => 'ro',
-    isa      => Str,
+    isa      => NonEmptyStr,
     required => 1,
     default  => 'PayPal',
 );
 
 has password => (
     is       => 'ro',
-    isa      => Str,
+    isa      => NonEmptyStr,
     required => 1,
 );
 
@@ -69,7 +70,7 @@ has production_mode => (
 
 has user => (
     is       => 'ro',
-    isa      => Str,
+    isa      => NonEmptyStr,
     required => 1,
 );
 
@@ -81,7 +82,7 @@ has validate_hosted_form_uri => (
 
 has vendor => (
     is       => 'ro',
-    isa      => Str,
+    isa      => NonEmptyStr,
     required => 1,
 );
 
@@ -121,7 +122,7 @@ sub _build_payflow_link_uri {
 sub capture_delayed_transaction {
     my $self = shift;
 
-    state $check = compile(Str);
+    state $check = compile(NonEmptyStr);
     my ($pnref) = $check->(@_);
 
     return $self->post( { TRXTYPE => 'D', ORIGID => $pnref } );
@@ -196,7 +197,7 @@ sub get_response_from_silent_post {
 sub inquiry_transaction {
     my $self = shift;
 
-    state $check = compile(Str);
+    state $check = compile(NonEmptyStr);
     my ($pnref) = $check->(@_);
 
     return $self->post(
@@ -278,7 +279,7 @@ sub sale_from_credit_card_reference_transaction {
 
 sub _credit_card_reference_transaction {
     my $self = shift;
-    state $check = compile( Str, Str, Num );
+    state $check = compile( NonEmptyStr, NonEmptyStr, Num );
     my ( $type, $origid, $amount ) = $check->(@_);
 
     return $self->post(
@@ -303,7 +304,7 @@ sub sale_from_paypal_reference_transaction {
 
 sub _paypal_reference_transaction {
     my $self = shift;
-    state $check = compile( Str, Str, Num, Str );
+    state $check = compile( NonEmptyStr, NonEmptyStr, Num, NonEmptyStr );
     my ( $type, $baid, $amount, $currency ) = $check->(@_);
 
     return $self->post(
@@ -321,7 +322,7 @@ sub _paypal_reference_transaction {
 sub void_transaction {
     my $self = shift;
 
-    state $check = compile(Str);
+    state $check = compile(NonEmptyStr);
     my ($pnref) = $check->(@_);
 
     return $self->post( { TRXTYPE => 'V', ORIGID => $pnref } );

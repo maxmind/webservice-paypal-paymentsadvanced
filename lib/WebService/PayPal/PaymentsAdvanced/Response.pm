@@ -2,19 +2,19 @@ package WebService::PayPal::PaymentsAdvanced::Response;
 
 use Moo;
 
-use Types::Standard qw( Str );
+use Types::Common::String qw( NonEmptyStr );
 use WebService::PayPal::PaymentsAdvanced::Error::Authentication;
 use WebService::PayPal::PaymentsAdvanced::Error::Generic;
 
 has pnref => (
     is      => 'lazy',
-    isa     => Str,
+    isa     => NonEmptyStr,
     default => sub { shift->params->{PNREF} },
 );
 
 has ppref => (
     is      => 'lazy',
-    isa     => Str,
+    isa     => NonEmptyStr,
     default => sub { shift->params->{PPREF} },
 );
 

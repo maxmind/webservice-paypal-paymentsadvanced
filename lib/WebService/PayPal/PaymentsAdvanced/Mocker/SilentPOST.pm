@@ -2,7 +2,8 @@ package WebService::PayPal::PaymentsAdvanced::Mocker::SilentPOST;
 
 use Moo;
 
-use Types::Standard qw( InstanceOf Str );
+use Types::Common::String qw( NonEmptyStr );
+use Types::Standard qw( InstanceOf );
 use WebService::PayPal::PaymentsAdvanced::Mocker::Helper;
 
 has _helper => (
@@ -15,7 +16,7 @@ has _helper => (
 
 has _secure_token_id => (
     is       => 'ro',
-    isa      => Str,
+    isa      => NonEmptyStr,
     required => 1,
     init_arg => 'secure_token_id',
 );

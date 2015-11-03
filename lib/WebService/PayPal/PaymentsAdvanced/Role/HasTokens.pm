@@ -2,17 +2,17 @@ package WebService::PayPal::PaymentsAdvanced::Role::HasTokens;
 
 use Moo::Role;
 
-use Types::Standard qw( Str );
+use Types::Common::String qw( NonEmptyStr );
 
 has secure_token => (
     is       => 'lazy',
-    isa      => Str,
+    isa      => NonEmptyStr,
     init_arg => undef,
 );
 
 has secure_token_id => (
     is       => 'lazy',
-    isa      => Str,
+    isa      => NonEmptyStr,
     init_arg => undef,
 );
 

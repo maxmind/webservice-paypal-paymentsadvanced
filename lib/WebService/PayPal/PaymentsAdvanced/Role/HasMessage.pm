@@ -2,11 +2,11 @@ package WebService::PayPal::PaymentsAdvanced::Role::HasMessage;
 
 use Moo::Role;
 
-use Types::Standard qw( Str );
+use Types::Common::String qw( NonEmptyStr );
 
 has message => (
     is       => 'lazy',
-    isa      => Str,
+    isa      => NonEmptyStr,
     init_arg => undef,
 );
 
