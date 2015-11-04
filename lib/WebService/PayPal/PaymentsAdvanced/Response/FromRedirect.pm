@@ -2,6 +2,8 @@ package WebService::PayPal::PaymentsAdvanced::Response::FromRedirect;
 
 use Moo;
 
+our $VERSION = '0.000008';
+
 with(
     'WebService::PayPal::PaymentsAdvanced::Role::HasParams',
     'WebService::PayPal::PaymentsAdvanced::Role::HasMessage',

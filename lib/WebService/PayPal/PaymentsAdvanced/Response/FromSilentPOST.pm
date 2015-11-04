@@ -2,6 +2,8 @@ package WebService::PayPal::PaymentsAdvanced::Response::FromSilentPOST;
 
 use Moo;
 
+our $VERSION = '0.000008';
+
 use List::AllUtils qw( any );
 use MooX::HandlesVia;
 use MooX::StrictConstructor;

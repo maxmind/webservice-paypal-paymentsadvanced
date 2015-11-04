@@ -2,6 +2,8 @@ package WebService::PayPal::PaymentsAdvanced::Role::HasParams;
 
 use Moo::Role;
 
+our $VERSION = '0.000008';
+
 use Types::Standard qw( HashRef );
 
 has params => (

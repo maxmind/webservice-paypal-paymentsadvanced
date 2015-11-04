@@ -2,6 +2,8 @@ package WebService::PayPal::PaymentsAdvanced::Response::FromHTTP;
 
 use Moo;
 
+our $VERSION = '0.000008';
+
 use MooX::HandlesVia;
 use MooX::StrictConstructor;
 use Types::Standard qw( HashRef InstanceOf );

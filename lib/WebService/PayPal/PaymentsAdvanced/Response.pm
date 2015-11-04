@@ -2,6 +2,8 @@ package WebService::PayPal::PaymentsAdvanced::Response;
 
 use Moo;
 
+our $VERSION = '0.000008';
+
 use Types::Common::String qw( NonEmptyStr );
 use WebService::PayPal::PaymentsAdvanced::Error::Authentication;
 use WebService::PayPal::PaymentsAdvanced::Error::Generic;

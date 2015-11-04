@@ -2,6 +2,8 @@ package WebService::PayPal::PaymentsAdvanced::Error::HTTP;
 
 use Moo;
 
+our $VERSION = '0.000008';
+
 extends 'Throwable::Error';
 
 with 'WebService::PayPal::PaymentsAdvanced::Error::Role::HasHTTPResponse';
