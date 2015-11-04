@@ -2,15 +2,9 @@ package WebService::PayPal::PaymentsAdvanced::Error::HostedForm;
 
 use Moo;
 
-use Types::Standard qw( InstanceOf );
-
 extends 'Throwable::Error';
 
-has http_response => (
-    is       => 'ro',
-    isa      => InstanceOf ['HTTP::Response'],
-    required => 1,
-);
+with 'WebService::PayPal::PaymentsAdvanced::Error::Role::HasHTTPResponse';
 
 1;
 
@@ -63,5 +57,13 @@ inherited from L<Throwable::Error>.
 
 Returns the L<HTTP::Response> object which was returned when attempting to GET
 the hosted form.
+
+=head2 http_status
+
+Returns the HTTP status code for the response.
+
+=head2 request_uri
+
+The URI of the request that caused the error.
 
 =cut

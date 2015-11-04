@@ -5,6 +5,7 @@ use Moo;
 use MooX::HandlesVia;
 use MooX::StrictConstructor;
 use Types::Standard qw( HashRef InstanceOf );
+use Types::URI qw( Uri );
 use URI;
 use URI::QueryParam;
 use WebService::PayPal::PaymentsAdvanced::Error::HTTP;
@@ -25,6 +26,15 @@ has _http_response => (
     handles  => { _code => 'code', _content => 'content', },
 );
 
+
+has _request_uri => (
+    init_arg => 'request_uri',
+    is       => 'ro',
+    isa      => Uri,
+    coerce   => 1,
+    required => 1,
+);
+
 sub BUILD {
     my $self = shift;
     return if $self->_http_response->is_success;
@@ -33,6 +43,7 @@ sub BUILD {
         message       => 'HTTP error: ' . $self->_code,
         http_response => $self->_http_response,
         http_status   => $self->_code,
+        request_uri   => $self->_request_uri,
     );
 }
 
