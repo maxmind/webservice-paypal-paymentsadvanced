@@ -2,6 +2,8 @@ package WebService::PayPal::PaymentsAdvanced::Role::HasTokens;
 
 use Moo::Role;
 
+our $VERSION = '0.000008';
+
 use Types::Common::String qw( NonEmptyStr );
 
 has secure_token => (

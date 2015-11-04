@@ -2,6 +2,8 @@ package WebService::PayPal::PaymentsAdvanced::Role::HasTender;
 
 use Moo::Role;
 
+our $VERSION = '0.000008';
+
 use Types::Standard qw( Bool StrictNum );
 
 has amount => (

@@ -2,6 +2,8 @@ package WebService::PayPal::PaymentsAdvanced::Response::Sale::CreditCard;
 
 use Moo;
 
+our $VERSION = '0.000008';
+
 extends 'WebService::PayPal::PaymentsAdvanced::Response::Sale';
 
 with(

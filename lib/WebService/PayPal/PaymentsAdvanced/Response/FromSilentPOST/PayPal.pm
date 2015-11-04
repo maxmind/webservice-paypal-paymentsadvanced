@@ -2,6 +2,8 @@ package WebService::PayPal::PaymentsAdvanced::Response::FromSilentPOST::PayPal;
 
 use Moo;
 
+our $VERSION = '0.000008';
+
 extends 'WebService::PayPal::PaymentsAdvanced::Response::FromSilentPOST';
 
 with 'WebService::PayPal::PaymentsAdvanced::Role::HasPayPal';

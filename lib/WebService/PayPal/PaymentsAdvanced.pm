@@ -2,6 +2,8 @@ package WebService::PayPal::PaymentsAdvanced;
 
 use Moo;
 
+our $VERSION = '0.000008';
+
 use feature qw( say state );
 
 use Data::GUID;

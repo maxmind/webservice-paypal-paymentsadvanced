@@ -2,6 +2,8 @@ package WebService::PayPal::PaymentsAdvanced::Error::IPVerification;
 
 use Moo;
 
+our $VERSION = '0.000008';
+
 extends 'Throwable::Error';
 
 use Types::Common::String qw( NonEmptyStr );

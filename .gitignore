@@ -1,7 +1,8 @@
-/WebService*
 .build
 cpanfile.snapshot
 local
+Makefile.PL
 *.swp
-t/test-data/*config.pl
 .tidyall.d
+t/test-data/*config.pl
+/WebService*

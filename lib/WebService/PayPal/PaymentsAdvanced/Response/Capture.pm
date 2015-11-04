@@ -2,6 +2,8 @@ package WebService::PayPal::PaymentsAdvanced::Response::Capture;
 
 use Moo;
 
+our $VERSION = '0.000008';
+
 extends 'WebService::PayPal::PaymentsAdvanced::Response';
 
 with 'WebService::PayPal::PaymentsAdvanced::Role::HasTransactionTime';

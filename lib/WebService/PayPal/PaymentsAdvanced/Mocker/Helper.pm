@@ -2,6 +2,8 @@ package WebService::PayPal::PaymentsAdvanced::Mocker::Helper;
 
 use Moo;
 
+our $VERSION = '0.000008';
+
 use Data::GUID;
 use DateTime;
 use DateTime::Format::MySQL;

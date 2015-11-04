@@ -2,6 +2,8 @@ package WebService::PayPal::PaymentsAdvanced::Mocker::PayflowLink;
 
 use Mojolicious::Lite;
 
+our $VERSION = '0.000008';
+
 # A GET request will be a request for the hosted form.
 
 get '/' => sub {
