@@ -11,7 +11,9 @@ use WebService::PayPal::PaymentsAdvanced::Response::FromHTTP;
 
     my $payments_response
         = WebService::PayPal::PaymentsAdvanced::Response::FromHTTP->new(
-        http_response => $http_response );
+        http_response => $http_response,
+        request_uri   => 'http://www.paypal.com/',
+        );
 
     ok( $payments_response, 'got response' );
 }
@@ -22,9 +24,10 @@ use WebService::PayPal::PaymentsAdvanced::Response::FromHTTP;
 
     isa_ok(
         exception {
-            my $payments_response
-                = WebService::PayPal::PaymentsAdvanced::Response::FromHTTP
-                ->new( http_response => $http_response );
+            WebService::PayPal::PaymentsAdvanced::Response::FromHTTP->new(
+                http_response => $http_response,
+                request_uri   => 'http://www.paypal.com/',
+                )
         },
         'WebService::PayPal::PaymentsAdvanced::Error::HTTP',
         'HTTP error thrown'

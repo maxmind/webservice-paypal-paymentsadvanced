@@ -2,21 +2,9 @@ package WebService::PayPal::PaymentsAdvanced::Error::HTTP;
 
 use Moo;
 
-use Types::Standard qw( InstanceOf Int );
-
 extends 'Throwable::Error';
 
-has http_status => (
-    is       => 'ro',
-    isa      => Int,
-    required => 1,
-);
-
-has http_response => (
-    is       => 'ro',
-    isa      => InstanceOf ['HTTP::Response'],
-    required => 1,
-);
+with 'WebService::PayPal::PaymentsAdvanced::Error::Role::HasHTTPResponse';
 
 1;
 
@@ -69,5 +57,9 @@ the hosted form.
 =head2 http_status
 
 Returns the HTTP status code for the response.
+
+=head2 request_uri
+
+The URI of the request that caused the HTTP error.
 
 =cut

@@ -58,6 +58,7 @@ sub _build_hosted_form_uri {
             message       => "hosted_form URI does not validate: $uri",
             http_response => $res,
             http_status   => $res->code,
+            request_uri   => $uri,
         );
 
     }
@@ -74,6 +75,8 @@ sub _build_hosted_form_uri {
         message =>
             "hosted_form contains error message: $scraped_text->{error}",
         http_response => $res,
+        http_status   => $res->code,
+        request_uri   => $uri,
     );
 }
 

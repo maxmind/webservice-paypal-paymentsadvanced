@@ -224,9 +224,10 @@ sub post {
     my $http_response
         = $self->ua->post( $self->payflow_pro_uri, Content => $content );
 
-    my $params
-        = $self->_class_for('Response::FromHTTP')
-        ->new( http_response => $http_response )->params;
+    my $params = $self->_class_for('Response::FromHTTP')->new(
+        http_response => $http_response,
+        request_uri   => $self->payflow_pro_uri,
+    )->params;
 
     my $response_class = $self->_class_for('Response');
 

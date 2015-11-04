@@ -15,6 +15,7 @@ requires "Test::LWP::UserAgent" => "0";
 requires "Throwable::Error" => "0";
 requires "Type::Params" => "0";
 requires "Types::Common::Numeric" => "0";
+requires "Types::Common::String" => "0";
 requires "Types::Standard" => "0";
 requires "Types::URI" => "0";
 requires "URI" => "1.69";
