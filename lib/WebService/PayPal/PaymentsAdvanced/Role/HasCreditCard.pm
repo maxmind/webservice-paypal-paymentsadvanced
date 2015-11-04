@@ -77,7 +77,7 @@ A human readable credit card type.  One of:
 
 The month and year of the credit card expiration.
 
-=head card_last_four_digits
+=head2 card_last_four_digits
 
 The last four digits of the credit card.
 

@@ -16,3 +16,9 @@ has params => (
 
 __END__
 #ABSTRACT: Role which provides params attribute to exception and response classes.
+
+=head1 METHODS
+
+=head2 params
+
+The parameters returned by PayPal

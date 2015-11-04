@@ -14,3 +14,11 @@ has reference_transaction_id => (
 );
 
 1;
+
+# ABSTRACT: Role which provides methods specifically for PayPal transactions
+
+=head1 METHODS
+
+=head2 reference_transaction_id
+
+The id you will use in order to use this as a reference transaction (C<BAID>).

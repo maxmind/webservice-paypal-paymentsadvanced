@@ -24,7 +24,7 @@ my %params = (
     is( $res->secure_token,    'token',    'token' );
     is( $res->secure_token_id, 'token_id', 'secure_token_id' );
 
-    ok( $res, 'can create response object' );
+    ok( $res,                  'can create response object' );
     ok( $res->hosted_form_uri, 'hosted_form_uri' );
 }
 

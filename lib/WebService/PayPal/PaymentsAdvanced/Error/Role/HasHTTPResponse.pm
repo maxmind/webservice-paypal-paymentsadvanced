@@ -30,3 +30,23 @@ has request_uri => (
 
 __END__
 #ABSTRACT: Role which provides attributes for an error in an HTTP response.
+
+=head1 METHODS
+
+The C<< $error->message() >>, and C<< $error->stack_trace() >> methods are
+inherited from L<Throwable::Error>.
+
+=head2 http_response
+
+Returns the L<HTTP::Response> object which was returned when attempting to GET
+the hosted form.
+
+=head2 http_status
+
+Returns the HTTP status code for the response.
+
+=head2 request_uri
+
+The URI of the request that caused the HTTP error.
+
+=cut

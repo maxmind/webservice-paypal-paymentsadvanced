@@ -93,16 +93,16 @@ use Util;
     ok( $res->pnref, 'pnref' );
 
     # XXX this blows up on ppref
-    ok( $res->card_type,             'card_type' );
-    ok( $res->card_last_four_digits, 'credit_card' );
-    ok( $res->card_expiration,       'expiration' );
-    ok( $res->amount, 'amount' );
+    ok( $res->card_type,                  'card_type' );
+    ok( $res->card_last_four_digits,      'credit_card' );
+    ok( $res->card_expiration,            'expiration' );
+    ok( $res->amount,                     'amount' );
     ok( $res->is_credit_card_transaction, 'is_credit_card_transaction' );
-    ok( !$res->is_paypal_transaction, 'is_paypal_transaction' );
+    ok( !$res->is_paypal_transaction,     'is_paypal_transaction' );
 }
 
 {
-    my $ppa = Util::mocked_ppa();
+    my $ppa    = Util::mocked_ppa();
     my $amount = 16;
     my $res
         = $ppa->auth_from_credit_card_reference_transaction( 'FOO', $amount );
@@ -115,11 +115,11 @@ use Util;
     ok( $res->ppref, 'ppref' );
     is( $res->amount, $amount, 'amount' );
     ok( $res->is_credit_card_transaction, 'is_credit_card_transaction' );
-    ok( !$res->is_paypal_transaction, 'is_paypal_transaction' );
+    ok( !$res->is_paypal_transaction,     'is_paypal_transaction' );
 }
 
 {
-    my $ppa = Util::mocked_ppa();
+    my $ppa    = Util::mocked_ppa();
     my $amount = 15;
     my $res
         = $ppa->sale_from_credit_card_reference_transaction( 'FOO', $amount );
@@ -132,7 +132,7 @@ use Util;
     ok( $res->ppref, 'ppref' );
     is( $res->amount, $amount, 'amount' );
     ok( $res->is_credit_card_transaction, 'is_credit_card_transaction' );
-    ok( !$res->is_paypal_transaction, 'is_paypal_transaction' );
+    ok( !$res->is_paypal_transaction,     'is_paypal_transaction' );
 }
 
 {
@@ -152,7 +152,7 @@ use Util;
     ok( $res->ppref, 'ppref' );
     is( $res->amount, $amount, 'amount' );
     ok( !$res->is_credit_card_transaction, 'is_credit_card_transaction' );
-    ok( $res->is_paypal_transaction, 'is_paypal_transaction' );
+    ok( $res->is_paypal_transaction,       'is_paypal_transaction' );
 }
 
 {
@@ -172,7 +172,7 @@ use Util;
     ok( $res->ppref, 'ppref' );
     is( $res->amount, $amount, 'amount' );
     ok( !$res->is_credit_card_transaction, 'is_credit_card_transaction' );
-    ok( $res->is_paypal_transaction, 'is_paypal_transaction' );
+    ok( $res->is_paypal_transaction,       'is_paypal_transaction' );
 }
 
 sub get_mocked_payments {

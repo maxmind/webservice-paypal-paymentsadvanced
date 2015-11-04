@@ -28,7 +28,6 @@ has _http_response => (
     handles  => { _code => 'code', _content => 'content', },
 );
 
-
 has _request_uri => (
     init_arg => 'request_uri',
     is       => 'ro',
