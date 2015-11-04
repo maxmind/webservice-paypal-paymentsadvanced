@@ -2,7 +2,7 @@ package WebService::PayPal::PaymentsAdvanced::Response;
 
 use Moo;
 
-our $VERSION = '0.000008';
+our $VERSION = '0.000009';
 
 use Types::Common::String qw( NonEmptyStr );
 use WebService::PayPal::PaymentsAdvanced::Error::Authentication;
