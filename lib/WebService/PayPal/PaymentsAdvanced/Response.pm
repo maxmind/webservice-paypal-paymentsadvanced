@@ -5,6 +5,7 @@ use Moo;
 our $VERSION = '0.000009';
 
 use Types::Common::String qw( NonEmptyStr );
+use Types::Standard qw( Maybe );
 use WebService::PayPal::PaymentsAdvanced::Error::Authentication;
 use WebService::PayPal::PaymentsAdvanced::Error::Generic;
 
@@ -14,9 +15,10 @@ has pnref => (
     default => sub { shift->params->{PNREF} },
 );
 
+# PPREF is only returned if PayPal was the payment processor.
 has ppref => (
     is      => 'lazy',
-    isa     => NonEmptyStr,
+    isa     => Maybe[ NonEmptyStr ],
     default => sub { shift->params->{PPREF} },
 );
 

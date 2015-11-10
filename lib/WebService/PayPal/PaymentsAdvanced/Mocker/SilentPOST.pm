@@ -208,7 +208,11 @@ sub _massage_args {
 
     $default_args = $self->_set_defaults($default_args);
 
-    return { %{$default_args}, %{$user_args} };
+    my $args = { %{$default_args}, %{$user_args} };
+    if ( $self->_secure_token_id eq 'NOPPREF' ) {
+        delete $args->{PPREF};
+    }
+    return $args;
 }
 
 sub _set_defaults {
@@ -233,6 +237,9 @@ sub _set_defaults {
     }
 
     $defaults->{SECURETOKENID} = $self->_secure_token_id;
+    if ( $self->_secure_token_id eq 'NOPPREF' ) {
+        delete $defaults->{PPREF};
+    }
     return $defaults;
 }
 
