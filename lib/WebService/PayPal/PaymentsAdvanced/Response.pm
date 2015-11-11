@@ -18,7 +18,7 @@ has pnref => (
 # PPREF is only returned if PayPal was the payment processor.
 has ppref => (
     is      => 'lazy',
-    isa     => Maybe[ NonEmptyStr ],
+    isa     => Maybe [NonEmptyStr],
     default => sub { shift->params->{PPREF} },
 );
 
