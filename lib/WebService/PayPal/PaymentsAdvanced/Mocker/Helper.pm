@@ -2,7 +2,7 @@ package WebService::PayPal::PaymentsAdvanced::Mocker::Helper;
 
 use Moo;
 
-our $VERSION = '0.000009';
+our $VERSION = '0.000010';
 
 use Data::GUID;
 use DateTime;

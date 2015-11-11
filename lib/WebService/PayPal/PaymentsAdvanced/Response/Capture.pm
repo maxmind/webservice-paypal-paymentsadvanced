@@ -2,7 +2,7 @@ package WebService::PayPal::PaymentsAdvanced::Response::Capture;
 
 use Moo;
 
-our $VERSION = '0.000009';
+our $VERSION = '0.000010';
 
 extends 'WebService::PayPal::PaymentsAdvanced::Response';
 

@@ -1,6 +1,9 @@
-Revision history for WebService-PayflowPro
+Revision history for WebService-PayPal-PaymentsAdvanced
 
 {{$NEXT}}
+    - Response objects no longer assume that PPREF will always be present.
+
+0.000009 2015-11-04
     - WebService::PayPal::PaymentsAdvanced::Error::HTTP now provides
       request_uri. WebService::PayPal::PaymentsAdvanced::Error::HostedForm
       provides request_uri and http_status.
