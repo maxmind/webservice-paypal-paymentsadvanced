@@ -2,7 +2,7 @@ package WebService::PayPal::PaymentsAdvanced::Response::FromRedirect;
 
 use Moo;
 
-our $VERSION = '0.000010';
+our $VERSION = '0.000011';
 
 with(
     'WebService::PayPal::PaymentsAdvanced::Role::HasParams',
