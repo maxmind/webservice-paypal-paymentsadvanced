@@ -10,8 +10,9 @@ use Data::GUID;
 use LWP::UserAgent;
 use MooX::StrictConstructor;
 use Type::Params qw( compile );
+use Types::Common::Numeric qw( PositiveNum );
 use Types::Common::String qw( NonEmptyStr );
-use Types::Standard qw( Bool HashRef InstanceOf Num );
+use Types::Standard qw( Bool HashRef InstanceOf Num Optional );
 use Types::URI qw( Uri );
 use URI;
 use URI::FromHash qw( uri uri_object );
@@ -124,10 +125,18 @@ sub _build_payflow_link_uri {
 sub capture_delayed_transaction {
     my $self = shift;
 
-    state $check = compile(NonEmptyStr);
-    my ($pnref) = $check->(@_);
+    state $check = compile( NonEmptyStr, Optional [PositiveNum] );
+    my ( $origid, $amt ) = $check->(@_);
 
-    return $self->post( { TRXTYPE => 'D', ORIGID => $pnref } );
+    ## no critic (ValuesAndExpressions::ProhibitCommaSeparatedStatements)
+    return $self->post(
+        {
+            $amt ? ( AMT => $amt ) : (),
+            ORIGID  => $origid,
+            TRXTYPE => 'D',
+        }
+    );
+    ## use critic
 }
 
 sub _class_for {
@@ -622,10 +631,12 @@ response is sent.
     # OR
     my $response = $payments->post( { trxtype => 'V', origid => $pnref, } );
 
-=head3 capture_delayed_transaction( $ORIGID )
+=head3 capture_delayed_transaction( $ORIGID, [$AMT] )
 
 Captures a sale which you have previously authorized.  Requires the ID of the
-original transaction.  Returns a response object.
+original transaction.  If you wish to capture an amount which is not equal to
+the original authorization amount, you'll need to pass an amount as the second
+parameter.  Returns a response object.
 
 =head3 auth_from_credit_card_reference_transaction( $ORIGID, $amount )
 

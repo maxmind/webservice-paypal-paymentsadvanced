@@ -47,7 +47,6 @@ use Util;
     );
 }
 
-# Test parsing errors out of hosted_form content.
 {
     my ( $payments, $payments_res )
         = get_mocked_payments('test-data/hosted-form-with-error.html');
@@ -59,7 +58,6 @@ use Util;
     );
 }
 
-# Test parsing hosted_form content without errors.
 {
 
     my ( $payments, $payments_res )
@@ -72,14 +70,16 @@ use Util;
 
 {
     my $ppa = Util::mocked_ppa();
-    my $res = $ppa->capture_delayed_transaction('FOO');
-    ok( $res, 'capture_delayed_transaction' );
-    ok(
-        $res->transaction_time,
-        'transaction_time: ' . $res->transaction_time
-    );
-    ok( $res->pnref, 'pnref' );
-    ok( $res->ppref, 'ppref' );
+    foreach my $params ( ['FOO'], [ 'FOO', 12.99 ] ) {
+        my $res = $ppa->capture_delayed_transaction( @{$params} );
+        ok( $res, 'capture_delayed_transaction' );
+        ok(
+            $res->transaction_time,
+            'transaction_time: ' . $res->transaction_time
+        );
+        ok( $res->pnref, 'pnref' );
+        ok( $res->ppref, 'ppref' );
+    }
 }
 
 {
