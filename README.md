@@ -4,7 +4,7 @@ WebService::PayPal::PaymentsAdvanced - A simple wrapper around the PayPal Paymen
 
 # VERSION
 
-version 0.000010
+version 0.000012
 
 # SYNOPSIS
 
@@ -236,10 +236,12 @@ response is sent.
     # OR
     my $response = $payments->post( { trxtype => 'V', origid => $pnref, } );
 
-### capture\_delayed\_transaction( $ORIGID )
+### capture\_delayed\_transaction( $ORIGID, \[$AMT\] )
 
 Captures a sale which you have previously authorized.  Requires the ID of the
-original transaction.  Returns a response object.
+original transaction.  If you wish to capture an amount which is not equal to
+the original authorization amount, you'll need to pass an amount as the second
+parameter.  Returns a response object.
 
 ### auth\_from\_credit\_card\_reference\_transaction( $ORIGID, $amount )
 
