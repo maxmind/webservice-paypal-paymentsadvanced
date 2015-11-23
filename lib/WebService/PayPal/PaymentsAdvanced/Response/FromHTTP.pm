@@ -2,7 +2,7 @@ package WebService::PayPal::PaymentsAdvanced::Response::FromHTTP;
 
 use Moo;
 
-our $VERSION = '0.000012';
+our $VERSION = '0.000013';
 
 use MooX::HandlesVia;
 use MooX::StrictConstructor;
