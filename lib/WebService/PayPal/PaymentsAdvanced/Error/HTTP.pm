@@ -2,7 +2,7 @@ package WebService::PayPal::PaymentsAdvanced::Error::HTTP;
 
 use Moo;
 
-our $VERSION = '0.000013';
+our $VERSION = '0.000014';
 
 extends 'Throwable::Error';
 
