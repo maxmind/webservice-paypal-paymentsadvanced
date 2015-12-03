@@ -4,10 +4,18 @@ use Moo;
 
 our $VERSION = '0.000013';
 
+use List::AllUtils qw( any );
 use Types::Common::String qw( NonEmptyStr );
-use Types::Standard qw( Maybe );
+use Types::Standard qw( ArrayRef Int Maybe );
 use WebService::PayPal::PaymentsAdvanced::Error::Authentication;
 use WebService::PayPal::PaymentsAdvanced::Error::Generic;
+
+has _nonfatal_result_codes => (
+    init_arg => 'nonfatal_result_codes',
+    is      => 'ro',
+    isa     => ArrayRef [Int],
+    required => 1,
+);
 
 has pnref => (
     is      => 'lazy',
@@ -33,7 +41,9 @@ sub BUILD {
 
     my $result = $self->params->{RESULT};
 
-    return if defined $result && !$result;
+    return
+        if Int->check($result)
+        && ( any { $result == $_ } @{ $self->_nonfatal_result_codes } );
 
     if ( $result && $result == 1 ) {
         $self->_class_for('Error::Authentication')->throw(

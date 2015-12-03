@@ -15,6 +15,7 @@ my %params = (
 {
     my $res
         = WebService::PayPal::PaymentsAdvanced::Response::SecureToken->new(
+        nonfatal_result_codes    => [0],
         params                   => \%params,
         payflow_link_uri         => 'http://example.com',
         validate_hosted_form_uri => 0,

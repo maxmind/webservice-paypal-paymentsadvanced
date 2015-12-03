@@ -17,10 +17,21 @@ my %params = (
     isa_ok(
         exception {
             WebService::PayPal::PaymentsAdvanced::Response->new(
-                params => \%params );
+                nonfatal_result_codes => [0],
+                params                => \%params
+            );
         },
         'WebService::PayPal::PaymentsAdvanced::Error::Authentication',
         'authentication exception'
+    );
+
+    isa_ok(
+        WebService::PayPal::PaymentsAdvanced::Response->new(
+            nonfatal_result_codes => [ 0, 1 ],
+            params => \%params,
+        ),
+        'WebService::PayPal::PaymentsAdvanced::Response',
+        'no exception when result code is marked as non-fatal'
     );
 }
 
