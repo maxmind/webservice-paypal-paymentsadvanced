@@ -12,8 +12,8 @@ use WebService::PayPal::PaymentsAdvanced::Error::Generic;
 
 has _nonfatal_result_codes => (
     init_arg => 'nonfatal_result_codes',
-    is      => 'ro',
-    isa     => ArrayRef [Int],
+    is       => 'ro',
+    isa      => ArrayRef [Int],
     required => 1,
 );
 
