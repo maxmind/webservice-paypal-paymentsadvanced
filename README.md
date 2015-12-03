@@ -4,7 +4,7 @@ WebService::PayPal::PaymentsAdvanced - A simple wrapper around the PayPal Paymen
 
 # VERSION
 
-version 0.000012
+version 0.000013
 
 # SYNOPSIS
 
@@ -95,6 +95,13 @@ The value of the `vendor` field you use when logging in to the Payflow
 Manager.
 
 ## Optional Parameters
+
+### nonfatal\_result\_codes
+
+An arrayref of result codes that will be treated as non-fatal (i.e., that will
+not cause an exception). By default, only 0 is considered non-fatal, but
+depending on your integration, other codes such as 112 (failed AVS check) may
+be considered non-fatal.
 
 ### partner
 
@@ -310,13 +317,13 @@ Returns a response object.
 
 # AUTHOR
 
-Olaf Alders <olaf@wundercounter.com>
+Olaf Alders &lt;olaf@wundercounter.com>
 
 # CONTRIBUTORS
 
-- Greg Oschwald <goschwald@maxmind.com>
-- Mark Fowler <mark@twoshortplanks.com>
-- Olaf Alders <oalders@maxmind.com>
+- Greg Oschwald &lt;goschwald@maxmind.com>
+- Mark Fowler &lt;mark@twoshortplanks.com>
+- Olaf Alders &lt;oalders@maxmind.com>
 
 # COPYRIGHT AND LICENSE
 
