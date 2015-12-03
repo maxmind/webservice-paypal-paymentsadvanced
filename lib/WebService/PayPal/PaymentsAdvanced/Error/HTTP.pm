@@ -40,9 +40,7 @@ with 'WebService::PayPal::PaymentsAdvanced::Error::Role::HasHTTPResponse';
 
 =head1 DESCRIPTION
 
-This class represents an error which is embedded into the HTML of a hosted
-form.   It will only be thrown if you have enabled
-L<WebService::PayPal::PaymentsAdvanced/validate_hosted_form_uri>.
+This class represents an HTTP transport error.
 
 It extends L<Throwable::Error> and adds one attribute of its own.
 
@@ -53,8 +51,8 @@ inherited from L<Throwable::Error>.
 
 =head2 http_response
 
-Returns the L<HTTP::Response> object which was returned when attempting to GET
-the hosted form.
+Returns the L<HTTP::Response> object which was returned when attempting the
+HTTP request.
 
 =head2 http_status
 
