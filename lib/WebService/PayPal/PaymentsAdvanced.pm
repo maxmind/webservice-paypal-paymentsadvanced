@@ -12,7 +12,7 @@ use MooX::StrictConstructor;
 use Type::Params qw( compile );
 use Types::Common::Numeric qw( PositiveNum );
 use Types::Common::String qw( NonEmptyStr );
-use Types::Standard qw( Bool HashRef InstanceOf Num Optional );
+use Types::Standard qw( ArrayRef Bool HashRef InstanceOf Int Num Optional );
 use Types::URI qw( Uri );
 use URI;
 use URI::FromHash qw( uri uri_object );
@@ -39,6 +39,12 @@ use WebService::PayPal::PaymentsAdvanced::Response::Sale::CreditCard;
 use WebService::PayPal::PaymentsAdvanced::Response::Sale::PayPal;
 use WebService::PayPal::PaymentsAdvanced::Response::SecureToken;
 #>>>
+
+has nonfatal_result_codes => (
+    is      => 'ro',
+    isa     => ArrayRef [Int],
+    default => sub { [0] },
+);
 
 has partner => (
     is       => 'ro',
@@ -139,9 +145,15 @@ sub capture_delayed_transaction {
     ## use critic
 }
 
-sub _class_for {
-    my $self = shift;
-    return 'WebService::PayPal::PaymentsAdvanced::' . shift;
+sub _response_for {
+    my $self         = shift;
+    my $class_suffix = shift;
+    my %args         = @_;
+
+    $self->_class_for($class_suffix)->new(
+        nonfatal_result_codes => $self->nonfatal_result_codes,
+        %args,
+    );
 }
 
 sub create_secure_token {
@@ -170,7 +182,7 @@ sub get_response_from_redirect {
 
     my $response = $self->_class_for('Response::FromRedirect')->new($args);
 
-    return $self->_class_for('Response')->new( params => $response->params );
+    return $self->_response_for( 'Response', params => $response->params );
 }
 
 sub get_response_from_silent_post {
@@ -195,14 +207,14 @@ sub get_response_from_silent_post {
     # IPs will only be validate once as the PayPal/CreditCard object
     # instantiation will not provide an IP address.
 
-    my $response_class = $self->_class_for('Response::FromSilentPOST');
-    my $response       = $response_class->new($args);
+    my $class_suffix = 'Response::FromSilentPOST';
+    my $response = $self->_response_for( $class_suffix, %{$args} );
 
-    $response_class
+    $class_suffix
         .= '::'
         . ( $response->is_credit_card_transaction ? 'CreditCard' : 'PayPal' );
 
-    return $response_class->new( params => $response->params );
+    return $self->_response_for( $class_suffix, params => $response->params );
 }
 
 sub inquiry_transaction {
@@ -240,10 +252,9 @@ sub post {
         request_uri   => $self->payflow_pro_uri,
     )->params;
 
-    my $response_class = $self->_class_for('Response');
-
     if ( $post->{CREATESECURETOKEN} && $post->{CREATESECURETOKEN} eq 'Y' ) {
-        return $self->_class_for('Response::SecureToken')->new(
+        return $self->_response_for(
+            'Response::SecureToken',
             params                   => $params,
             payflow_link_uri         => $self->payflow_link_uri,
             ua                       => $self->ua,
@@ -258,17 +269,21 @@ sub post {
         S => 'Response::Sale',
     );
 
-    my $type = $post->{TRXTYPE};
+    my $type                  = $post->{TRXTYPE};
+    my $response_class_suffix = 'Response';
     if ( $type && exists $class_for_type{$type} ) {
 
-        $response_class = $self->_class_for( $class_for_type{$type} );
+        $response_class_suffix = $class_for_type{$type};
 
         # Get more specific response classes for CC and PayPal txns.
         unless ( $type eq 'D' ) {
-            my $response = $response_class->new( params => $params );
+            my $response = $self->_response_for(
+                $response_class_suffix,
+                params => $params
+            );
 
-            $response_class = sprintf(
-                '%s::%s', $response_class,
+            $response_class_suffix = sprintf(
+                '%s::%s', $response_class_suffix,
                 $response->is_credit_card_transaction
                 ? 'CreditCard'
                 : 'PayPal'
@@ -276,7 +291,7 @@ sub post {
         }
     }
 
-    return $response_class->new( params => $params );
+    return $self->_response_for( $response_class_suffix, params => $params );
 }
 
 sub auth_from_credit_card_reference_transaction {
@@ -490,6 +505,13 @@ The value of the C<vendor> field you use when logging in to the Payflow
 Manager.
 
 =head2 Optional Parameters
+
+=head3 nonfatal_result_codes
+
+An arrayref of result codes that will be treated as non-fatal (i.e., that will
+not cause an exception). By default, only 0 is considered non-fatal, but
+depending on your integration, other codes such as 112 (failed AVS check) may
+be considered non-fatal.
 
 =head3 partner
 
