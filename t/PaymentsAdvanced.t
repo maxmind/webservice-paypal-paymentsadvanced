@@ -104,8 +104,10 @@ use Util;
 {
     my $ppa    = Util::mocked_ppa();
     my $amount = 16;
-    my $res
-        = $ppa->auth_from_credit_card_reference_transaction( 'FOO', $amount );
+    my $res    = $ppa->auth_from_credit_card_reference_transaction(
+        'FOO', $amount,
+        { INVNUM => 'FOO123' }
+    );
     ok( $res, 'auth_from_credit_card_reference_transaction' );
     ok(
         $res->transaction_time,
@@ -116,13 +118,16 @@ use Util;
     is( $res->amount, $amount, 'amount' );
     ok( $res->is_credit_card_transaction, 'is_credit_card_transaction' );
     ok( !$res->is_paypal_transaction,     'is_paypal_transaction' );
+    is( $res->params->{INVNUM}, 'FOO123', 'INVNUM' );
 }
 
 {
     my $ppa    = Util::mocked_ppa();
     my $amount = 15;
-    my $res
-        = $ppa->sale_from_credit_card_reference_transaction( 'FOO', $amount );
+    my $res    = $ppa->sale_from_credit_card_reference_transaction(
+        'FOO', $amount,
+        { INVNUM => 'FOO456' }
+    );
     ok( $res, 'sale_from_credit_card_reference_transaction' );
     ok(
         $res->transaction_time,
@@ -133,6 +138,7 @@ use Util;
     is( $res->amount, $amount, 'amount' );
     ok( $res->is_credit_card_transaction, 'is_credit_card_transaction' );
     ok( !$res->is_paypal_transaction,     'is_paypal_transaction' );
+    is( $res->params->{INVNUM}, 'FOO456', 'INVNUM' );
 }
 
 {

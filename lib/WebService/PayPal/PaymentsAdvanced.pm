@@ -306,8 +306,9 @@ sub sale_from_credit_card_reference_transaction {
 
 sub _credit_card_reference_transaction {
     my $self = shift;
-    state $check = compile( NonEmptyStr, NonEmptyStr, Num );
-    my ( $type, $origid, $amount ) = $check->(@_);
+    state $check
+        = compile( NonEmptyStr, NonEmptyStr, Num, Optional [HashRef] );
+    my ( $type, $origid, $amount, $extra ) = $check->(@_);
 
     return $self->post(
         {
@@ -315,6 +316,7 @@ sub _credit_card_reference_transaction {
             ORIGID  => $origid,
             TENDER  => 'C',
             TRXTYPE => $type,
+            $extra ? ( %{$extra} ) : (),
         }
     );
 }
@@ -331,8 +333,10 @@ sub sale_from_paypal_reference_transaction {
 
 sub _paypal_reference_transaction {
     my $self = shift;
-    state $check = compile( NonEmptyStr, NonEmptyStr, Num, NonEmptyStr );
-    my ( $type, $baid, $amount, $currency ) = $check->(@_);
+    state $check = compile( NonEmptyStr, NonEmptyStr, Num, NonEmptyStr,
+        Optional [HashRef]
+    );
+    my ( $type, $baid, $amount, $currency, $extra ) = $check->(@_);
 
     return $self->post(
         {
@@ -342,6 +346,7 @@ sub _paypal_reference_transaction {
             CURRENCY => $currency,
             TENDER   => 'P',
             TRXTYPE  => $type,
+            $extra ? ( %{$extra} ) : (),
         }
     );
 }
@@ -660,17 +665,18 @@ original transaction.  If you wish to capture an amount which is not equal to
 the original authorization amount, you'll need to pass an amount as the second
 parameter.  Returns a response object.
 
-=head3 auth_from_credit_card_reference_transaction( $ORIGID, $amount )
+=head3 auth_from_credit_card_reference_transaction( $ORIGID, $amount, $extra )
 
 Process a authorization based on a reference transaction from a credit card.
 Requires 2 arguments: an ORIGID from a previous credit card transaction and an
-amount.
+amount. Any additional parameters can be passed via a HashRef as an optional
+3rd argument.
 
     use WebService::PayPal::PaymentsAdvanced;
     my $payments = WebService::PayPal::PaymentsAdvanced->new(...);
 
     my $response = $payments->auth_from_credit_card_reference_transaction(
-        'BFOOBAR', 1.50'
+        'BFOOBAR', 1.50', { INVNUM => 'FOO123' }
     );
     say $response->message;
 
@@ -678,40 +684,44 @@ amount.
 
 Process a sale based on a reference transaction from a credit card.  See
 Requires 2 arguments: an ORIGID from a previous credit card transaction and an
-amount.
+amount.  Any additional parameters can be passed via a HashRef as an optional
+3rd argument.
 
     use WebService::PayPal::PaymentsAdvanced;
     my $payments = WebService::PayPal::PaymentsAdvanced->new(...);
 
     my $response = $payments->sale_from_credit_card_reference_transaction(
-        'BFOOBAR', 1.50'
+        'BFOOBAR', 1.50', { INVNUM => 'FOO123' }
     );
     say $response->message;
 
-=head3 auth_from_paypal_reference_transaction( $BAID, $amount, $currency )
+=head3 auth_from_paypal_reference_transaction( $BAID, $amount, $currency, $extra )
 
 Process an authorization based on a reference transaction from PayPal.
 Requires 3 arguments: a BAID from a previous PayPal transaction, an amount and
-a currency.
+a currency.  Any additional parameters can be passed via a HashRef as the
+optional 4th argument.
 
     use WebService::PayPal::PaymentsAdvanced;
     my $payments = WebService::PayPal::PaymentsAdvanced->new(...);
 
     my $response = $payments->auth_from_paypal_reference_transaction(
-        'B-FOOBAR', 1.50, 'USD'
+        'B-FOOBAR', 1.50, 'USD', { INVNUM => 'FOO123' }
     );
     say $response->message;
 
-=head3 sale_from_paypal_reference_transaction( $BAID, $amount, $currency )
+=head3 sale_from_paypal_reference_transaction( $BAID, $amount, $currency, $extra )
 
 Process a sale based on a reference transaction from PayPal.  Requires 3
 arguments: a BAID from a previous PayPal transaction, an amount and a currency.
+Any additional parameters can be passed via a HashRef as an optional 4th
+argument.
 
     use WebService::PayPal::PaymentsAdvanced;
     my $payments = WebService::PayPal::PaymentsAdvanced->new(...);
 
     my $response = $payments->sale_from_paypal_reference_transaction(
-        'B-FOOBAR', 1.50, 'USD'
+        'B-FOOBAR', 1.50, 'USD', { INVNUM => 'FOO123' }
     );
     say $response->message;
 

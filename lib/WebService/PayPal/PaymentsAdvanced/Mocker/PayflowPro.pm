@@ -174,11 +174,24 @@ post '/' => sub {
 };
 
 sub _render_response {
-    my $c      = shift;
-    my $params = shift;
+    my $c        = shift;
+    my $response = shift;
+    my $params   = _filter_params($c);
 
-    my $res = uri_object( query => $params );
-    $c->render( text => $res->query, format => 'nvp' );
+    # Echo some params back to make the responses more DRY
+    if (
+        (
+            $params->{TRXTYPE}
+            && ( $params->{TRXTYPE} eq 'A' || $params->{TRXTYPE} eq 'S' )
+        )
+        && $params->{INVNUM}
+        ) {
+        $response->{INVNUM}  = $params->{INVNUM};
+        $response->{INVOICE} = $params->{INVNUM};
+    }
+
+    my $response_as_uri = uri_object( query => $response );
+    $c->render( text => $response_as_uri->query, format => 'nvp' );
 }
 
 sub _filter_params {
