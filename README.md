@@ -4,7 +4,7 @@ WebService::PayPal::PaymentsAdvanced - A simple wrapper around the PayPal Paymen
 
 # VERSION
 
-version 0.000013
+version 0.000014
 
 # SYNOPSIS
 
@@ -250,17 +250,18 @@ original transaction.  If you wish to capture an amount which is not equal to
 the original authorization amount, you'll need to pass an amount as the second
 parameter.  Returns a response object.
 
-### auth\_from\_credit\_card\_reference\_transaction( $ORIGID, $amount )
+### auth\_from\_credit\_card\_reference\_transaction( $ORIGID, $amount, $extra )
 
 Process a authorization based on a reference transaction from a credit card.
 Requires 2 arguments: an ORIGID from a previous credit card transaction and an
-amount.
+amount. Any additional parameters can be passed via a HashRef as an optional
+3rd argument.
 
     use WebService::PayPal::PaymentsAdvanced;
     my $payments = WebService::PayPal::PaymentsAdvanced->new(...);
 
     my $response = $payments->auth_from_credit_card_reference_transaction(
-        'BFOOBAR', 1.50'
+        'BFOOBAR', 1.50', { INVNUM => 'FOO123' }
     );
     say $response->message;
 
@@ -268,40 +269,44 @@ amount.
 
 Process a sale based on a reference transaction from a credit card.  See
 Requires 2 arguments: an ORIGID from a previous credit card transaction and an
-amount.
+amount.  Any additional parameters can be passed via a HashRef as an optional
+3rd argument.
 
     use WebService::PayPal::PaymentsAdvanced;
     my $payments = WebService::PayPal::PaymentsAdvanced->new(...);
 
     my $response = $payments->sale_from_credit_card_reference_transaction(
-        'BFOOBAR', 1.50'
+        'BFOOBAR', 1.50', { INVNUM => 'FOO123' }
     );
     say $response->message;
 
-### auth\_from\_paypal\_reference\_transaction( $BAID, $amount, $currency )
+### auth\_from\_paypal\_reference\_transaction( $BAID, $amount, $currency, $extra )
 
 Process an authorization based on a reference transaction from PayPal.
 Requires 3 arguments: a BAID from a previous PayPal transaction, an amount and
-a currency.
+a currency.  Any additional parameters can be passed via a HashRef as the
+optional 4th argument.
 
     use WebService::PayPal::PaymentsAdvanced;
     my $payments = WebService::PayPal::PaymentsAdvanced->new(...);
 
     my $response = $payments->auth_from_paypal_reference_transaction(
-        'B-FOOBAR', 1.50, 'USD'
+        'B-FOOBAR', 1.50, 'USD', { INVNUM => 'FOO123' }
     );
     say $response->message;
 
-### sale\_from\_paypal\_reference\_transaction( $BAID, $amount, $currency )
+### sale\_from\_paypal\_reference\_transaction( $BAID, $amount, $currency, $extra )
 
 Process a sale based on a reference transaction from PayPal.  Requires 3
 arguments: a BAID from a previous PayPal transaction, an amount and a currency.
+Any additional parameters can be passed via a HashRef as an optional 4th
+argument.
 
     use WebService::PayPal::PaymentsAdvanced;
     my $payments = WebService::PayPal::PaymentsAdvanced->new(...);
 
     my $response = $payments->sale_from_paypal_reference_transaction(
-        'B-FOOBAR', 1.50, 'USD'
+        'B-FOOBAR', 1.50, 'USD', { INVNUM => 'FOO123' }
     );
     say $response->message;
 
