@@ -285,7 +285,7 @@ amount.  Any additional parameters can be passed via a HashRef as an optional
 Process an authorization based on a reference transaction from PayPal.
 Requires 3 arguments: a BAID from a previous PayPal transaction, an amount and
 a currency.  Any additional parameters can be passed via a HashRef as the
-optional 4th argument.
+optional fourth argument.
 
     use WebService::PayPal::PaymentsAdvanced;
     my $payments = WebService::PayPal::PaymentsAdvanced->new(...);
@@ -299,7 +299,7 @@ optional 4th argument.
 
 Process a sale based on a reference transaction from PayPal.  Requires 3
 arguments: a BAID from a previous PayPal transaction, an amount and a currency.
-Any additional parameters can be passed via a HashRef as an optional 4th
+Any additional parameters can be passed via a HashRef as an optional fourth
 argument.
 
     use WebService::PayPal::PaymentsAdvanced;
