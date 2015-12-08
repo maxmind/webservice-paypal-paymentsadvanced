@@ -2,7 +2,7 @@ package WebService::PayPal::PaymentsAdvanced::Response;
 
 use Moo;
 
-our $VERSION = '0.000014';
+our $VERSION = '0.000015';
 
 use List::AllUtils qw( any );
 use Types::Common::String qw( NonEmptyStr );

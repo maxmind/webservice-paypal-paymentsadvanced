@@ -2,7 +2,7 @@ package WebService::PayPal::PaymentsAdvanced::Role::HasMessage;
 
 use Moo::Role;
 
-our $VERSION = '0.000014';
+our $VERSION = '0.000015';
 
 use Types::Common::String qw( NonEmptyStr );
 

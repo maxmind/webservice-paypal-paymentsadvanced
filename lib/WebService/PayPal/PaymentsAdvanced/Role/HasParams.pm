@@ -2,7 +2,7 @@ package WebService::PayPal::PaymentsAdvanced::Role::HasParams;
 
 use Moo::Role;
 
-our $VERSION = '0.000014';
+our $VERSION = '0.000015';
 
 use Types::Standard qw( HashRef );
 

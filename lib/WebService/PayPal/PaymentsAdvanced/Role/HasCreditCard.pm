@@ -2,7 +2,7 @@ package WebService::PayPal::PaymentsAdvanced::Role::HasCreditCard;
 
 use Moo::Role;
 
-our $VERSION = '0.000014';
+our $VERSION = '0.000015';
 
 use Types::Common::Numeric qw( PositiveInt );
 use Types::Common::String qw( NonEmptyStr );
