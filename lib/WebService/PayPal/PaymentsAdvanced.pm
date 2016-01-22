@@ -220,16 +220,11 @@ sub get_response_from_silent_post {
 sub inquiry_transaction {
     my $self = shift;
 
-    state $check = compile(NonEmptyStr);
-    my ($pnref) = $check->(@_);
+    state $check = compile(HashRef);
+    my ($args) = $check->(@_);
+    $args->{TRXTYPE} = 'I';
 
-    return $self->post(
-        {
-            ORIGID  => $pnref,
-            TENDER  => 'C',
-            TRXTYPE => 'I',
-        }
-    );
+    return $self->post($args);
 }
 
 sub post {
@@ -725,10 +720,18 @@ argument.
     );
     say $response->message;
 
-=head3 inquiry_transaction( $ORIGID )
+=head3 inquiry_transaction( $HashRef )
 
 Performs a transaction inquiry on a previously submitted transaction.  Requires
 the ID of the original transaction.  Returns a response object.
+
+    use WebService::PayPal::PaymentsAdvanced;
+    my $payments = WebService::PayPal::PaymentsAdvanced->new(...);
+
+    my $inquiry = $payments->inquiry_transaction(
+        { ORIGID => 'FOO123', TENDER => 'C', }
+    );
+    say $response->message;
 
 =head3 void_transaction( $ORIGID )
 

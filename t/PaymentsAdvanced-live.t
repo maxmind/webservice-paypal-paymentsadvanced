@@ -123,7 +123,8 @@ SKIP: {
         like(
             exception(
                 sub {
-                    $payments->inquiry_transaction('xfoox');
+                    $payments->inquiry_transaction(
+                        { ORIGID => 'xfoox', TENDER => 'C', } );
                 }
             ),
             qr{Field format error}i,
