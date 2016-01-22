@@ -2,7 +2,7 @@ package WebService::PayPal::PaymentsAdvanced::Role::ClassFor;
 
 use Moo::Role;
 
-our $VERSION = '0.000015';
+our $VERSION = '0.000016';
 
 sub _class_for {
     my $self = shift;

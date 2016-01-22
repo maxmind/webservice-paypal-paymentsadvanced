@@ -2,7 +2,7 @@ package WebService::PayPal::PaymentsAdvanced::Response::FromSilentPOST::PayPal;
 
 use Moo;
 
-our $VERSION = '0.000015';
+our $VERSION = '0.000016';
 
 extends 'WebService::PayPal::PaymentsAdvanced::Response::FromSilentPOST';
 
