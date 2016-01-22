@@ -1,6 +1,8 @@
 Revision history for WebService-PayPal-PaymentsAdvanced
 
 {{$NEXT}}
+    - Make less assumptions about inquiry_transaction().  This is a breaking
+      change.
 
 0.000014 2015-12-08
     - *_reference_transaction() methods now accept an additional, optional
