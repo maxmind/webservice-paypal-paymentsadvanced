@@ -4,7 +4,7 @@ WebService::PayPal::PaymentsAdvanced - A simple wrapper around the PayPal Paymen
 
 # VERSION
 
-version 0.000014
+version 0.000015
 
 # SYNOPSIS
 
@@ -310,10 +310,18 @@ argument.
     );
     say $response->message;
 
-### inquiry\_transaction( $ORIGID )
+### inquiry\_transaction( $HashRef )
 
 Performs a transaction inquiry on a previously submitted transaction.  Requires
 the ID of the original transaction.  Returns a response object.
+
+    use WebService::PayPal::PaymentsAdvanced;
+    my $payments = WebService::PayPal::PaymentsAdvanced->new(...);
+
+    my $inquiry = $payments->inquiry_transaction(
+        { ORIGID => 'FOO123', TENDER => 'C', }
+    );
+    say $response->message;
 
 ### void\_transaction( $ORIGID )
 
@@ -332,7 +340,7 @@ Olaf Alders &lt;olaf@wundercounter.com>
 
 # COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2015 by MaxMind, Inc..
+This software is copyright (c) 2016 by MaxMind, Inc..
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.
