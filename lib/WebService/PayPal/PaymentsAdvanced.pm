@@ -7,6 +7,7 @@ our $VERSION = '0.000016';
 use feature qw( say state );
 
 use Data::GUID;
+use List::AllUtils qw( any );
 use LWP::UserAgent;
 use MooX::StrictConstructor;
 use Type::Params qw( compile );
@@ -38,6 +39,7 @@ use WebService::PayPal::PaymentsAdvanced::Response::Sale;
 use WebService::PayPal::PaymentsAdvanced::Response::Sale::CreditCard;
 use WebService::PayPal::PaymentsAdvanced::Response::Sale::PayPal;
 use WebService::PayPal::PaymentsAdvanced::Response::SecureToken;
+use WebService::PayPal::PaymentsAdvanced::Response::Void;
 #>>>
 
 has nonfatal_result_codes => (
@@ -262,6 +264,7 @@ sub post {
         D => 'Response::Capture',
         I => 'Response::Inquiry',
         S => 'Response::Sale',
+        V => 'Response::Void',
     );
 
     my $type                  = $post->{TRXTYPE};
@@ -271,7 +274,7 @@ sub post {
         $response_class_suffix = $class_for_type{$type};
 
         # Get more specific response classes for CC and PayPal txns.
-        unless ( $type eq 'D' ) {
+        unless ( any { $type eq $_ } ( 'D', 'V' ) ) {
             my $response = $self->_response_for(
                 $response_class_suffix,
                 params => $params
