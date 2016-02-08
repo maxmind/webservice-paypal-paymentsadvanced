@@ -15,7 +15,7 @@ __END__
 
 =head1 DESCRIPTION
 
-Response class for Sale transactions C<TRXTYPE=S>  You should not create this
+Response class for Authorization transactions C<TRXTYPE=A>  You should not create this
 response object directly. This module inherits from
 L<WebService::PayPal::PaymentsAdvanced::Response> and includes the methods
 provided by L<WebService::PayPal::PaymentsAdvanced::Role::HasTransactionTime>

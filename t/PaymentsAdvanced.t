@@ -84,6 +84,18 @@ use Util;
 
 {
     my $ppa = Util::mocked_ppa();
+    my $res = $ppa->void_transaction('FOO');
+    ok( $res, 'void_transaction' );
+    ok(
+        $res->transaction_time,
+        'transaction_time: ' . $res->transaction_time
+    );
+    ok( $res->pnref, 'pnref' );
+    ok( $res->ppref, 'ppref' );
+}
+
+{
+    my $ppa = Util::mocked_ppa();
     my $res
         = $ppa->inquiry_transaction( { ORIGID => 'FOO', TENDER => 'C', } );
     ok( $res, 'inquiry_transaction' );
