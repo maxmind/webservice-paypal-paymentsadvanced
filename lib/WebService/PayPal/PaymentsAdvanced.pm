@@ -741,4 +741,9 @@ the ID of the original transaction.  Returns a response object.
 Voids a previous transaction.  Requires the ID of the transaction to void.
 Returns a response object.
 
+=head1 SEE ALSO
+
+The official L<Payflow Gateway Developer Guide and
+Reference|https://developer.paypal.com/docs/classic/payflow/integration-guide/>
+
 =cut
