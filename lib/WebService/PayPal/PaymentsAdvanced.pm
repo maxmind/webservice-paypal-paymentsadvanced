@@ -472,7 +472,7 @@ __END__
 
     # Everything looks good.  Carry on!
 
-print $response->secure_token;
+    print $response->secure_token;
 
 =head1 DESCRIPTION
 
