@@ -2,7 +2,7 @@ package WebService::PayPal::PaymentsAdvanced::Error::HostedForm;
 
 use Moo;
 
-our $VERSION = '0.000016';
+our $VERSION = '0.000017';
 
 extends 'Throwable::Error';
 

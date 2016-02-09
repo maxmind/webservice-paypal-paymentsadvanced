@@ -2,7 +2,7 @@ package WebService::PayPal::PaymentsAdvanced::Response::SecureToken;
 
 use Moo;
 
-our $VERSION = '0.000016';
+our $VERSION = '0.000017';
 
 use feature qw( state );
 

@@ -2,7 +2,7 @@ package WebService::PayPal::PaymentsAdvanced::Mocker::SilentPOST;
 
 use Moo;
 
-our $VERSION = '0.000016';
+our $VERSION = '0.000017';
 
 use Types::Common::String qw( NonEmptyStr );
 use Types::Standard qw( InstanceOf );
