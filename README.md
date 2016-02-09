@@ -4,7 +4,7 @@ WebService::PayPal::PaymentsAdvanced - A simple wrapper around the PayPal Paymen
 
 # VERSION
 
-version 0.000015
+version 0.000016
 
 # SYNOPSIS
 
@@ -328,6 +328,11 @@ the ID of the original transaction.  Returns a response object.
 Voids a previous transaction.  Requires the ID of the transaction to void.
 Returns a response object.
 
+# SEE ALSO
+
+The official [Payflow Gateway Developer Guide and
+Reference](https://developer.paypal.com/docs/classic/payflow/integration-guide/)
+
 # AUTHOR
 
 Olaf Alders &lt;olaf@wundercounter.com>
@@ -340,7 +345,7 @@ Olaf Alders &lt;olaf@wundercounter.com>
 
 # COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2016 by MaxMind, Inc..
+This software is copyright (c) 2016 by MaxMind, Inc.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.
