@@ -84,6 +84,30 @@ use Util;
 
 {
     my $ppa = Util::mocked_ppa();
+    my $res = $ppa->refund_transaction('FOO');
+    ok( $res, 'refund_transaction' );
+    ok(
+        $res->transaction_time,
+        'transaction_time: ' . $res->transaction_time
+    );
+    ok( $res->pnref, 'pnref' );
+    ok( $res->ppref, 'ppref' );
+}
+
+{
+    my $ppa = Util::mocked_ppa();
+    my $res = $ppa->refund_transaction('FOO', '99.99');
+    ok( $res, 'refund_transaction' );
+    ok(
+        $res->transaction_time,
+        'transaction_time: ' . $res->transaction_time
+    );
+    ok( $res->pnref, 'pnref' );
+    ok( $res->ppref, 'ppref' );
+}
+
+{
+    my $ppa = Util::mocked_ppa();
     my $res = $ppa->void_transaction('FOO');
     ok( $res, 'void_transaction' );
     ok(

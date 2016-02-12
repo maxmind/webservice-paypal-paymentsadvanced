@@ -27,6 +27,7 @@ use WebService::PayPal::PaymentsAdvanced::Response::Authorization;
 use WebService::PayPal::PaymentsAdvanced::Response::Authorization::CreditCard;
 use WebService::PayPal::PaymentsAdvanced::Response::Authorization::PayPal;
 use WebService::PayPal::PaymentsAdvanced::Response::Capture;
+use WebService::PayPal::PaymentsAdvanced::Response::Credit;
 use WebService::PayPal::PaymentsAdvanced::Response::FromHTTP;
 use WebService::PayPal::PaymentsAdvanced::Response::FromRedirect;
 use WebService::PayPal::PaymentsAdvanced::Response::FromSilentPOST;
@@ -261,6 +262,7 @@ sub post {
 
     my %class_for_type = (
         A => 'Response::Authorization',
+        C => 'Response::Credit',
         D => 'Response::Capture',
         I => 'Response::Inquiry',
         S => 'Response::Sale',
@@ -274,7 +276,7 @@ sub post {
         $response_class_suffix = $class_for_type{$type};
 
         # Get more specific response classes for CC and PayPal txns.
-        unless ( any { $type eq $_ } ( 'D', 'V' ) ) {
+        unless ( any { $type eq $_ } ( 'C', 'D', 'V' ) ) {
             my $response = $self->_response_for(
                 $response_class_suffix,
                 params => $params
@@ -290,6 +292,20 @@ sub post {
     }
 
     return $self->_response_for( $response_class_suffix, params => $params );
+}
+
+sub refund_transaction {
+    my $self = shift;
+    state $check = compile( NonEmptyStr, Optional [NonEmptyStr] );
+    my ( $origid, $amount ) = $check->(@_);
+
+    return $self->post(
+        {
+            TRXTYPE => 'C',
+            ORIGID  => $origid,
+            $amount ? ( AMT => $amount ) : ()
+        }
+    );
 }
 
 sub auth_from_credit_card_reference_transaction {
@@ -722,6 +738,12 @@ argument.
         'B-FOOBAR', 1.50, 'USD', { INVNUM => 'FOO123' }
     );
     say $response->message;
+
+=head3 refund_transaction( $origid, [$amount] )
+
+Refunds (credits) a previous transaction.  Requires the C<ORIGID> and an
+optional C<AMT>.  If no amount is provided, the entire transaction will be
+refunded.
 
 =head3 inquiry_transaction( $HashRef )
 
