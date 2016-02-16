@@ -2,7 +2,7 @@ package WebService::PayPal::PaymentsAdvanced::Response::Authorization::CreditCar
 
 use Moo;
 
-our $VERSION = '0.000017';
+our $VERSION = '0.000018';
 
 extends 'WebService::PayPal::PaymentsAdvanced::Response::Authorization';
 
