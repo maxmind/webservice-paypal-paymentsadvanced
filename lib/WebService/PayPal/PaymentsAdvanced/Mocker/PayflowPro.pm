@@ -33,7 +33,8 @@ post '/' => sub {
     }
 
     if ( !$params->{TRXTYPE}
-        || none { $params->{TRXTYPE} eq $_ } ( 'A', 'D', 'I', 'S', 'V', ) ) {
+        || none { $params->{TRXTYPE} eq $_ }
+        ( 'A', 'C', 'D', 'I', 'S', 'V', ) ) {
         $c->render( text => 'Mocked URL not found', status => 404 );
         return;
     }
@@ -168,6 +169,19 @@ post '/' => sub {
             _render_response( $c, \%return );
             return;
         }
+    }
+
+    if ( $params->{TRXTYPE} eq 'C' ) {
+        my %return = (
+            CORRELATIONID => $helper->correlationid,
+            PNREF         => $helper->pnref,
+            PPREF         => $helper->ppref,
+            RESPMSG       => 'Approved',
+            RESULT        => 0,
+            TRANSTIME     => $helper->transtime,
+        );
+        _render_response( $c, \%return );
+        return;
     }
 
     if ( $params->{TRXTYPE} eq 'V' ) {
