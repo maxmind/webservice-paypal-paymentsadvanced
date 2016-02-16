@@ -4,7 +4,7 @@ WebService::PayPal::PaymentsAdvanced - A simple wrapper around the PayPal Paymen
 
 # VERSION
 
-version 0.000016
+version 0.000017
 
 # SYNOPSIS
 
@@ -59,7 +59,7 @@ version 0.000016
 
     # Everything looks good.  Carry on!
 
-print $response->secure\_token;
+    print $response->secure_token;
 
 # DESCRIPTION
 
@@ -310,6 +310,12 @@ argument.
     );
     say $response->message;
 
+### refund\_transaction( $origid, \[$amount\] )
+
+Refunds (credits) a previous transaction.  Requires the `ORIGID` and an
+optional `AMT`.  If no amount is provided, the entire transaction will be
+refunded.
+
 ### inquiry\_transaction( $HashRef )
 
 Performs a transaction inquiry on a previously submitted transaction.  Requires
@@ -339,6 +345,7 @@ Olaf Alders &lt;olaf@wundercounter.com>
 
 # CONTRIBUTORS
 
+- Dave Rolsky &lt;drolsky@maxmind.com>
 - Greg Oschwald &lt;goschwald@maxmind.com>
 - Mark Fowler &lt;mark@twoshortplanks.com>
 - Olaf Alders &lt;oalders@maxmind.com>
