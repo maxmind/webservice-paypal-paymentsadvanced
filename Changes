@@ -1,6 +1,8 @@
 Revision history for WebService-PayPal-PaymentsAdvanced
 
 {{$NEXT}}
+
+0.000017 2016-02-16
     - Successful refunds now return a
       WebService::PayPal::PaymentsAdvanced::Response::Credit response object.
 
