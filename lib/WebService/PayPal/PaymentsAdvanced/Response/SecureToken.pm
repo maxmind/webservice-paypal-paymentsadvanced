@@ -57,10 +57,9 @@ sub _build_hosted_form_uri {
     unless ( $res->is_success ) {
 
         $self->_class_for('Error::HTTP')->throw(
-            message       => "hosted_form URI does not validate: $uri",
-            http_response => $res,
-            http_status   => $res->code,
-            request_uri   => $uri,
+            message_prefix => "hosted_form URI does not validate ($uri):",
+            http_response  => $res,
+            request_uri    => $uri,
         );
 
     }

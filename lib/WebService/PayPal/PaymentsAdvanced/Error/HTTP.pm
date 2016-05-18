@@ -8,6 +8,42 @@ extends 'Throwable::Error';
 
 with 'WebService::PayPal::PaymentsAdvanced::Error::Role::HasHTTPResponse';
 
+sub throw_from_http_response {
+    my $self = shift;
+    my %args = @_;
+
+    my $response = $args{http_response};
+
+    die q{"http_response" parameter is required} unless $response;
+
+    my $message = delete $args{message_prefix} || q{};
+
+    # LWP::UA doesn't throw exceptions or have sane error handling. It just
+    # sticks things in random, sometimes-undocumented headers and passes back
+    # a fake response.
+    if ( ( $response->header('Client-Warning') || q{} ) eq
+        'Internal response' ) {
+        $message
+            .= 'User-agent internal error: ' . ( $response->content || q{} );
+    }
+    elsif ( my $died_header = $response->header('X-Died') ) {
+        $message .= 'User-agent died: ' . $died_header;
+    }
+    elsif ( my $aborted_header = $response->header('Client-Aborted') ) {
+        $message .= 'User-agent aborted: ' . $aborted_header;
+    }
+    else {
+        # Given none of the above were set, this _might_ be a real HTTP
+        # error.
+        $message .= 'HTTP error: ' . $response->code;
+    }
+    $self->throw(
+        message     => $message,
+        http_status => $response->code,
+        %args
+    );
+}
+
 1;
 
 # ABSTRACT: An HTTP transport error

@@ -38,14 +38,15 @@ has _request_uri => (
 
 sub BUILD {
     my $self = shift;
-    return if $self->_http_response->is_success;
+    return
+        if $self->_http_response->is_success
+        && !$self->_http_response->header('X-Died');
 
-    WebService::PayPal::PaymentsAdvanced::Error::HTTP->throw(
-        message       => 'HTTP error: ' . $self->_code,
+    WebService::PayPal::PaymentsAdvanced::Error::HTTP
+        ->throw_from_http_response(
         http_response => $self->_http_response,
-        http_status   => $self->_code,
         request_uri   => $self->_request_uri,
-    );
+        );
 }
 
 sub _build_params {

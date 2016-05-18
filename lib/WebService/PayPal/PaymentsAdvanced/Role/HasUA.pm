@@ -12,7 +12,7 @@ has ua => (
     isa     => InstanceOf ['LWP::UserAgent'],
     default => sub {
         my $ua = LWP::UserAgent->new;
-        $ua->timeout(5);
+        $ua->timeout(60);
         return $ua;
     },
 );

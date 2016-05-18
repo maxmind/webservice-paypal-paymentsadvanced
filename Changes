@@ -2,6 +2,14 @@ Revision history for WebService-PayPal-PaymentsAdvanced
 
 {{$NEXT}}
 
+    - The connection timeout was increased to 60 seconds as requests to the
+      service frequently run 20-30 seconds.
+    - Previously, this API would throw
+      WebService::PayPal::PaymentsAdvanced::Error::HTTP exceptions with
+      messages indicating that there was an HTTP error when the request failed
+      for other reasons such as a timeout. The message should now more
+      accurately reflect the cause of the exception.
+
 0.000017 2016-02-16
     - Successful refunds now return a
       WebService::PayPal::PaymentsAdvanced::Response::Credit response object.
