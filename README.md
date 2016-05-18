@@ -4,7 +4,7 @@ WebService::PayPal::PaymentsAdvanced - A simple wrapper around the PayPal Paymen
 
 # VERSION
 
-version 0.000017
+version 0.000018
 
 # SYNOPSIS
 
@@ -129,7 +129,7 @@ real transactions.  Defaults to `false`.
 
 You may provide your own UserAgent, but it must be of the [LWP::UserAgent](https://metacpan.org/pod/LWP::UserAgent)
 family.  If you do provide a UserAgent, be sure to set a sensible timeout
-value.
+value. Requests to the web service frequently run 20-30 seconds.
 
 This can be useful for debugging.  You'll be able to get detailed information
 about the network calls which are being made.
