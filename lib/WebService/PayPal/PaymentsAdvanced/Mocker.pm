@@ -2,7 +2,7 @@ package WebService::PayPal::PaymentsAdvanced::Mocker;
 
 use Moo;
 
-our $VERSION = '0.000018';
+our $VERSION = '0.000019';
 
 use Types::Standard qw( Bool CodeRef InstanceOf );
 use WebService::PayPal::PaymentsAdvanced::Mocker::PayflowLink;
