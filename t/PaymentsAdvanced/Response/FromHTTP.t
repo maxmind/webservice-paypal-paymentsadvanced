@@ -58,7 +58,7 @@ sub _test_error {
     };
 
     isa_ok(
-        $ex,,
+        $ex,
         'WebService::PayPal::PaymentsAdvanced::Error::HTTP',
         'HTTP error thrown'
     ) or return;
