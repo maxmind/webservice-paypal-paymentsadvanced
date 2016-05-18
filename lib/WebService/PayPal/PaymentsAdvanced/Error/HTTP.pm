@@ -85,12 +85,18 @@ It extends L<Throwable::Error> and adds one attribute of its own.
 The C<< $error->message() >>, and C<< $error->stack_trace() >> methods are
 inherited from L<Throwable::Error>.
 
-=head2 http_response
+=head2 WebService::PayPal::PaymentsAdvanced::Error::HTTP->throw_from_http_response
+
+Throw a new instance of this class with a message created from the
+required C<http_response> parameter. If the optional C<message_prefix> is
+passed, the prefix will appear at the beginning of the message.
+
+=head2 $ex->http_response
 
 Returns the L<HTTP::Response> object which was returned when attempting the
 HTTP request.
 
-=head2 http_status
+=head2 $ex->http_status
 
 Returns the HTTP status code for the response.
 

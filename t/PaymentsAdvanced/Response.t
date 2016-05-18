@@ -28,7 +28,7 @@ my %params = (
     isa_ok(
         WebService::PayPal::PaymentsAdvanced::Response->new(
             nonfatal_result_codes => [ 0, 1 ],
-            params => \%params,
+            params                => \%params,
         ),
         'WebService::PayPal::PaymentsAdvanced::Response',
         'no exception when result code is marked as non-fatal'

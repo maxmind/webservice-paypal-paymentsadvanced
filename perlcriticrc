@@ -3,10 +3,8 @@ verbose = 11
 
 theme = core + pbp + bugs + maintenance + cosmetic + complexity + security + tests + moose
 
-exclude = Subroutines::ProhibitCallsToUndeclaredSubs
-
 # This policy keeps thinking that plain old HashRefs are blessed
-exclude = ValuesAndExpressions::ProhibitAccessOfPrivateData
+exclude = ValuesAndExpressions::ProhibitAccessOfPrivateData Subroutines::ProhibitCallsToUndeclaredSubs Subroutines::ProhibitCallsToUnexportedSubs Modules::RequireExplicitInclusion MM::RequireUseMMPerl
 
 [BuiltinFunctions::ProhibitStringySplit]
 severity = 3

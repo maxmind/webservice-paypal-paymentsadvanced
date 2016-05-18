@@ -11,7 +11,7 @@ use DateTime::Format::MySQL;
 use Types::Standard qw( InstanceOf );
 
 has transaction_time => (
-    is => 'lazy',
+    is  => 'lazy',
     isa => InstanceOf ['DateTime'],
 );
 
