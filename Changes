@@ -2,6 +2,9 @@ Revision history for WebService-PayPal-PaymentsAdvanced
 
 {{$NEXT}}
 
+    - Always add the response content to the HTTP error exception messages as
+      many fake LWP::UserAgent 500s do not set any distinguishing headers.
+
 0.000018 2016-05-18
 
     - The connection timeout was increased to 60 seconds as requests to the

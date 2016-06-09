@@ -34,8 +34,12 @@ sub throw_from_http_response {
     }
     else {
         # Given none of the above were set, this _might_ be a real HTTP
-        # error.
-        $message .= 'HTTP error: ' . $response->code;
+        # error or one of several fake LWP errors where it doesn't set any
+        # particular header to indicate that it is a fake response.
+        $message
+            .= 'HTTP error ('
+            . $response->code . '): '
+            . $response->decoded_content;
     }
     $self->throw(
         message     => $message,
