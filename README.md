@@ -4,7 +4,7 @@ WebService::PayPal::PaymentsAdvanced - A simple wrapper around the PayPal Paymen
 
 # VERSION
 
-version 0.000018
+version 0.000019
 
 # SYNOPSIS
 
@@ -341,14 +341,14 @@ Reference](https://developer.paypal.com/docs/classic/payflow/integration-guide/)
 
 # AUTHOR
 
-Olaf Alders &lt;olaf@wundercounter.com>
+Olaf Alders <olaf@wundercounter.com>
 
 # CONTRIBUTORS
 
-- Dave Rolsky &lt;drolsky@maxmind.com>
-- Greg Oschwald &lt;goschwald@maxmind.com>
-- Mark Fowler &lt;mark@twoshortplanks.com>
-- Olaf Alders &lt;oalders@maxmind.com>
+- Dave Rolsky <drolsky@maxmind.com>
+- Greg Oschwald <goschwald@maxmind.com>
+- Mark Fowler <mark@twoshortplanks.com>
+- Olaf Alders <oalders@maxmind.com>
 
 # COPYRIGHT AND LICENSE
 
