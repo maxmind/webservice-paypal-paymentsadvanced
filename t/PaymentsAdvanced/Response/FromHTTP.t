@@ -18,8 +18,8 @@ subtest '200 status code' => sub {
     ok( $payments_response, 'got response' );
 };
 
-subtest 'Real 500' => sub {
-    _test_error( undef, 'HTTP error: 500' );
+subtest 'Maybe real 500' => sub {
+    _test_error( undef, 'HTTP error (500): Server error' );
 };
 
 subtest 'Internal response 500' => sub {
