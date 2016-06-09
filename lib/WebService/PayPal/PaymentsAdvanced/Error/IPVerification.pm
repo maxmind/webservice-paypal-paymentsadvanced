@@ -2,7 +2,7 @@ package WebService::PayPal::PaymentsAdvanced::Error::IPVerification;
 
 use Moo;
 
-our $VERSION = '0.000019';
+our $VERSION = '0.000020';
 
 extends 'Throwable::Error';
 

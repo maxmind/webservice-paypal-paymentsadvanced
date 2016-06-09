@@ -2,7 +2,7 @@ package WebService::PayPal::PaymentsAdvanced::Mocker::PayflowPro;
 
 use Mojolicious::Lite;
 
-our $VERSION = '0.000019';
+our $VERSION = '0.000020';
 
 use feature qw( state );
 
