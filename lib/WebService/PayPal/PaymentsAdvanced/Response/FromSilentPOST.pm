@@ -8,7 +8,7 @@ use List::AllUtils qw( any );
 use MooX::HandlesVia;
 use MooX::StrictConstructor;
 use Types::Common::String qw( NonEmptyStr );
-use Types::Standard qw( Bool HashRef );
+use Types::Standard qw( ArrayRef Bool );
 use WebService::PayPal::PaymentsAdvanced::Error::IPVerification;
 
 extends 'WebService::PayPal::PaymentsAdvanced::Response';
@@ -48,13 +48,11 @@ has _ip_address_is_verified => (
 
 has _ip_addresses => (
     is          => 'ro',
-    isa         => HashRef,
-    handles_via => 'Hash',
-    handles     => { _all_verified_ip_addresses => 'values' },
+    isa         => ArrayRef,
+    handles_via => 'Array',
+    handles     => { _all_verified_ip_addresses => 'elements' },
     default     => sub {
-        +{
-            'notify.paypal.com' => '173.0.81.65',
-        };
+        [ '173.0.81.1', '173.0.81.33', '66.211.170.66', '173.0.81.65' ];
     },
 );
 
