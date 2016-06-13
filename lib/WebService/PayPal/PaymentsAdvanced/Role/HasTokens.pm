@@ -2,7 +2,7 @@ package WebService::PayPal::PaymentsAdvanced::Role::HasTokens;
 
 use Moo::Role;
 
-our $VERSION = '0.000020';
+our $VERSION = '0.000021';
 
 use Types::Common::String qw( NonEmptyStr );
 

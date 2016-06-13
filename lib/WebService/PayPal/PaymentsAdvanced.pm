@@ -2,7 +2,7 @@ package WebService::PayPal::PaymentsAdvanced;
 
 use Moo;
 
-our $VERSION = '0.000020';
+our $VERSION = '0.000021';
 
 use feature qw( say state );
 

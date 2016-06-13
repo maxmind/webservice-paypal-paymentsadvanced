@@ -2,7 +2,7 @@ package WebService::PayPal::PaymentsAdvanced::Role::HasUA;
 
 use Moo::Role;
 
-our $VERSION = '0.000020';
+our $VERSION = '0.000021';
 
 use LWP::UserAgent;
 use Types::Standard qw( InstanceOf );
