@@ -1,6 +1,8 @@
 Revision history for WebService-PayPal-PaymentsAdvanced
 
 {{$NEXT}}
+
+0.000020 2016-06-13
     - Update notify.paypal.com IP addresses.
 
 0.000019 2016-06-09
