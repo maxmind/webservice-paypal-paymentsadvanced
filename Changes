@@ -1,6 +1,8 @@
 Revision history for WebService-PayPal-PaymentsAdvanced
 
 {{$NEXT}}
+
+0.000021 2016-06-13
     - Use correct throw method for HTTP error.
 
 0.000020 2016-06-13
