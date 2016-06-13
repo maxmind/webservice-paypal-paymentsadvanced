@@ -2,7 +2,7 @@ package WebService::PayPal::PaymentsAdvanced::Role::HasTender;
 
 use Moo::Role;
 
-our $VERSION = '0.000021';
+our $VERSION = '0.000022';
 
 use Types::Standard qw( Bool StrictNum );
 

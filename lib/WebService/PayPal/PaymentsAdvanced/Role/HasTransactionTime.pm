@@ -2,7 +2,7 @@ package WebService::PayPal::PaymentsAdvanced::Role::HasTransactionTime;
 
 use Moo::Role;
 
-our $VERSION = '0.000021';
+our $VERSION = '0.000022';
 
 use feature qw( state );
 

@@ -2,7 +2,7 @@ package WebService::PayPal::PaymentsAdvanced::Error::Generic;
 
 use Moo;
 
-our $VERSION = '0.000021';
+our $VERSION = '0.000022';
 
 with 'WebService::PayPal::PaymentsAdvanced::Role::HasParams';
 

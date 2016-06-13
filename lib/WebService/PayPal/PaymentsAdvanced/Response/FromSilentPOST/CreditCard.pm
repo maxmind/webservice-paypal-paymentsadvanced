@@ -2,7 +2,7 @@ package WebService::PayPal::PaymentsAdvanced::Response::FromSilentPOST::CreditCa
 
 use Moo;
 
-our $VERSION = '0.000021';
+our $VERSION = '0.000022';
 
 extends 'WebService::PayPal::PaymentsAdvanced::Response::FromSilentPOST';
 
