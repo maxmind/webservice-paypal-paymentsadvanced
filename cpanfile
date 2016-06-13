@@ -53,6 +53,7 @@ on 'configure' => sub {
 };
 
 on 'develop' => sub {
+  requires "Code::TidyAll" => "0.24";
   requires "File::Spec" => "0";
   requires "IO::Handle" => "0";
   requires "IPC::Open3" => "0";
