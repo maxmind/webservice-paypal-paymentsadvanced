@@ -63,7 +63,7 @@ foreach my $method (
     {
         my $res = $payments->$method(
             {
-                ip_address => '173.0.81.65',
+                ip_address => '173.0.81.1',
                 params     => $params,
             }
         );
