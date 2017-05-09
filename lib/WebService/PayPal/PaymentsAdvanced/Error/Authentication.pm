@@ -2,6 +2,8 @@ package WebService::PayPal::PaymentsAdvanced::Error::Authentication;
 
 use Moo;
 
+use namespace::autoclean;
+
 our $VERSION = '0.000022';
 
 extends 'Throwable::Error';

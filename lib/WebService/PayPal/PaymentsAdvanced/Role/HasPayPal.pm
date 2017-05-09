@@ -2,6 +2,8 @@ package WebService::PayPal::PaymentsAdvanced::Role::HasPayPal;
 
 use Moo::Role;
 
+use namespace::autoclean;
+
 our $VERSION = '0.000022';
 
 use Types::Common::String qw( NonEmptyStr );

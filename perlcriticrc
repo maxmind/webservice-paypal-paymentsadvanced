@@ -3,7 +3,7 @@ verbose = 11
 theme = core + pbp + bugs + maintenance + cosmetic + complexity + security + tests + moose
 program-extensions = pl psgi t
 
-exclude = Subroutines::ProhibitCallsToUndeclaredSubs 
+exclude = Subroutines::ProhibitCallsToUndeclaredSubs ProhibitCallsToUnexportedSubs
 
 [BuiltinFunctions::ProhibitStringySplit]
 severity = 3

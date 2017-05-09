@@ -2,6 +2,8 @@ package WebService::PayPal::PaymentsAdvanced;
 
 use Moo;
 
+use namespace::autoclean;
+
 our $VERSION = '0.000022';
 
 use feature qw( say state );

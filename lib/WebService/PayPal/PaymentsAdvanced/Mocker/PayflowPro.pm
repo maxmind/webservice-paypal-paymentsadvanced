@@ -2,6 +2,8 @@ package WebService::PayPal::PaymentsAdvanced::Mocker::PayflowPro;
 
 use Mojolicious::Lite;
 
+use namespace::autoclean;
+
 our $VERSION = '0.000022';
 
 use feature qw( state );

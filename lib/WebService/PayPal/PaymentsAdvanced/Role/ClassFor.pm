@@ -2,6 +2,8 @@ package WebService::PayPal::PaymentsAdvanced::Role::ClassFor;
 
 use Moo::Role;
 
+use namespace::autoclean;
+
 our $VERSION = '0.000022';
 
 ## no critic (ProhibitUnusedPrivateSubroutines)

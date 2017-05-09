@@ -23,6 +23,7 @@ requires "URI::FromHash" => "0";
 requires "URI::QueryParam" => "0";
 requires "Web::Scraper" => "0";
 requires "feature" => "0";
+requires "namespace::autoclean" => "0";
 requires "perl" => "5.014";
 
 on 'test' => sub {
