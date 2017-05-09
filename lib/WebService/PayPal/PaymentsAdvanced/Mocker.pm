@@ -2,6 +2,8 @@ package WebService::PayPal::PaymentsAdvanced::Mocker;
 
 use Moo;
 
+use namespace::autoclean;
+
 our $VERSION = '0.000022';
 
 use Types::Standard qw( Bool CodeRef InstanceOf );

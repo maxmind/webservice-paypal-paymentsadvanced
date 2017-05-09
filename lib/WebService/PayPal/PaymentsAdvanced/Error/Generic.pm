@@ -2,6 +2,8 @@ package WebService::PayPal::PaymentsAdvanced::Error::Generic;
 
 use Moo;
 
+use namespace::autoclean;
+
 our $VERSION = '0.000022';
 
 with 'WebService::PayPal::PaymentsAdvanced::Role::HasParams';

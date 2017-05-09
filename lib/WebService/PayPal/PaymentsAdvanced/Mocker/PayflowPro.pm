@@ -2,6 +2,8 @@ package WebService::PayPal::PaymentsAdvanced::Mocker::PayflowPro;
 
 use Mojolicious::Lite;
 
+use namespace::autoclean;
+
 our $VERSION = '0.000022';
 
 use feature qw( state );
@@ -13,6 +15,7 @@ use WebService::PayPal::PaymentsAdvanced::Mocker::Helper;
 
 my $helper = WebService::PayPal::PaymentsAdvanced::Mocker::Helper->new;
 
+## no critic (RequireExplicitInclusion)
 app->types->type( nvp => 'text/namevalue' );
 
 post '/' => sub {

@@ -4,7 +4,7 @@ WebService::PayPal::PaymentsAdvanced - A simple wrapper around the PayPal Paymen
 
 # VERSION
 
-version 0.000021
+version 0.000022
 
 # SYNOPSIS
 
@@ -339,20 +339,26 @@ Returns a response object.
 The official [Payflow Gateway Developer Guide and
 Reference](https://developer.paypal.com/docs/classic/payflow/integration-guide/)
 
+# SUPPORT
+
+Bugs may be submitted through [https://github.com/maxmind/webservice-paypal-paymentsadvanced/issues](https://github.com/maxmind/webservice-paypal-paymentsadvanced/issues).
+
 # AUTHOR
 
 Olaf Alders <olaf@wundercounter.com>
 
 # CONTRIBUTORS
 
+- Andy Jack <ajack@maxmind.com>
 - Dave Rolsky <drolsky@maxmind.com>
 - Greg Oschwald <goschwald@maxmind.com>
 - Mark Fowler <mark@twoshortplanks.com>
+- Mateu X Hunter <mhunter@maxmind.com>
 - Olaf Alders <oalders@maxmind.com>
 
 # COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2016 by MaxMind, Inc.
+This software is copyright (c) 2017 by MaxMind, Inc.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.

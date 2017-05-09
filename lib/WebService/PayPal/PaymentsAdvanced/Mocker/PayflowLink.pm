@@ -12,6 +12,7 @@ get '/' => sub {
 };
 
 sub to_app {
+    ## no critic (RequireExplicitInclusion)
     app->secrets( ['Tempus fugit'] );
     app->start;
 }

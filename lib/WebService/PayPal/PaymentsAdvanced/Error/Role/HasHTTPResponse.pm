@@ -2,6 +2,8 @@ package WebService::PayPal::PaymentsAdvanced::Error::Role::HasHTTPResponse;
 
 use Moo::Role;
 
+use namespace::autoclean;
+
 our $VERSION = '0.000022';
 
 use Types::Standard qw( InstanceOf Int );

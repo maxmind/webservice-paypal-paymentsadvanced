@@ -2,6 +2,8 @@ package WebService::PayPal::PaymentsAdvanced::Response;
 
 use Moo;
 
+use namespace::autoclean;
+
 our $VERSION = '0.000022';
 
 use List::AllUtils qw( any );
@@ -42,7 +44,7 @@ sub BUILD {
     my $result = $self->params->{RESULT};
 
     return
-        if Int->check($result)
+        if Int()->check($result)
         && ( any { $result == $_ } @{ $self->_nonfatal_result_codes } );
 
     if ( $result && $result == 1 ) {

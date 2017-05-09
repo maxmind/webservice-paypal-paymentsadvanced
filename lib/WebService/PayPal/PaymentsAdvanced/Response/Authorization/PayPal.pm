@@ -2,6 +2,8 @@ package WebService::PayPal::PaymentsAdvanced::Response::Authorization::PayPal;
 
 use Moo;
 
+use namespace::autoclean;
+
 our $VERSION = '0.000022';
 
 extends 'WebService::PayPal::PaymentsAdvanced::Response::Authorization';
