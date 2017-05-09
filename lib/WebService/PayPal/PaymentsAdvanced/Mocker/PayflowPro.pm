@@ -13,6 +13,7 @@ use WebService::PayPal::PaymentsAdvanced::Mocker::Helper;
 
 my $helper = WebService::PayPal::PaymentsAdvanced::Mocker::Helper->new;
 
+## no critic (RequireExplicitInclusion)
 app->types->type( nvp => 'text/namevalue' );
 
 post '/' => sub {

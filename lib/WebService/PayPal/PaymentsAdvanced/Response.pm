@@ -42,7 +42,7 @@ sub BUILD {
     my $result = $self->params->{RESULT};
 
     return
-        if Int->check($result)
+        if Int()->check($result)
         && ( any { $result == $_ } @{ $self->_nonfatal_result_codes } );
 
     if ( $result && $result == 1 ) {
