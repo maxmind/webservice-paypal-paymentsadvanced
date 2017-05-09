@@ -349,7 +349,7 @@ Olaf Alders <olaf@wundercounter.com>
 
 # CONTRIBUTORS
 
-- Andy Jack <andyjack@users.noreply.github.com>
+- Andy Jack <ajack@maxmind.com>
 - Dave Rolsky <drolsky@maxmind.com>
 - Greg Oschwald <goschwald@maxmind.com>
 - Mark Fowler <mark@twoshortplanks.com>
