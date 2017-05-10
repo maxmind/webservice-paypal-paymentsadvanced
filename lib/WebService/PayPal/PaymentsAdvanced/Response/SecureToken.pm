@@ -115,12 +115,8 @@ sub _make_http_request_with_retries {
     my $res;
 
     # +1 so we always try at least once.
-    ## no critic (ControlStructures::ProhibitCStyleForLoops)
-    for (
-        my $attempts_left = $self->retry_attempts + 1;
-        $attempts_left > 0;
-        $attempts_left--
-        ) {
+    for my $attempt ( 1 .. $self->retry_attempts + 1 ) {
+
         # For whatever reason on the PayPal side, HEAD isn't useful here.
         $res = $self->ua->get($uri);
 
@@ -134,12 +130,11 @@ sub _make_http_request_with_retries {
         }
 
         # Don't call our callback if we won't be retrying. We'll throw an error.
-        last if $attempts_left == 1;
+        last if $attempt == $self->retry_attempts + 1;
 
         my $cb = $self->retry_callback;
         $cb->($res);
     }
-    ## use critic
 
     $self->_class_for('Error::HTTP')->throw_from_http_response(
               message_prefix => 'Made maximum number of HTTP requests. Tried '
@@ -184,9 +179,19 @@ retry only when encountering HTTP 5xx responses.
 
 =head2 retry_callback
 
-The callback to call if we encounter an HTTP 5xx response. We call this prior to
-retrying the request. The callback will have a single parameter, an
-HTTP::Response object.
+A callback function we call prior to retrying the HTTP request to PayPal. We
+call this function only when a retry will take place afterwards. Note we retry
+only when there are retry attempts remaining, and only when encountering HTTP
+5xx errors.
+
+This callback is useful if you want to know about each request failure.
+Consider a case where the first request failed, and then a retry request
+succeeded. If you want to know about the first failure, you can provide a
+callback that we call prior to the retry. In this scenario, you may want your
+callback function to write a message to a log.
+
+The callback will receive a single parameter, an HTTP::Response object. This is
+the response to the request that failed.
 
 =head1 METHODS
 
