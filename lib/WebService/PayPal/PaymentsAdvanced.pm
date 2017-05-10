@@ -605,7 +605,7 @@ Create a secure token which you can use to create a hosted form uri.  Returns a
 L<WebService::PayPal::PaymentsAdvanced::Response::SecureToken> object.
 
 The first parameter holds the key/value parameters for the request. The second
-parameter is optional, and holds parameters to the underlying
+parameter is optional and holds parameters to the underlying
 L<WebService::PayPal::PaymentsAdvanced::Response::SecureToken> object, which is
 useful to set attributes such as C<retry_attempts> and C<retry_callback>.
 
