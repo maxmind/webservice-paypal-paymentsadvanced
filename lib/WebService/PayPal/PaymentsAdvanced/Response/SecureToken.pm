@@ -48,7 +48,7 @@ has retry_attempts => (
 
 # Callback to call after encountering a 5xx HTTP error. We call this prior to
 # retrying the request.
-# Parameters to the callback: HTTP::Response from the request that generataed a
+# Parameters to the callback: HTTP::Response from the request that generated a
 # 5xx response.
 has retry_callback => (
     is      => 'ro',
