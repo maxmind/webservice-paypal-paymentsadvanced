@@ -4,7 +4,7 @@ use Moo;
 
 use namespace::autoclean;
 
-our $VERSION = '0.000022';
+our $VERSION = '0.000023';
 
 extends 'WebService::PayPal::PaymentsAdvanced::Response::Inquiry';
 
