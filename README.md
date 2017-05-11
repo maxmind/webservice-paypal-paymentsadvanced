@@ -165,7 +165,7 @@ to `true`.
 
 ## Methods
 
-### create\_secure\_token
+### create\_secure\_token( $HashRef, $HashRef = undef )
 
 Create a secure token which you can use to create a hosted form uri.  Returns a
 [WebService::PayPal::PaymentsAdvanced::Response::SecureToken](https://metacpan.org/pod/WebService::PayPal::PaymentsAdvanced::Response::SecureToken) object.
@@ -227,7 +227,7 @@ methods to learn which method the customer paid with.  Both methods return a
         print $response->card_type, q{ }, $response->card_expiration;
     }
 
-### post
+### post( $HashRef, $HashRef = undef )
 
 Generic method to post arbitrary params to PayPal.  Requires a `HashRef` of
 parameters and returns a [WebService::PayPal::PaymentsAdvanced::Response](https://metacpan.org/pod/WebService::PayPal::PaymentsAdvanced::Response)

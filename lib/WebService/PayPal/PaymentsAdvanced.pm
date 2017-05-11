@@ -15,7 +15,8 @@ use MooX::StrictConstructor;
 use Type::Params qw( compile );
 use Types::Common::Numeric qw( PositiveNum );
 use Types::Common::String qw( NonEmptyStr );
-use Types::Standard qw( ArrayRef Bool HashRef InstanceOf Int Num Optional );
+use Types::Standard
+    qw( ArrayRef Bool CodeRef HashRef InstanceOf Int Num Optional );
 use Types::URI qw( Uri );
 use URI;
 use URI::FromHash qw( uri uri_object );
@@ -164,15 +165,16 @@ sub _response_for {
 sub create_secure_token {
     my $self = shift;
 
-    state $check = compile(HashRef);
-    my ($args) = $check->(@_);
+    state $check = compile( HashRef, Optional [HashRef] );
+    my ( $args, $options ) = $check->(@_);
+    $options ||= {};
 
     my $post = $self->_force_upper_case($args);
 
     $post->{CREATESECURETOKEN} = 'Y';
     $post->{SECURETOKENID} ||= Data::GUID->new->as_string;
 
-    my $res = $self->post($post);
+    my $res = $self->post( $post, $options );
 
     $self->_validate_secure_token_id( $res, $post->{SECURETOKENID} );
 
@@ -235,8 +237,8 @@ sub inquiry_transaction {
 sub post {
     my $self = shift;
 
-    state $check = compile(HashRef);
-    my ($post) = $check->(@_);
+    state $check = compile( HashRef, Optional [HashRef] );
+    my ( $post, $options ) = $check->(@_);
 
     $post = $self->_force_upper_case($post);
     $post->{VERBOSITY} = 'HIGH' if $self->verbose;
@@ -259,6 +261,7 @@ sub post {
             payflow_link_uri         => $self->payflow_link_uri,
             ua                       => $self->ua,
             validate_hosted_form_uri => $self->validate_hosted_form_uri,
+            %{ $options || {} },
         );
     }
 
@@ -601,6 +604,11 @@ to C<true>.
 Create a secure token which you can use to create a hosted form uri.  Returns a
 L<WebService::PayPal::PaymentsAdvanced::Response::SecureToken> object.
 
+The first parameter holds the key/value parameters for the request. The second
+parameter is optional and holds parameters to the underlying
+L<WebService::PayPal::PaymentsAdvanced::Response::SecureToken> object, which is
+useful to set attributes such as C<retry_attempts> and C<retry_callback>.
+
     use WebService::PayPal::PaymentsAdvanced;
     my $payments = WebService::PayPal::PaymentsAdvanced->new(...);
 
@@ -663,7 +671,9 @@ C<Boolean>.
 Generic method to post arbitrary params to PayPal.  Requires a C<HashRef> of
 parameters and returns a L<WebService::PayPal::PaymentsAdvanced::Response>
 object.  Any lower case keys will be converted to upper case before this
-response is sent.
+response is sent. The second parameter is an optional C<HashRef>. If provided,
+it defines attributes to pass to the
+L<WebService::PayPal::PaymentsAdvanced::Response::SecureToken> object.
 
     use WebService::PayPal::PaymentsAdvanced;
     my $payments = WebService::PayPal::PaymentsAdvanced->new(...);
