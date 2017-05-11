@@ -3,6 +3,7 @@ requires "DateTime" => "0";
 requires "DateTime::Format::MySQL" => "0";
 requires "DateTime::TimeZone" => "0";
 requires "HTTP::Message::PSGI" => "0";
+requires "HTTP::Status" => "0";
 requires "LWP::Protocol::https" => "0";
 requires "LWP::UserAgent" => "0";
 requires "List::AllUtils" => "0";

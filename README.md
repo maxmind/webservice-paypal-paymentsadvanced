@@ -165,10 +165,15 @@ to `true`.
 
 ## Methods
 
-### create\_secure\_token( $HashRef, $HashRef = undef )
+### create\_secure\_token
 
 Create a secure token which you can use to create a hosted form uri.  Returns a
 [WebService::PayPal::PaymentsAdvanced::Response::SecureToken](https://metacpan.org/pod/WebService::PayPal::PaymentsAdvanced::Response::SecureToken) object.
+
+The first parameter holds the key/value parameters for the request. The second
+parameter is optional and holds parameters to the underlying
+[WebService::PayPal::PaymentsAdvanced::Response::SecureToken](https://metacpan.org/pod/WebService::PayPal::PaymentsAdvanced::Response::SecureToken) object, which is
+useful to set attributes such as `retry_attempts` and `retry_callback`.
 
     use WebService::PayPal::PaymentsAdvanced;
     my $payments = WebService::PayPal::PaymentsAdvanced->new(...);
@@ -227,12 +232,14 @@ methods to learn which method the customer paid with.  Both methods return a
         print $response->card_type, q{ }, $response->card_expiration;
     }
 
-### post( $HashRef, $HashRef = undef )
+### post
 
 Generic method to post arbitrary params to PayPal.  Requires a `HashRef` of
 parameters and returns a [WebService::PayPal::PaymentsAdvanced::Response](https://metacpan.org/pod/WebService::PayPal::PaymentsAdvanced::Response)
 object.  Any lower case keys will be converted to upper case before this
-response is sent.
+response is sent. The second parameter is an optional `HashRef`. If provided,
+it defines attributes to pass to the
+[WebService::PayPal::PaymentsAdvanced::Response::SecureToken](https://metacpan.org/pod/WebService::PayPal::PaymentsAdvanced::Response::SecureToken) object.
 
     use WebService::PayPal::PaymentsAdvanced;
     my $payments = WebService::PayPal::PaymentsAdvanced->new(...);
@@ -355,10 +362,11 @@ Olaf Alders <olaf@wundercounter.com>
 - Mark Fowler <mark@twoshortplanks.com>
 - Mateu X Hunter <mhunter@maxmind.com>
 - Olaf Alders <oalders@maxmind.com>
+- William Storey <wstorey@maxmind.com>
 
 # COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2017 by MaxMind, Inc.
+This software is copyright (c) 2017 by MaxMind, Inc..
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.
