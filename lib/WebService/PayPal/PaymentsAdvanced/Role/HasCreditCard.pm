@@ -6,8 +6,7 @@ use namespace::autoclean;
 
 our $VERSION = '0.000023';
 
-use Types::Common::Numeric qw( PositiveInt );
-use Types::Common::String qw( NonEmptyStr );
+use Types::Common::String qw( NonEmptyStr SimpleStr );
 
 has card_type => (
     is       => 'lazy',
@@ -23,9 +22,8 @@ has card_expiration => (
 
 has card_last_four_digits => (
     is       => 'lazy',
-    isa      => PositiveInt,
+    isa      => SimpleStr,
     init_arg => undef,
-    default  => sub { shift->params->{ACCT} },
 );
 
 has reference_transaction_id => (
@@ -57,6 +55,18 @@ sub _build_card_expiration {
 
     # This breaks in about 75 years.
     return sprintf( '20%s-%s', substr( $date, 2, 2 ), substr( $date, 0, 2 ) );
+}
+
+sub _build_card_last_four_digits {
+    my $self = shift;
+
+    my $acct = $self->params->{ACCT};
+
+    if ( $acct !~ /^[0-9]{4}$/ ) {
+        die 'credit_last_four_digits must be 4 digits';
+    }
+
+    return $acct;
 }
 
 1;
