@@ -39,7 +39,7 @@ post '/' => sub {
         !$params->{TRXTYPE}
         || none { $params->{TRXTYPE} eq $_ }
         ( 'A', 'C', 'D', 'I', 'S', 'V', )
-        ) {
+    ) {
         $c->render( text => 'Mocked URL not found', status => 404 );
         return;
     }
@@ -218,7 +218,7 @@ sub _render_response {
             && ( $params->{TRXTYPE} eq 'A' || $params->{TRXTYPE} eq 'S' )
         )
         && $params->{INVNUM}
-        ) {
+    ) {
         $response->{INVNUM}  = $params->{INVNUM};
         $response->{INVOICE} = $params->{INVNUM};
     }
