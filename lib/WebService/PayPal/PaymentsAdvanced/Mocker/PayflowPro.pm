@@ -4,7 +4,7 @@ use Mojolicious::Lite;
 
 use namespace::autoclean;
 
-our $VERSION = '0.000023';
+our $VERSION = '0.000024';
 
 use feature qw( state );
 
