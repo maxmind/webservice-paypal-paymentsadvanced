@@ -4,7 +4,7 @@ use Moo;
 
 use namespace::autoclean;
 
-our $VERSION = '0.000024';
+our $VERSION = '0.000025';
 
 extends 'Throwable::Error';
 

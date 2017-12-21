@@ -4,7 +4,7 @@ use Moo::Role;
 
 use namespace::autoclean;
 
-our $VERSION = '0.000024';
+our $VERSION = '0.000025';
 
 use feature qw( state );
 
