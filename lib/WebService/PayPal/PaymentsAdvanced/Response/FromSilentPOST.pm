@@ -67,7 +67,7 @@ with(
 );
 
 # Payments Advanced IPs listed at
-# https://www.paypal-techsupport.com/app/answers/detail/a_id/883/kw/payflow%20Ip
+# https://www.paypal.com/us/selfhelp/article/what-are-the-ip-addresses-for-payflow-servers-ts1465/1
 const my @ALLOWED_NETWORKS =>
     map { Net::Works::Network->new_from_string( string => $_ ) }
     ( '66.211.170.66/32', '173.0.81.0/24' );
