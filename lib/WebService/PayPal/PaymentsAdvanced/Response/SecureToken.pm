@@ -12,12 +12,18 @@ extends 'WebService::PayPal::PaymentsAdvanced::Response';
 
 use HTTP::Status qw( is_server_error );
 use Type::Params qw( compile );
-use Types::Standard qw( Bool CodeRef InstanceOf Int );
+use Types::Standard qw( Bool CodeRef Enum InstanceOf Int );
 use Types::URI qw( Uri );
 use URI::QueryParam;
 use Web::Scraper;
 use WebService::PayPal::PaymentsAdvanced::Error::HTTP;
 use WebService::PayPal::PaymentsAdvanced::Error::HostedForm;
+
+has hosted_form_mode => (
+    is        => 'ro',
+    isa       => Enum [qw( LIVE TEST )],
+    predicate => '_has_hosted_form_mode',
+);
 
 has hosted_form_uri => (
     is       => 'lazy',
@@ -70,6 +76,9 @@ sub _build_hosted_form_uri {
     my $uri = $self->payflow_link_uri->clone;
     $uri->query_param( SECURETOKEN   => $self->secure_token, );
     $uri->query_param( SECURETOKENID => $self->secure_token_id, );
+
+    $uri->query_param( MODE => $self->hosted_form_mode, )
+        if $self->_has_hosted_form_mode;
 
     return $uri unless $self->validate_hosted_form_uri;
 
