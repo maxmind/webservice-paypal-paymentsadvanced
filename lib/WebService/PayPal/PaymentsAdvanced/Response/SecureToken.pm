@@ -172,6 +172,11 @@ you via L<WebService::PayPal::PaymentsAdvanced/<create_secure_token>.
 
 =head1 OPTIONS
 
+=head2 hosted_form_mode
+
+Sets the C<MODE> query parameter on C<hosted_form_uri>. This can be C<LIVE>
+or C<TEST>.
+
 =head2 payflow_link_uri
 
 The URL for the PayflowLink web service.  Can be a mocked URL.
