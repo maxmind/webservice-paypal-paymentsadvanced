@@ -4,7 +4,7 @@ use Moo;
 
 use namespace::autoclean;
 
-our $VERSION = '0.000025';
+our $VERSION = '0.000026';
 
 use Const::Fast qw( const );
 use List::AllUtils qw( any );
