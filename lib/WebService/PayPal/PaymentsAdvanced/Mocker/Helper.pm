@@ -49,7 +49,7 @@ sub transtime {
 }
 
 sub unique_id {
-    my $self = shift;
+    my $self   = shift;
     my $length = shift || die 'length param required';
 
     my $id = Data::GUID->new->as_string;

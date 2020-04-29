@@ -224,7 +224,7 @@ sub get_response_from_silent_post {
     # instantiation will not provide an IP address.
 
     my $class_suffix = 'Response::FromSilentPOST';
-    my $response = $self->_response_for( $class_suffix, %{$args} );
+    my $response     = $self->_response_for( $class_suffix, %{$args} );
 
     $class_suffix
         .= '::'
