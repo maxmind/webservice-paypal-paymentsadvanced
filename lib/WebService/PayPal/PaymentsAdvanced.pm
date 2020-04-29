@@ -15,8 +15,17 @@ use MooX::StrictConstructor;
 use Type::Params qw( compile );
 use Types::Common::Numeric qw( PositiveNum );
 use Types::Common::String qw( NonEmptyStr );
-use Types::Standard
-    qw( ArrayRef Bool CodeRef HashRef InstanceOf Int Num Optional );
+use Types::Standard qw(
+    ArrayRef
+    Bool
+    CodeRef
+    Defined
+    HashRef
+    InstanceOf
+    Int
+    Num
+    Optional
+);
 use Types::URI qw( Uri );
 use URI;
 use URI::FromHash qw( uri uri_object );
@@ -61,7 +70,7 @@ has partner => (
 
 has password => (
     is       => 'ro',
-    isa      => NonEmptyStr,
+    isa      => Defined,
     required => 1,
 );
 
@@ -85,7 +94,7 @@ has production_mode => (
 
 has user => (
     is       => 'ro',
-    isa      => NonEmptyStr,
+    isa      => Defined,
     required => 1,
 );
 
@@ -215,7 +224,7 @@ sub get_response_from_silent_post {
     # instantiation will not provide an IP address.
 
     my $class_suffix = 'Response::FromSilentPOST';
-    my $response = $self->_response_for( $class_suffix, %{$args} );
+    my $response     = $self->_response_for( $class_suffix, %{$args} );
 
     $class_suffix
         .= '::'
