@@ -4,7 +4,7 @@ use Moo;
 
 use namespace::autoclean;
 
-our $VERSION = '0.000026';
+our $VERSION = '0.000027';
 
 with(
     'WebService::PayPal::PaymentsAdvanced::Role::HasParams',

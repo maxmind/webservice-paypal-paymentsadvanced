@@ -4,7 +4,7 @@ use Moo;
 
 use namespace::autoclean;
 
-our $VERSION = '0.000026';
+our $VERSION = '0.000027';
 
 use List::AllUtils qw( any );
 use Types::Common::String qw( NonEmptyStr );
