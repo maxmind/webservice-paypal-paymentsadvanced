@@ -13,8 +13,8 @@ use DateTime::TimeZone;
 use Types::Standard qw( InstanceOf );
 
 has _time_zone => (
-    is  => 'lazy',
-    isa => InstanceOf ['DateTime::TimeZone'],
+    is      => 'lazy',
+    isa     => InstanceOf ['DateTime::TimeZone'],
     default =>
         sub { DateTime::TimeZone->new( name => 'America/Los_Angeles' ) },
 );
