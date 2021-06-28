@@ -4,14 +4,14 @@ use Moo;
 
 use namespace::autoclean;
 
-our $VERSION = '0.000027';
+our $VERSION = '0.000028';
 
 use Types::Common::String qw( NonEmptyStr );
 use Types::Standard qw( InstanceOf );
 use WebService::PayPal::PaymentsAdvanced::Mocker::Helper;
 
 has _helper => (
-    is => 'lazy',
+    is  => 'lazy',
     isa =>
         InstanceOf ['WebService::PayPal::PaymentsAdvanced::Mocker::Helper'],
     default =>
@@ -153,7 +153,7 @@ sub credit_card_duplicate_invoice_id {
             TRANSTIME     => 'XXX',
             TRXTYPE       => 'A',
             TYPE          => 'A',
-            RESPMSG =>
+            RESPMSG       =>
                 'Duplicate trans:  10536-The transaction was refused as a result of a duplicate invoice ID supplied.  Attempt with a new invoice ID',
         },
         \%args
@@ -189,7 +189,7 @@ sub credit_card_auth_verification_success {
             PPREF         => 'XXX',
             PROCAVS       => 'X',
             PROCCVV2      => 'M',
-            RESPMSG =>
+            RESPMSG       =>
                 'Verified =>  10574-This card authorization verification is not a payment transaction.',
             SECURETOKEN   => 'XXX',
             RESULT        => 0,
