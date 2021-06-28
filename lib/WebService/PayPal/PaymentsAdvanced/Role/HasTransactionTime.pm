@@ -10,11 +10,11 @@ use feature qw( state );
 
 use DateTime::TimeZone;
 use DateTime::Format::MySQL;
-use Types::Standard qw( InstanceOf );
+use Types::Standard qw( InstanceOf Maybe );
 
 has transaction_time => (
     is  => 'lazy',
-    isa => InstanceOf ['DateTime'],
+    isa => Maybe [ InstanceOf ['DateTime'] ],
 );
 
 sub _build_transaction_time {
@@ -22,8 +22,10 @@ sub _build_transaction_time {
 
     state $time_zone
         = DateTime::TimeZone->new( name => 'America/Los_Angeles' );
-    my $dt = DateTime::Format::MySQL->parse_datetime(
-        $self->params->{TRANSTIME} );
+
+    return undef unless my $transtime = $self->params->{TRANSTIME};
+
+    my $dt = DateTime::Format::MySQL->parse_datetime($transtime);
     $dt->set_time_zone($time_zone);
     return $dt;
 }
