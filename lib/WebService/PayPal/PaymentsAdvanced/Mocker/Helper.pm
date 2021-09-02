@@ -6,10 +6,10 @@ use namespace::autoclean;
 
 our $VERSION = '0.000028';
 
-use Data::GUID;
-use DateTime;
-use DateTime::Format::MySQL;
-use DateTime::TimeZone;
+use Data::GUID              ();
+use DateTime                ();
+use DateTime::Format::MySQL ();
+use DateTime::TimeZone      ();
 use Types::Standard qw( InstanceOf );
 
 has _time_zone => (

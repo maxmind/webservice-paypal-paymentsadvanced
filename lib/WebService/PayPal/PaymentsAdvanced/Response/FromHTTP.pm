@@ -6,13 +6,12 @@ use namespace::autoclean;
 
 our $VERSION = '0.000028';
 
-use MooX::HandlesVia;
 use MooX::StrictConstructor;
 use Types::Standard qw( HashRef InstanceOf );
 use Types::URI qw( Uri );
-use URI;
+use URI ();
 use URI::QueryParam;
-use WebService::PayPal::PaymentsAdvanced::Error::HTTP;
+use WebService::PayPal::PaymentsAdvanced::Error::HTTP ();
 
 # Don't use HasParams role as we want to build params rather than require them.
 

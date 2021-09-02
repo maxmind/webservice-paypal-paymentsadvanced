@@ -8,14 +8,13 @@ our $VERSION = '0.000028';
 
 use Const::Fast qw( const );
 use List::AllUtils qw( any );
-use MooX::HandlesVia;
 use MooX::StrictConstructor;
 use Net::Works::Address ();
 use Net::Works::Network ();
 use Types::Common::String qw( NonEmptyStr );
 use Types::Standard qw( ArrayRef Bool );
 use Type::Utils qw( class_type );
-use WebService::PayPal::PaymentsAdvanced::Error::IPVerification;
+use WebService::PayPal::PaymentsAdvanced::Error::IPVerification ();
 
 extends 'WebService::PayPal::PaymentsAdvanced::Response';
 
