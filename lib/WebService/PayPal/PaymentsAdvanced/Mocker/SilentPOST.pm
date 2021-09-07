@@ -8,7 +8,7 @@ our $VERSION = '0.000028';
 
 use Types::Common::String qw( NonEmptyStr );
 use Types::Standard qw( InstanceOf );
-use WebService::PayPal::PaymentsAdvanced::Mocker::Helper;
+use WebService::PayPal::PaymentsAdvanced::Mocker::Helper ();
 
 has _helper => (
     is  => 'lazy',

@@ -11,7 +11,7 @@ use feature qw( state );
 use Data::GUID ();
 use List::AllUtils qw( none );
 use URI::FromHash qw( uri_object );
-use WebService::PayPal::PaymentsAdvanced::Mocker::Helper;
+use WebService::PayPal::PaymentsAdvanced::Mocker::Helper ();
 
 my $helper = WebService::PayPal::PaymentsAdvanced::Mocker::Helper->new;
 

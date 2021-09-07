@@ -8,9 +8,8 @@ our $VERSION = '0.000028';
 
 use feature qw( say state );
 
-use Data::GUID;
+use Data::GUID ();
 use List::AllUtils qw( any );
-use LWP::UserAgent;
 use MooX::StrictConstructor;
 use Type::Params qw( compile );
 use Types::Common::Numeric qw( PositiveNum );
@@ -27,32 +26,32 @@ use Types::Standard qw(
     Optional
 );
 use Types::URI qw( Uri );
-use URI;
-use URI::FromHash qw( uri uri_object );
+use URI ();
+use URI::FromHash qw( uri_object );
 use URI::QueryParam;
 
 #<<< don't perltidy
-use WebService::PayPal::PaymentsAdvanced::Error::Generic;
-use WebService::PayPal::PaymentsAdvanced::Error::HostedForm;
-use WebService::PayPal::PaymentsAdvanced::Response;
-use WebService::PayPal::PaymentsAdvanced::Response::Authorization;
-use WebService::PayPal::PaymentsAdvanced::Response::Authorization::CreditCard;
-use WebService::PayPal::PaymentsAdvanced::Response::Authorization::PayPal;
-use WebService::PayPal::PaymentsAdvanced::Response::Capture;
-use WebService::PayPal::PaymentsAdvanced::Response::Credit;
-use WebService::PayPal::PaymentsAdvanced::Response::FromHTTP;
-use WebService::PayPal::PaymentsAdvanced::Response::FromRedirect;
-use WebService::PayPal::PaymentsAdvanced::Response::FromSilentPOST;
-use WebService::PayPal::PaymentsAdvanced::Response::FromSilentPOST::CreditCard;
-use WebService::PayPal::PaymentsAdvanced::Response::FromSilentPOST::PayPal;
-use WebService::PayPal::PaymentsAdvanced::Response::Inquiry;
-use WebService::PayPal::PaymentsAdvanced::Response::Inquiry::CreditCard;
-use WebService::PayPal::PaymentsAdvanced::Response::Inquiry::PayPal;
-use WebService::PayPal::PaymentsAdvanced::Response::Sale;
-use WebService::PayPal::PaymentsAdvanced::Response::Sale::CreditCard;
-use WebService::PayPal::PaymentsAdvanced::Response::Sale::PayPal;
-use WebService::PayPal::PaymentsAdvanced::Response::SecureToken;
-use WebService::PayPal::PaymentsAdvanced::Response::Void;
+use WebService::PayPal::PaymentsAdvanced::Error::Generic ();
+use WebService::PayPal::PaymentsAdvanced::Error::HostedForm ();
+use WebService::PayPal::PaymentsAdvanced::Response ();
+use WebService::PayPal::PaymentsAdvanced::Response::Authorization ();
+use WebService::PayPal::PaymentsAdvanced::Response::Authorization::CreditCard ();
+use WebService::PayPal::PaymentsAdvanced::Response::Authorization::PayPal ();
+use WebService::PayPal::PaymentsAdvanced::Response::Capture ();
+use WebService::PayPal::PaymentsAdvanced::Response::Credit ();
+use WebService::PayPal::PaymentsAdvanced::Response::FromHTTP ();
+use WebService::PayPal::PaymentsAdvanced::Response::FromRedirect ();
+use WebService::PayPal::PaymentsAdvanced::Response::FromSilentPOST ();
+use WebService::PayPal::PaymentsAdvanced::Response::FromSilentPOST::CreditCard ();
+use WebService::PayPal::PaymentsAdvanced::Response::FromSilentPOST::PayPal ();
+use WebService::PayPal::PaymentsAdvanced::Response::Inquiry ();
+use WebService::PayPal::PaymentsAdvanced::Response::Inquiry::CreditCard ();
+use WebService::PayPal::PaymentsAdvanced::Response::Inquiry::PayPal ();
+use WebService::PayPal::PaymentsAdvanced::Response::Sale ();
+use WebService::PayPal::PaymentsAdvanced::Response::Sale::CreditCard ();
+use WebService::PayPal::PaymentsAdvanced::Response::Sale::PayPal ();
+use WebService::PayPal::PaymentsAdvanced::Response::SecureToken ();
+use WebService::PayPal::PaymentsAdvanced::Response::Void ();
 #>>>
 
 has nonfatal_result_codes => (

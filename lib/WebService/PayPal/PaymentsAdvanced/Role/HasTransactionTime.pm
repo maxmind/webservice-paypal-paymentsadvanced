@@ -8,8 +8,8 @@ our $VERSION = '0.000028';
 
 use feature qw( state );
 
-use DateTime::TimeZone;
-use DateTime::Format::MySQL;
+use DateTime::TimeZone      ();
+use DateTime::Format::MySQL ();
 use Types::Standard qw( InstanceOf Maybe );
 
 has transaction_time => (

@@ -7,8 +7,8 @@ use namespace::autoclean;
 our $VERSION = '0.000028';
 
 use Types::Standard qw( Bool CodeRef InstanceOf );
-use WebService::PayPal::PaymentsAdvanced::Mocker::PayflowLink;
-use WebService::PayPal::PaymentsAdvanced::Mocker::PayflowPro;
+use WebService::PayPal::PaymentsAdvanced::Mocker::PayflowLink ();
+use WebService::PayPal::PaymentsAdvanced::Mocker::PayflowPro  ();
 
 has mocked_ua => (
     is       => 'ro',
