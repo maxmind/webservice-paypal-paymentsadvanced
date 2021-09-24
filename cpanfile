@@ -14,7 +14,6 @@ requires "List::AllUtils" => "0";
 requires "Mojolicious::Lite" => "0";
 requires "Moo" => "1.004005";
 requires "Moo::Role" => "0";
-requires "MooX::HandlesVia" => "0";
 requires "MooX::StrictConstructor" => "0";
 requires "Net::Works::Address" => "0";
 requires "Net::Works::Network" => "0";

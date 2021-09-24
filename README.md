@@ -4,7 +4,7 @@ WebService::PayPal::PaymentsAdvanced - A simple wrapper around the PayPal Paymen
 
 # VERSION
 
-version 0.000027
+version 0.000028
 
 # SYNOPSIS
 
@@ -62,8 +62,6 @@ version 0.000027
     print $response->secure_token;
 
 # DESCRIPTION
-
-BETA BETA BETA.  The interface is still subject to change.
 
 This is a wrapper around the "PayPal Payments Advanced" (AKA "PayPal Payflow
 Link") hosted forms.  This code does things like facilitating secure token
