@@ -2,7 +2,7 @@
 use strict;
 use warnings;
 
-use 5.014;
+use 5.016;
 
 use ExtUtils::MakeMaker;
 
@@ -18,7 +18,7 @@ my %WriteMakefileArgs = (
     "bin/mock-payflow-pro"
   ],
   "LICENSE" => "perl",
-  "MIN_PERL_VERSION" => "5.014",
+  "MIN_PERL_VERSION" => "5.016",
   "NAME" => "WebService::PayPal::PaymentsAdvanced",
   "PREREQ_PM" => {
     "Const::Fast" => 0,

@@ -31,7 +31,7 @@ requires "URI::QueryParam" => "0";
 requires "Web::Scraper" => "0";
 requires "feature" => "0";
 requires "namespace::autoclean" => "0";
-requires "perl" => "5.014";
+requires "perl" => "5.016";
 
 on 'test' => sub {
   requires "ExtUtils::MakeMaker" => "0";
