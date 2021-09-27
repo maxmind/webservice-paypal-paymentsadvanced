@@ -1,7 +1,6 @@
 .build
 cpanfile.snapshot
 local
-Makefile.PL
 *.swp
 .tidyall.d
 t/test-data/*config.pl
