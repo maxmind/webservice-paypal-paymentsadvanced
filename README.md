@@ -360,12 +360,13 @@ Olaf Alders <olaf@wundercounter.com>
 - Mark Fowler <mark@twoshortplanks.com>
 - Mateu X Hunter <mhunter@maxmind.com>
 - Narsimham Chelluri <nchelluri@users.noreply.github.com>
+- Nick Logan <nlogan@maxmind.com>
 - Olaf Alders <oalders@maxmind.com>
 - William Storey <wstorey@maxmind.com>
 
 # COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2021 by MaxMind, Inc.
+This software is copyright (c) 2022 by MaxMind, Inc.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.
