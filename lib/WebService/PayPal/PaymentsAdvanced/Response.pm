@@ -10,7 +10,7 @@ use List::AllUtils qw( any );
 use Types::Common::String qw( NonEmptyStr );
 use Types::Standard qw( ArrayRef Int Maybe );
 use WebService::PayPal::PaymentsAdvanced::Error::Authentication ();
-use WebService::PayPal::PaymentsAdvanced::Error::Generic ();
+use WebService::PayPal::PaymentsAdvanced::Error::Generic        ();
 
 has _nonfatal_result_codes => (
     init_arg => 'nonfatal_result_codes',

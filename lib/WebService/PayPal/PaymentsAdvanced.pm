@@ -360,7 +360,8 @@ sub sale_from_paypal_reference_transaction {
 
 sub _paypal_reference_transaction {
     my $self = shift;
-    state $check = compile( NonEmptyStr, NonEmptyStr, Num, NonEmptyStr,
+    state $check = compile(
+        NonEmptyStr, NonEmptyStr, Num, NonEmptyStr,
         Optional [HashRef]
     );
     my ( $type, $baid, $amount, $currency, $extra ) = $check->(@_);
