@@ -36,8 +36,8 @@ sub BUILD {
 
 {
     my $Address
-        = class_type( { class => 'Net::Works::Address' } )
-        ->plus_coercions( NonEmptyStr,
+        = class_type( { class => 'Net::Works::Address' } )->plus_coercions(
+        NonEmptyStr,
         sub { Net::Works::Address->new_from_string( string => $_ ) },
         );
 
